@@ -21,6 +21,12 @@ public class Constants {
 
     public static final String EMAIL_X_ALREADY_REGISTER = "Email %s is already registered!";
 
+    public static final String X_PARAMETER_IS_MISSING = "%s parameter is missing";
+
+    public static final String X_METHOD_IS_NOT_SUPPORT = " method is not supported for this request. Supported methods are ";
+
+    public static final String X_MEDIA_TYPE_IS_NO_SUPPORT = " media type is not supported. Supported media types are ";
+
     public static final String EXCEPTION_IN_LOGIN = "Excepcion en login";
 
     public static final String WILDCARD = "*";

@@ -85,21 +85,14 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public UserDto resetPassword(String token, String password) {
-
-        //TODO Validar que pasa si el token viene null
-
         Optional<UserEntity> userEntityOptional = userRepository.findByResetToken(token);
-
-        if (userEntityOptional.isEmpty()) {
-            throw new UsernameNotFoundException("Email no encontrado!");
-        }
+        if (userEntityOptional.isEmpty()) throw new UsernameNotFoundException("Email no encontrado!");
 
         UserEntity userEntity = userEntityOptional.get();
-
         userEntity.setResetToken(null);
         userEntity.setPassword(passwordEncoder.encode(password));
-
         userRepository.save(userEntity);
+
         userEntity.setPassword(null);
         return UserUtil.toUserDto(userEntity);
     }

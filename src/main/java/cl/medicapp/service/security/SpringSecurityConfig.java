@@ -2,7 +2,6 @@ package cl.medicapp.service.security;
 
 import cl.medicapp.service.logger.LoggingInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationEventPublisher;
@@ -24,9 +23,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
 
-    @Qualifier("userDetailsServiceImpl")
     @Autowired
-    private UserDetailsService service;
+    private UserDetailsService userDetailsService;
 
     @Autowired
     private AuthenticationEventPublisher authenticationEventPublisher;
@@ -50,7 +48,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter implement
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .userDetailsService(this.service)
+                .userDetailsService(this.userDetailsService)
                 .passwordEncoder(passwordEncoder())
                 .and().authenticationEventPublisher(authenticationEventPublisher);
     }
