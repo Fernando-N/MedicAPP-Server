@@ -8,16 +8,21 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-@Service("emailService")
+@Service
 @Slf4j
 public class EmailServiceImpl implements EmailService {
 
     @Autowired
     private JavaMailSender mailSender;
 
+    /**
+     * Metodo que envia un mail de manera asíncrona
+     *
+     * @param email Objeto SimpleMailMessage a enviar
+     */
     @Async
     public void sendEmail(SimpleMailMessage email) {
-        log.info("[EmailService] Send password recovery token mail to {}", email.getTo()[0]);
+        log.info("[EmailService] Sending password recovery token mail to {}", email.getTo()[0]);
         mailSender.send(email);
         log.info("[EmailService] Email send!");
     }

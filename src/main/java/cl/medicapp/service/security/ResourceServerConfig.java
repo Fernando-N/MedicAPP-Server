@@ -1,7 +1,7 @@
 package cl.medicapp.service.security;
 
+import cl.medicapp.service.constants.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,14 +26,12 @@ import java.util.Collections;
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
-    @Value("${configuration.security.oauth.jwt.key}")
-    private String jwtKey;
-
     @Autowired
     private TokenStore tokenStore;
 
     /**
      * Configura el almacen de tokens
+     *
      * @param resources
      * @throws Exception
      */
@@ -44,28 +42,30 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     /**
      * Configura el objeto HttpSecurity asignando los parametros de seguridad para los endpoints
-     * @param http
+     *
+     * @param http objeto spring security http
      * @throws Exception
      */
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/oauth/token").permitAll()
+                .antMatchers("/oauth/**").permitAll()
                 .and()
                 .cors().configurationSource(corsConfigurationSource());
     }
 
     /**
      * Configura los cors permitiendo origenes, metodos y headers personalizados.
+     *
      * @return
      */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.setAllowedOrigins(Collections.singletonList("*"));
-        corsConfig.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "OPTIONS"));
+        corsConfig.setAllowedOrigins(Collections.singletonList(Constants.WILDCARD));
+        corsConfig.setAllowedMethods(Arrays.asList(Constants.SECURITY_ALLOWED_METHODS));
         corsConfig.setAllowCredentials(true);
-        corsConfig.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        corsConfig.setAllowedHeaders(Arrays.asList(Constants.SECURITY_ALLOWED_HEADERS));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfig);
@@ -75,6 +75,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     /**
      * Asigna el filtro de cors
+     *
      * @return
      */
     @Bean

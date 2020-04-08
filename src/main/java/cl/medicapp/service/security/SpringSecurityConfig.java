@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -14,9 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
-import org.springframework.security.oauth2.provider.error.DefaultWebResponseExceptionTranslator;
-import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -37,6 +33,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter implement
 
     /**
      * Codificador de contraseñas
+     *
      * @return codificador
      */
     @Bean
@@ -46,6 +43,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter implement
 
     /**
      * Configura el userDetailsServide, codificador de contraseñas y clase controladora de eventos de autenticación
+     *
      * @param auth
      * @throws Exception
      */
@@ -59,6 +57,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter implement
 
     /**
      * Retorna el manejador de autenticación
+     *
      * @return
      * @throws Exception
      */
@@ -69,25 +68,14 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter implement
     }
 
     /**
-     * Traductor de exceptions en login
-     * @return
+     * Agrega el interceptor de logs al contexto de spring
+     *
+     * @param registry
      */
-    @Bean
-    public WebResponseExceptionTranslator loggingExceptionTranslator() {
-        return new DefaultWebResponseExceptionTranslator() {
-            @Override
-            public ResponseEntity<OAuth2Exception> translate(Exception e) throws Exception {
-                e.printStackTrace();
-                return super.translate(e);
-            }
-        };
-    }
-
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoggingInterceptor());
     }
-
 
 
 }

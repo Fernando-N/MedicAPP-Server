@@ -1,8 +1,8 @@
 package cl.medicapp.service.services.impl;
 
 import cl.medicapp.service.entity.UserEntity;
-import cl.medicapp.service.mapper.UserDetailsMapper;
 import cl.medicapp.service.repository.UserRepository;
+import cl.medicapp.service.util.UserDetailsUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,7 +15,7 @@ import java.util.Optional;
 /**
  * Clase implementación de UserDetailsService
  */
-@Service("userDetailsServiceImpl")
+@Service
 @Slf4j
 public class UserDetailsServiceImpl implements UserDetailsService {
 
@@ -24,18 +24,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     /**
      * Carga el usuario a logearse
+     *
      * @param username
      * @return
      * @throws UsernameNotFoundException
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-            log.info("Inicializado por {}", username);
+        log.info("Inicializado por {}", username);
 
-            Optional<UserEntity> userOptional = userRepository.findByEmailIgnoreCaseAndEnabledTrue(username);
-            userOptional.orElseThrow(() -> new UsernameNotFoundException(username.concat(" not found")));
+        Optional<UserEntity> userOptional = userRepository.findByEmailIgnoreCaseAndEnabledTrue(username);
+        userOptional.orElseThrow(() -> new UsernameNotFoundException(username.concat(" not found")));
 
-            return UserDetailsMapper.build(userOptional.get());
+        return UserDetailsUtil.build(userOptional.get());
     }
 
 }

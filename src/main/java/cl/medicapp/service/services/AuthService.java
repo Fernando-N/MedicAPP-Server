@@ -1,5 +1,6 @@
 package cl.medicapp.service.services;
 
+import cl.medicapp.service.dto.GenericResponseDto;
 import cl.medicapp.service.dto.UserDto;
 
 public interface AuthService {
@@ -8,6 +9,6 @@ public interface AuthService {
 
     UserDto resetPassword(String token, String password);
 
-    void recoveryPassword(String email);
+    GenericResponseDto recoveryPassword(String email);
 
 }

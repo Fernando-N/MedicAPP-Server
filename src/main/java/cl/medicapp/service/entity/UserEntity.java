@@ -21,6 +21,9 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Entity User
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -35,7 +38,7 @@ public class UserEntity implements Serializable {
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
-    @Column(name = "email", unique = true, length = 100,  nullable = false)
+    @Column(name = "email", unique = true, length = 100, nullable = false)
     private String email;
 
     @Column(name = "password", length = 60, nullable = false)

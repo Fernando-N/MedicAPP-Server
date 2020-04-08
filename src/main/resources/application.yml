@@ -1,0 +1,38 @@
+#Spring configuration
+spring:
+  security:
+    oauth:
+      client.id: medicapp
+      client.secret: 12345
+      jwt.secretkey: codigosupersecreto
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/medicapp?serverTimezone=America/Santiago
+    username: medicapp
+    password: medicapp1
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate.ddl-auto: create
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: fe.neiraj@gmail.com
+    password: lbijxnkpoddlyoji
+    properties:
+      mail.smtp:
+        auth: true
+        starttls.enable: true
+#  redis:
+#    host: localhost
+#    port: 6379
+#    ssl: true
+#    password: 57686f6120447564652c2049495320526f636b73
+
+
+#Log configuration
+logging:
+  level:
+    root: info
+    org.hibernate.SQL: info
+#  pattern:
+#    console: '${CONSOLE_LOG_PATTERN:-%clr(%d{dd-MM-yyyy HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}'
