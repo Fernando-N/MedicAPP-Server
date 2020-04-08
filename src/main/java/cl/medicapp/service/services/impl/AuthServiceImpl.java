@@ -118,7 +118,6 @@ public class AuthServiceImpl implements AuthService {
         usuario.setAttemps(0);
         usuario.setEnabled(true);
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
-        usuario.setCreatedOn(new Date());
     }
 
     /**

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -62,6 +63,7 @@ public class UserEntity implements Serializable {
     @Column(name = "attemps", columnDefinition = "integer default 0")
     private Integer attemps;
 
+    @CreatedDate
     @Column(name = "created_on")
     private Date createdOn;
 
