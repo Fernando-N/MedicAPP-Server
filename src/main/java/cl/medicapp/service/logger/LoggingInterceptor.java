@@ -90,7 +90,7 @@ public class LoggingInterceptor extends RequestBodyAdviceAdapter implements Resp
         stringBuilder.append("[RESPONSE]").append("[").append(httpServletRequest.getMethod()).append("]");
         stringBuilder.append("[").append(httpServletRequest.getRequestURI()).append("] ");
         stringBuilder.append("[HEADERS -> [").append(buildHeadersMap(httpServletResponse)).append("] ");
-        stringBuilder.append("[BODY=[").append(body.toString()).append("]");
+        stringBuilder.append("[BODY=[").append(body!=null ? body.toString() : "[EMPTY]").append("]");
 
         log.info(stringBuilder.toString());
     }

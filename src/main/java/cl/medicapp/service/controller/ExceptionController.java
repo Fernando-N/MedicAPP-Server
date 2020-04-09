@@ -20,7 +20,6 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -99,7 +98,7 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(HttpMediaTypeNotSupportedException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
         StringBuilder detail = new StringBuilder();
         detail.append(exception.getContentType()).append(Constants.X_MEDIA_TYPE_IS_NO_SUPPORT);
-        exception.getSupportedMediaTypes().forEach(mediaType -> detail.append(mediaType + ", "));
+        exception.getSupportedMediaTypes().forEach(mediaType -> detail.append(mediaType).append(", "));
         GenericResponseDto error = GenericResponseDto.builder().message(HttpStatus.UNSUPPORTED_MEDIA_TYPE.getReasonPhrase()).details(Collections.singletonList(detail.toString())).build();
         return new ResponseEntity<>(error, new HttpHeaders(), HttpStatus.UNSUPPORTED_MEDIA_TYPE);
     }
