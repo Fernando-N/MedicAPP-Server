@@ -1,4 +1,4 @@
-package cl.medicapp.service.services;
+package cl.medicapp.service.services.auth;
 
 import cl.medicapp.service.dto.GenericResponseDto;
 import cl.medicapp.service.dto.UserDto;

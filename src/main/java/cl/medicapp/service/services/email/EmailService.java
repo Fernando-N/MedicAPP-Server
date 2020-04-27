@@ -1,4 +1,4 @@
-package cl.medicapp.service.services;
+package cl.medicapp.service.services.email;
 
 import org.springframework.mail.SimpleMailMessage;
 

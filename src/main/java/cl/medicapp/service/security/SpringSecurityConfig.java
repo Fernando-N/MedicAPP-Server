@@ -1,7 +1,7 @@
 package cl.medicapp.service.security;
 
 import cl.medicapp.service.logger.LoggingInterceptor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationEventPublisher;
@@ -20,14 +20,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
 
-    @Autowired
-    private UserDetailsService userDetailsService;
-
-    @Autowired
-    private AuthenticationEventPublisher authenticationEventPublisher;
+    private final UserDetailsService userDetailsService;
+    private final AuthenticationEventPublisher authenticationEventPublisher;
+    private final LoggingInterceptor loggingInterceptor;
 
     /**
      * Codificador de contraseñas
@@ -42,8 +41,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter implement
     /**
      * Configura el userDetailsServide, codificador de contraseñas y clase controladora de eventos de autenticación
      *
-     * @param auth
-     * @throws Exception
+     * @param auth AuthenticationManagerBuilder
+     * @throws Exception exception
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -56,8 +55,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter implement
     /**
      * Retorna el manejador de autenticación
      *
-     * @return
-     * @throws Exception
+     * @return AuthenticationManager
+     * @throws Exception exception
      */
     @Override
     @Bean
@@ -68,11 +67,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter implement
     /**
      * Agrega el interceptor de logs al contexto de spring
      *
-     * @param registry
+     * @param registry InterceptorRegistry
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoggingInterceptor());
+        registry.addInterceptor(loggingInterceptor);
     }
 
 

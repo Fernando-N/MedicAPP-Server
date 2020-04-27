@@ -3,7 +3,7 @@ package cl.medicapp.service.security;
 import cl.medicapp.service.constants.Constants;
 import cl.medicapp.service.entity.UserEntity;
 import cl.medicapp.service.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -19,34 +19,31 @@ import java.util.Optional;
  * Componente que agrega información adicional al token de acceso
  */
 @Component
+@RequiredArgsConstructor
 public class TokenAdditionalInformation implements TokenEnhancer {
 
-    @Autowired
-    private UserRepository usuarioRepository;
+    private final UserRepository userRepository;
 
     /**
      * Agrega datos extra al token
      *
      * @param accessToken    token de acceso
      * @param authentication objeto de autenticación
-     * @return
+     * @return OAuth2AccessToken
      */
     @Override
     public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
-        Optional<UserEntity> optionalUser = usuarioRepository.findByEmail(authentication.getName());
+        Optional<UserEntity> optionalUser = userRepository.findByEmail(authentication.getName());
 
-        if (optionalUser.isEmpty()) {
-            throw new UsernameNotFoundException(authentication.getName().concat(Constants.USER_NOT_FOUND));
-        }
+        Map<String, Object> additionalInformation = optionalUser.map(userEntity -> {
+            Map<String, Object> extra = new HashMap<>();
+            extra.put(Constants.FIRST_NAME,  userEntity.getFirstName());
+            extra.put(Constants.LAST_NAME,   userEntity.getLastName());
+            extra.put(Constants.EMAIL,       userEntity.getEmail());
+            return extra;
+        }).orElseThrow(() -> new UsernameNotFoundException(authentication.getName().concat(Constants.USER_NOT_FOUND)));
 
-        UserEntity user = optionalUser.get();
-
-        Map<String, Object> extra = new HashMap<>();
-        extra.put(Constants.FIRST_NAME,  user.getFirstName());
-        extra.put(Constants.LAST_NAME,   user.getLastName());
-        extra.put(Constants.EMAIL,       user.getEmail());
-
-        ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(extra);
+        ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInformation);
 
         return accessToken;
     }

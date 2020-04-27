@@ -15,6 +15,14 @@ import java.util.List;
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class GenericResponseDto {
+
+    /**
+     * Mensaje
+     */
     private String message;
+
+    /**
+     * Detalles
+     */
     private List<String> details;
 }

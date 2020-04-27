@@ -147,7 +147,7 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
      * Manejador de excepciones de tipo ConstraintViolationException que son lanzadas por alguna violación de constraint de base de datos
      *
      * @param exception Excepcion capturada
-     * @param request Request que causo la excepcion
+     * @param request   Request que causo la excepcion
      * @return ErrorResponse con detalles del error ocurrido
      */
     @ExceptionHandler(ConstraintViolationException.class)

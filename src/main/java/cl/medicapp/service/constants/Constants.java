@@ -31,14 +31,11 @@ public class Constants {
 
     public static final String WILDCARD = "*";
 
-    public static final String[] SECURITY_SCOPES = {"read", "write"};
+    /**
+     * Constructor privado para no permitir crear instancias de la clase
+     */
+    private Constants() {
 
-    public static final String[] SECURITY_AUTHORIZED_GRANT_TYPE = {"password", "refresh_token"};
-
-    public static final int SECURITY_TOKEN_VALIDITY_SECONDS = 600;
-
-    public static final String[] SECURITY_ALLOWED_METHODS = {"POST", "GET", "PUT", "DELETE", "OPTIONS"};
-
-    public static final String[] SECURITY_ALLOWED_HEADERS = {"Authorization", "Content-Type"};
+    }
 
 }

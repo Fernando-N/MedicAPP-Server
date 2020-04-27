@@ -37,4 +37,12 @@ public class UserDetailsUtil {
         roleEntities.forEach(roleEntity -> authorities.add(new SimpleGrantedAuthority(roleEntity.getName())));
         return authorities;
     }
+
+    /**
+     * Constructor privado para no permitir crear instancias de la clase
+     */
+    private UserDetailsUtil() {
+
+    }
+
 }

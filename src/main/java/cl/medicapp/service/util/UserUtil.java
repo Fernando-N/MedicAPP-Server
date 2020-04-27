@@ -11,7 +11,7 @@ import org.dozer.DozerBeanMapper;
  */
 public class UserUtil {
 
-    private static DozerBeanMapper mapper = new DozerBeanMapper();
+    private static final DozerBeanMapper mapper = new DozerBeanMapper();
 
     public static UserDto toUserDto(UserEntity userEntity) {
         return mapper.map(userEntity, UserDto.class);
@@ -27,6 +27,13 @@ public class UserUtil {
 
     public static RoleEntity toRoleEntity(RoleDto roleDto) {
         return mapper.map(roleDto, RoleEntity.class);
+    }
+
+    /**
+     * Constructor privado para no permitir crear instancias de la clase
+     */
+    private UserUtil() {
+
     }
 
 }

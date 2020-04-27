@@ -1,6 +1,7 @@
 package cl.medicapp.service.security;
 
-import cl.medicapp.service.constants.Constants;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -26,20 +27,18 @@ import java.util.Arrays;
  *
  */
 @Configuration
+@RequiredArgsConstructor
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private TokenAdditionalInformation tokenAdditionalInformation;
-
-    @Autowired
-    private UserDetailsService userDetailsService;
+    protected static final String[] SECURITY_SCOPES = {"read", "write"};
+    protected static final String[] SECURITY_AUTHORIZED_GRANT_TYPE = {"password", "refresh_token"};
+    protected static final int SECURITY_TOKEN_VALIDITY_SECONDS = 600;
+    
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final TokenAdditionalInformation tokenAdditionalInformation;
+    private final UserDetailsService userDetailsService;
 
     @Value("${spring.security.oauth.client.id}")
     private String clientId;
@@ -54,7 +53,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      * Configuración para definir donde guardar los tokens generados
      *
      * @param clients obj spring security config clients
-     * @throws Exception
+     * @throws Exception exception
      */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -62,19 +61,18 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .inMemory()
                 .withClient(clientId)
                 .secret(passwordEncoder.encode(clientSecret))
-                .scopes(Constants.SECURITY_SCOPES)
-                .authorizedGrantTypes(Constants.SECURITY_AUTHORIZED_GRANT_TYPE)
-                .accessTokenValiditySeconds(Constants.SECURITY_TOKEN_VALIDITY_SECONDS);
+                .scopes(SECURITY_SCOPES)
+                .authorizedGrantTypes(SECURITY_AUTHORIZED_GRANT_TYPE)
+                .accessTokenValiditySeconds(SECURITY_TOKEN_VALIDITY_SECONDS);
     }
 
     /**
      * Configuración de endpoints de autorización
      *
      * @param endpoints obj spring security endpoints
-     * @throws Exception
      */
     @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints){
         TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
         tokenEnhancerChain.setTokenEnhancers(Arrays.asList(tokenAdditionalInformation, accessTokenConverter()));
 
@@ -99,7 +97,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     /**
      * Definir UserDetailsService personalizado
      *
-     * @return
+     * @return Convertidor de usuarios
      */
     @Bean
     public UserAuthenticationConverter userAuthenticationConverter() {

@@ -2,8 +2,9 @@ package cl.medicapp.service.controller;
 
 import cl.medicapp.service.dto.GenericResponseDto;
 import cl.medicapp.service.dto.UserDto;
-import cl.medicapp.service.services.AuthService;
-import org.springframework.beans.factory.annotation.Autowired;
+import cl.medicapp.service.services.auth.AuthService;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,11 +21,11 @@ import javax.validation.constraints.NotBlank;
  * Controlador de autenticación
  */
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/oauth")
 public class AuthController {
 
-    @Autowired
-    private AuthService authService;
+    private final AuthService authService;
 
     /**
      * Endpoint de registro

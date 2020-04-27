@@ -13,7 +13,14 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class RoleDto implements Serializable {
 
+    /**
+     * Identificado
+     */
     private Long id;
+
+    /**
+     * Nombre
+     */
     private String name;
 
 }

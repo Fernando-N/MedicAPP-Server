@@ -1,7 +1,8 @@
 package cl.medicapp.service.logger;
 
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpMethod;
@@ -31,11 +32,11 @@ import java.util.Map;
  */
 @ControllerAdvice
 @Component
+@RequiredArgsConstructor
 @Slf4j
 public class LoggingInterceptor extends RequestBodyAdviceAdapter implements ResponseBodyAdvice<Object>, HandlerInterceptor {
 
-    @Autowired
-    HttpServletRequest httpServletRequest;
+    private final HttpServletRequest httpServletRequest;
 
     @Override
     public boolean supports(MethodParameter methodParameter, Type type, Class<? extends HttpMessageConverter<?>> aClass) {

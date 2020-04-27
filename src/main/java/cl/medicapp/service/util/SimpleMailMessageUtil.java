@@ -16,4 +16,11 @@ public class SimpleMailMessageUtil {
         return simpleMailMessage;
     }
 
+    /**
+     * Constructor privado para no permitir crear instancias de la clase
+     */
+    private SimpleMailMessageUtil(){
+
+    }
+
 }

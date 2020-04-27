@@ -25,10 +25,16 @@ import java.io.Serializable;
 public class RoleEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Identificador
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * Nombre
+     */
     @Column(unique = true, length = 30)
     private String name;
 
