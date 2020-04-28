@@ -3,7 +3,6 @@ package cl.medicapp.service.controller;
 import cl.medicapp.service.dto.GenericResponseDto;
 import cl.medicapp.service.dto.UserDto;
 import cl.medicapp.service.services.auth.AuthService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;

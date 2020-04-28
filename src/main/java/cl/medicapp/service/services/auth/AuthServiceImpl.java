@@ -3,14 +3,15 @@ package cl.medicapp.service.services.auth;
 import cl.medicapp.service.constants.Constants;
 import cl.medicapp.service.dto.GenericResponseDto;
 import cl.medicapp.service.dto.UserDto;
+import cl.medicapp.service.entity.RoleEntity;
 import cl.medicapp.service.entity.UserEntity;
 import cl.medicapp.service.exception.GenericException;
+import cl.medicapp.service.repository.RoleRepository;
 import cl.medicapp.service.repository.UserRepository;
 import cl.medicapp.service.services.email.EmailService;
 import cl.medicapp.service.util.SimpleMailMessageUtil;
 import cl.medicapp.service.util.UserUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,6 +30,7 @@ import java.util.UUID;
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final EmailService emailService;
     private final BCryptPasswordEncoder passwordEncoder;
 
@@ -46,10 +48,14 @@ public class AuthServiceImpl implements AuthService {
                     throw new GenericException(Constants.EMAIL_ALREADY_REGISTERED, details);
                 },
                 () -> {
-                    newUser.setAttemps(0);
-                    newUser.setEnabled(true);
-                    newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-                    userRepository.save(UserUtil.toUserEntity(newUser));
+
+                    RoleEntity roleUser = roleRepository.findByName("ROLE_USER").orElse(null);
+
+                    UserEntity userEntity = UserUtil.toUserEntity(newUser);
+                    userEntity.setPassword(passwordEncoder.encode(newUser.getPassword()));
+                    userEntity.setRoleEntities(Collections.singletonList(roleUser));
+
+                    userRepository.save(userEntity);
                 }
         );
 

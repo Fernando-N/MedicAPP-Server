@@ -1,6 +1,5 @@
 package cl.medicapp.service.logger;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
@@ -109,9 +108,9 @@ public class LoggingInterceptor extends RequestBodyAdviceAdapter implements Resp
 
     private Map<String, String> buildHeadersMap(HttpServletRequest request) {
         Map<String, String> map = new HashMap<>();
-        Enumeration headerNames = request.getHeaderNames();
+        Enumeration<String> headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()) {
-            String key = (String) headerNames.nextElement();
+            String key = headerNames.nextElement();
             String value = request.getHeader(key);
             map.put(key, value);
         }

@@ -4,23 +4,25 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
- * Entity Role
+ * Entity Message Chat
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "roles")
-public class RoleEntity implements Serializable {
+@Document(collection = "chat")
+public class MessageEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -30,10 +32,17 @@ public class RoleEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
-    /**
-     * Nombre
-     */
-    @Indexed(unique=true)
-    private String name;
+    @DBRef
+    private UserEntity from;
+
+    @DBRef
+    private UserEntity to;
+
+    private String message;
+
+    @CreatedDate
+    private Date date;
+
+    private boolean alreadyRead = false;
 
 }

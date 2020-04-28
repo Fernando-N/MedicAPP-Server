@@ -59,14 +59,14 @@ public class UserDto implements Serializable {
      * JsonIgnore para ocultar en respuestas
      */
     @JsonIgnore
-    private Integer attemps;
+    private Integer attemps = 0;
 
     /**
      * Habilitado
      * JsonIgnore para ocultar en respuestas
      */
     @JsonIgnore
-    private Boolean enabled;
+    private Boolean enabled = true;
 
     /**
      * Roles

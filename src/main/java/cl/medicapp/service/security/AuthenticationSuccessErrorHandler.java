@@ -2,7 +2,6 @@ package cl.medicapp.service.security;
 
 import cl.medicapp.service.constants.Constants;
 import cl.medicapp.service.repository.UserRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationEventPublisher;
@@ -11,7 +10,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * Clase que maneja eventos de login
@@ -35,7 +34,7 @@ public class AuthenticationSuccessErrorHandler implements AuthenticationEventPub
 
         userRepository.findByEmail(authentication.getName()).ifPresent(userEntity -> {
             userEntity.setAttemps(0);
-            userEntity.setLastLogin(new Timestamp(System.currentTimeMillis()));
+            userEntity.setLastLogin(new Date());
             userRepository.save(userEntity);
         });
     }
