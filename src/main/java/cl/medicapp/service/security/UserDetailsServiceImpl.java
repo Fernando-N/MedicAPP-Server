@@ -1,5 +1,6 @@
 package cl.medicapp.service.security;
 
+import cl.medicapp.service.constants.Constants;
 import cl.medicapp.service.entity.UserEntity;
 import cl.medicapp.service.repository.UserRepository;
 import cl.medicapp.service.util.UserDetailsUtil;
@@ -32,7 +33,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) {
         log.info("Inicializado por {}", username);
         Optional<UserEntity> userOptional = userRepository.findByEmailIgnoreCaseAndEnabledTrue(username);
-        return UserDetailsUtil.build(userOptional.orElseThrow(() -> new UsernameNotFoundException(username.concat(" not found"))));
+        return UserDetailsUtil.build(userOptional.orElseThrow(() -> new UsernameNotFoundException(String.format(Constants.USER_X_NOT_FOUND, username))));
     }
 
 }

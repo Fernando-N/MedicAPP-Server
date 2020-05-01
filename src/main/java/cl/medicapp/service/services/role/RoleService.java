@@ -11,7 +11,9 @@ public interface RoleService {
 
     RoleDto getByName(String name);
 
-    RoleDto save(RoleDto roleDto);
+    RoleDto save(RoleDto request);
+
+    RoleDto update(String roleName, RoleDto newRoleName);
 
     GenericResponseDto deleteRoleByName(String name);
 

@@ -15,6 +15,7 @@ public class UserUtil {
 
     /**
      * Transforma UserEntity -> UserDto
+     *
      * @param userEntity userEntity
      * @return UserDto
      */
@@ -24,6 +25,7 @@ public class UserUtil {
 
     /**
      * Transforma UserDto -> UserEntity
+     *
      * @param userDto userDto
      * @return UserEntity
      */
@@ -33,6 +35,7 @@ public class UserUtil {
 
     /**
      * Obtiene el email del usuario logeado
+     *
      * @return email usuario logeado
      */
     public static String getEmailUserLogged() {

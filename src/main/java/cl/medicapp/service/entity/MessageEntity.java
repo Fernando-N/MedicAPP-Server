@@ -32,17 +32,34 @@ public class MessageEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
+    /**
+     * De
+     * DBRef para referenciar entity User
+     */
     @DBRef
     private UserEntity from;
 
+    /**
+     * Para
+     * DBRef para referenciar entity User
+     */
     @DBRef
     private UserEntity to;
 
+    /**
+     * Mensajes
+     */
     private String message;
 
+    /**
+     * Fecha
+     */
     @CreatedDate
     private Date date;
 
+    /**
+     * Fue leido
+     */
     private boolean alreadyRead = false;
 
 }

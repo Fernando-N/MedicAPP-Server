@@ -154,7 +154,7 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException exception, WebRequest request) {
         List<String> details = new ArrayList<>();
         exception.getConstraintViolations().forEach(constraintViolation ->
-            details.add(constraintViolation.getRootBeanClass().getName() + " " + constraintViolation.getPropertyPath() + ": " + constraintViolation.getMessage())
+                details.add(constraintViolation.getRootBeanClass().getName() + " " + constraintViolation.getPropertyPath() + ": " + constraintViolation.getMessage())
         );
 
         GenericResponseDto error = GenericResponseDto.builder().message(HttpStatus.BAD_REQUEST.getReasonPhrase()).details(details).build();
@@ -163,6 +163,7 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
 
     /**
      * Manejador de excepciones de cualquier tipo, es decir cualquier excepcion no controlada
+     *
      * @param exception Excepcion capturada
      * @param headers   headers http request
      * @param status    httpStatus

@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+/**
+ * Dto para mensajes de chat
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -15,14 +18,29 @@ import java.util.Date;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MessageDto {
 
+    /**
+     * Fecha
+     */
     private Date date;
 
+    /**
+     * De
+     */
     private String from;
 
+    /**
+     * Para
+     */
     private String to;
 
+    /**
+     * Mensaje
+     */
     private String message;
 
+    /**
+     * Fue leido
+     */
     private boolean alreadyRead = false;
 
 }

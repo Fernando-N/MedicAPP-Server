@@ -13,11 +13,11 @@ public class Constants {
 
     public static final String UNAUTHORIZED_RESOURCE = "Access to this resource is denied";
 
-    public static final String USER_NOT_FOUND = "{} not found";
+    public static final String USER_X_NOT_FOUND = "User %s not found";
 
-    public static final String USER_JOINED_SUCCESSFUL = "{} ingreso correctamente";
+    public static final String USER_X_X_NOT_FOUND = "User %s %s not found";
 
-    public static final String EMAIL_ALREADY_REGISTERED = "Email already registered";
+    public static final String USER_JOINED_SUCCESSFUL = "{} logged successful!";
 
     public static final String EMAIL_X_ALREADY_REGISTER = "Email %s is already registered!";
 
@@ -30,6 +30,53 @@ public class Constants {
     public static final String EXCEPTION_IN_LOGIN = "Excepcion en login";
 
     public static final String WILDCARD = "*";
+
+    public static final String ROLE_X_NOT_FOUND = "Role %s not found!";
+
+    public static final String ROLE_DELETED = "Role deleted";
+
+    public static final String ROLE_X_DELETED = "Role %s delete";
+
+    public static final String EMAIL_CANT_BE_EMPTY = "Email can't be empty!";
+
+    public static final String EMAIL_SHOULD_BE_VALID = "Email should be a valid email!";
+
+    public static final String PASSWORD_CANT_BE_EMPTY = "Password can't be empty!";
+
+    public static final String PASSWORD2_CANT_BE_EMPTY = "Password confirmation can't be empty!";
+
+    public static final String PASSWORD_MUST_BE_BETWEEN = "Password must be between 6 and 16 characters long";
+
+    public static final String FIRST_NAME_CANT_BE_EMPTY = "First name can't be empty!";
+
+    public static final String LAST_NAME_CANT_BE_EMPTY = "First name can't be empty!";
+
+    public static final String PASSWORD_MUST_MATCH = "Passwords must match";
+
+    public static final String INPUT_PASSWORDS_NOT_MATCH = "Input passwords don't match!";
+
+    public static final String TOKEN_NOT_FOUND = "Token %s not found";
+
+    public static final String TOKEN_CANT_BE_EMPTY = "Token can't be empty!";
+
+    public static final String ROLE_NAME_CANT_BE_EMPTY = "Role name can't be empty!";
+
+    public static final String ROLE_X_ALREADY_EXIST = "Role %s already exist!";
+
+    public static final String ROLE = "ROLE_";
+
+    public static final String GET = "get";
+
+    public static final String SET = "set";
+
+    public static final String CAPITALIZE = "Capitalize";
+
+    public static final String UPPERCASE = "UpperCase";
+
+    public static final String LOWERCASE = "LowerCase";
+
+    public static final String PACKAGE_BASE = "cl.medicapp";
+
 
     /**
      * Constructor privado para no permitir crear instancias de la clase

@@ -7,6 +7,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -22,7 +24,7 @@ public class EmailServiceImpl implements EmailService {
     @Async
     public void sendEmail(SimpleMailMessage email) {
         mailSender.send(email);
-        log.info("[EmailService] Password recovery token mail send to {}", email.getTo()[0]);
+        log.info("[EmailService] Password recovery token mail send to {}", Objects.requireNonNull(email.getTo())[0]);
     }
 
 }

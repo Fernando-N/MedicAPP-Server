@@ -10,17 +10,19 @@ import java.util.List;
 @Getter
 public class GenericException extends RuntimeException {
 
-    private int statusCode = 0;
-    private List<String> details;
-
-    public GenericException(String message, List<String> details) {
-        super(message);
-        this.details = details;
-    }
+    private final int statusCode;
+    private final List<String> details;
 
     public GenericException(int statusCode, String message, List<String> details) {
         super(message);
         this.statusCode = statusCode;
         this.details = details;
     }
+
+    public GenericException(String message, List<String> details) {
+        super(message);
+        this.statusCode = 500;
+        this.details = details;
+    }
+
 }

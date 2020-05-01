@@ -33,15 +33,15 @@ public class TokenAdditionalInformation implements TokenEnhancer {
      */
     @Override
     public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
-        Optional<UserEntity> optionalUser = userRepository.findByEmail(authentication.getName());
+        Optional<UserEntity> optionalUser = userRepository.findByEmailIgnoreCase(authentication.getName());
 
         Map<String, Object> additionalInformation = optionalUser.map(userEntity -> {
             Map<String, Object> extra = new HashMap<>();
-            extra.put(Constants.FIRST_NAME,  userEntity.getFirstName());
-            extra.put(Constants.LAST_NAME,   userEntity.getLastName());
-            extra.put(Constants.EMAIL,       userEntity.getEmail());
+            extra.put(Constants.FIRST_NAME, userEntity.getFirstName());
+            extra.put(Constants.LAST_NAME, userEntity.getLastName());
+            extra.put(Constants.EMAIL, userEntity.getEmail());
             return extra;
-        }).orElseThrow(() -> new UsernameNotFoundException(authentication.getName().concat(Constants.USER_NOT_FOUND)));
+        }).orElseThrow(() -> new UsernameNotFoundException(String.format(Constants.USER_X_NOT_FOUND, authentication.getName())));
 
         ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInformation);
 

@@ -63,7 +63,7 @@ public class LoggingInterceptor extends RequestBodyAdviceAdapter implements Resp
     }
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         if (DispatcherType.REQUEST.name().equals(request.getDispatcherType().name()) && request.getMethod().equals(HttpMethod.GET.name())) {
             logRequest(request, null);
         }
@@ -79,7 +79,7 @@ public class LoggingInterceptor extends RequestBodyAdviceAdapter implements Resp
         stringBuilder.append("[").append(httpServletRequest.getRequestURI()).append("] ");
         stringBuilder.append("[HEADERS -> [").append(buildHeadersMap(httpServletRequest)).append("] ");
         stringBuilder.append("[PARAMS -> [").append(parameters.isEmpty() ? "EMPTY" : parameters).append("]");
-        stringBuilder.append("[BODY -> [").append(body==null ? "EMPTY" : body).append("]");
+        stringBuilder.append("[BODY -> [").append(body == null ? "EMPTY" : body).append("]");
 
         log.info(stringBuilder.toString());
     }
@@ -90,9 +90,11 @@ public class LoggingInterceptor extends RequestBodyAdviceAdapter implements Resp
         stringBuilder.append("[RESPONSE]").append("[").append(httpServletRequest.getMethod()).append("]");
         stringBuilder.append("[").append(httpServletRequest.getRequestURI()).append("] ");
         stringBuilder.append("[HEADERS -> [").append(buildHeadersMap(httpServletResponse)).append("] ");
-        stringBuilder.append("[BODY=[").append(body!=null ? body.toString() : "[EMPTY]").append("]");
+        stringBuilder.append("[BODY=[").append(body != null ? body.toString() : "[EMPTY]").append("]");
 
-        log.info(stringBuilder.toString());
+        if (!stringBuilder.toString().contains("/auth")) {
+            log.info(stringBuilder.toString());
+        }
     }
 
     private Map<String, String> buildParametersMap(HttpServletRequest httpServletRequest) {

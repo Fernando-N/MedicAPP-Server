@@ -25,14 +25,14 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public void insertAndSubscribe(MessageDto messageDto) {
-        UserEntity from = userRepository.findByEmail(UserUtil.getEmailUserLogged()).orElseThrow();
-        UserEntity to = userRepository.findByEmail(messageDto.getTo()).orElseThrow();
+        UserEntity from = userRepository.findByEmailIgnoreCase(UserUtil.getEmailUserLogged()).orElseThrow();
+        UserEntity to = userRepository.findByEmailIgnoreCase(messageDto.getTo()).orElseThrow();
         chatRepository.insert(MessageUtil.build(messageDto, from, to)).subscribe();
     }
 
     @Override
     public Flux<MessageDto> openStreamToUser(String to) {
-        UserEntity toEntity = userRepository.findByEmail(to).orElseThrow();
+        UserEntity toEntity = userRepository.findByEmailIgnoreCase(to).orElseThrow();
         Flux<MessageEntity> messageEntityFlux = chatRepository.findWithTailableCursorByTo(toEntity)
                 .doOnNext(messageEntity -> {
                     messageEntity.setAlreadyRead(true);

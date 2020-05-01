@@ -1,6 +1,7 @@
 package cl.medicapp.service.controller;
 
 import cl.medicapp.service.dto.GenericResponseDto;
+import cl.medicapp.service.dto.ResetPasswordRequestDto;
 import cl.medicapp.service.dto.UserDto;
 import cl.medicapp.service.services.auth.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ import javax.validation.constraints.NotBlank;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/oauth")
+@RequestMapping("/auth")
 public class AuthController {
 
     private final AuthService authService;
@@ -52,13 +53,12 @@ public class AuthController {
     /**
      * Endpoint para resetear la contraseña
      *
-     * @param resetToken Token obtenido para resetear contraseña
-     * @param password Contraseña nueva
+     * @param request Request con token y contraseña nueva
      * @return Usuario reseteado sin contraseña
      */
     @PostMapping("/reset")
-    public UserDto resetPassword(@Valid @NotBlank @RequestParam String resetToken, @Valid @NotBlank @RequestParam String password) {
-        return authService.resetPassword(resetToken, password);
+    public UserDto resetPassword(@Valid @RequestBody ResetPasswordRequestDto request) {
+        return authService.resetPassword(request);
     }
 
 }

@@ -33,7 +33,7 @@ public class RoleEntity implements Serializable {
     /**
      * Nombre
      */
-    @Indexed(unique=true)
+    @Indexed(unique = true)
     private String name;
 
 }

@@ -65,7 +65,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter implement
     }
 
     /**
-     * Agrega el interceptor de logs al contexto de spring
+     * Agrega interceptores al contexto de spring
      *
      * @param registry InterceptorRegistry
      */

@@ -10,7 +10,7 @@ import lombok.ToString;
 import java.util.List;
 
 /**
- * Dto generico para respuestas, incluye mensaje y detalles
+ * Objeto de transferencia generico para respuestas, incluye mensaje y detalles
  */
 @Builder
 @Getter

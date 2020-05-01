@@ -1,11 +1,13 @@
 package cl.medicapp.service.services.user;
 
+import cl.medicapp.service.constants.Constants;
 import cl.medicapp.service.dto.GenericResponseDto;
 import cl.medicapp.service.dto.UserDto;
-import cl.medicapp.service.exception.GenericException;
 import cl.medicapp.service.repository.UserRepository;
+import cl.medicapp.service.util.GenericResponseUtil;
 import cl.medicapp.service.util.UserUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,8 +29,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getByEmail(String email) {
-        return userRepository.findByEmail(email).map(UserUtil::toUserDto)
-                .orElseThrow(() -> new GenericException("User not found", Collections.singletonList("User " + email + " not found")));
+        return userRepository.findByEmailIgnoreCase(email).map(UserUtil::toUserDto)
+                .orElseThrow(() -> GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), String.format(Constants.USER_X_NOT_FOUND, email)));
     }
 
     @Override
@@ -38,7 +40,7 @@ public class UserServiceImpl implements UserService {
                 usersList ->
                         usersList.forEach(userEntity -> userDtoList.add(UserUtil.toUserDto(userEntity))),
                 () -> {
-                    throw new GenericException("User not found", Collections.singletonList("User " + firstName + " " + lastName + " not found"));
+                    throw GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), String.format(Constants.USER_X_X_NOT_FOUND, firstName, lastName));
                 });
         return userDtoList;
     }
@@ -52,9 +54,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public GenericResponseDto deleteByEmail(String email) {
         int rowsDelete = userRepository.deleteByEmail(email);
-        if (rowsDelete>1) {
-            return GenericResponseDto.builder().message("User deleted").details(Collections.singletonList("User "+email+" delete")).build();
+        if (rowsDelete > 1) {
+            return GenericResponseDto.builder().message("User deleted").details(Collections.singletonList("User " + email + " delete")).build();
         }
-        return GenericResponseDto.builder().message("User not found").details(Collections.singletonList("User "+email+" not found")).build();
+        return GenericResponseUtil.buildGenericResponse(HttpStatus.NOT_FOUND.getReasonPhrase(), String.format(Constants.USER_X_NOT_FOUND, email));
     }
 }

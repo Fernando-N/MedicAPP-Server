@@ -22,30 +22,34 @@ import java.util.Arrays;
 
 /**
  * Clase de configuración de autenticación
- *
  */
 @Configuration
 @RequiredArgsConstructor
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
-    protected static final String[] SECURITY_SCOPES = {"read", "write"};
-    protected static final String[] SECURITY_AUTHORIZED_GRANT_TYPE = {"password", "refresh_token"};
-    protected static final int SECURITY_TOKEN_VALIDITY_SECONDS = 600;
-    
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final TokenAdditionalInformation tokenAdditionalInformation;
     private final UserDetailsService userDetailsService;
 
-    @Value("${spring.security.oauth.client.id}")
+    @Value("${security.auth.client.id}")
     private String clientId;
 
-    @Value("${spring.security.oauth.client.secret}")
+    @Value("${security.auth.client.secret}")
     private String clientSecret;
 
-    @Value("${spring.security.oauth.jwt.secretkey}")
+    @Value("${security.auth.jwt.secretKey}")
     private String secret;
+
+    @Value("${security.config.scopes}")
+    private String[] securityScopes;
+
+    @Value("${security.config.authorizedGrantTypes}")
+    private String[] authorizedGrantTypes;
+
+    @Value("${security.config.accessTokenValiditySeconds}")
+    private int accessTokenValiditySeconds;
 
     /**
      * Configuración para definir donde guardar los tokens generados
@@ -59,9 +63,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .inMemory()
                 .withClient(clientId)
                 .secret(passwordEncoder.encode(clientSecret))
-                .scopes(SECURITY_SCOPES)
-                .authorizedGrantTypes(SECURITY_AUTHORIZED_GRANT_TYPE)
-                .accessTokenValiditySeconds(SECURITY_TOKEN_VALIDITY_SECONDS);
+                .scopes(securityScopes)
+                .authorizedGrantTypes(authorizedGrantTypes)
+                .accessTokenValiditySeconds(accessTokenValiditySeconds);
     }
 
     /**
@@ -70,16 +74,17 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      * @param endpoints obj spring security endpoints
      */
     @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints){
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
         tokenEnhancerChain.setTokenEnhancers(Arrays.asList(tokenAdditionalInformation, accessTokenConverter()));
 
-        endpoints.authenticationManager(authenticationManager)
+        endpoints
+                .authenticationManager(authenticationManager)
                 .accessTokenConverter(accessTokenConverter())
+                .pathMapping("/oauth/token", "/auth/login")
                 .tokenStore(tokenStore())
                 .tokenEnhancer(tokenEnhancerChain)
-                .userDetailsService(userDetailsService)
-        ;
+                .userDetailsService(userDetailsService);
     }
 
     /**

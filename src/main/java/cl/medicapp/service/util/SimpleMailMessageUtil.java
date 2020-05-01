@@ -19,7 +19,7 @@ public class SimpleMailMessageUtil {
     /**
      * Constructor privado para no permitir crear instancias de la clase
      */
-    private SimpleMailMessageUtil(){
+    private SimpleMailMessageUtil() {
 
     }
 

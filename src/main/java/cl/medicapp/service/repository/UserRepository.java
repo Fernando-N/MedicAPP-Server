@@ -13,15 +13,13 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends PagingAndSortingRepository<UserEntity, Long> {
 
-    Optional<UserEntity> findByEmail(String email);
+    Optional<UserEntity> findByEmailIgnoreCase(String email);
 
     Optional<List<UserEntity>> findByFirstNameAndLastName(String firstName, String lastName);
 
     Optional<UserEntity> findByEmailIgnoreCaseAndEnabledTrue(String username);
 
     Optional<UserEntity> findByResetToken(String resetToken);
-
-    boolean existsByEmail(String email);
 
     int deleteByEmail(String email);
 

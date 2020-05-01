@@ -12,8 +12,8 @@ import java.util.Optional;
 @Repository
 public interface RoleRepository extends PagingAndSortingRepository<RoleEntity, Long> {
 
-    Optional<RoleEntity> findByName(String role);
+    Optional<RoleEntity> findByNameIgnoreCaseEndsWith(String role);
 
-    int deleteByName(String name);
+    int deleteByNameIgnoreCase(String name);
 
 }

@@ -1,10 +1,5 @@
 #Spring configuration
 spring:
-  security:
-    oauth:
-      client.id: medicapp
-      client.secret: 12345
-      jwt.secretkey: codigosupersecreto
   data:
     mongodb:
       host: localhost
@@ -12,6 +7,7 @@ spring:
       database: test
       username: medicapp
       password: medicapp1
+      auto-index-creation: false
   mail:
     host: smtp.gmail.com
     port: 587
