@@ -1,18 +1,18 @@
 package cl.medicapp.service.util;
 
+import cl.medicapp.service.document.MessageDocument;
+import cl.medicapp.service.document.UserDocument;
 import cl.medicapp.service.dto.MessageDto;
-import cl.medicapp.service.entity.MessageEntity;
-import cl.medicapp.service.entity.UserEntity;
 
 import java.util.Date;
 
 /**
- * Clase util para MessageEntity y MessageDto
+ * Clase util para MessageDocument y MessageDto
  */
 public class MessageUtil {
 
-    public static MessageEntity build(MessageDto messageDto, UserEntity from, UserEntity to) {
-        return MessageEntity.builder()
+    public static MessageDocument buildDocument(MessageDto messageDto, UserDocument from, UserDocument to) {
+        return MessageDocument.builder()
                 .date(new Date())
                 .from(from)
                 .to(to)
@@ -20,12 +20,12 @@ public class MessageUtil {
                 .build();
     }
 
-    public static MessageDto toMessageDto(MessageEntity messageEntity) {
+    public static MessageDto toMessageDto(MessageDocument messageDocument) {
         return MessageDto.builder()
-                .date(messageEntity.getDate())
-                .message(messageEntity.getMessage())
-                .from(messageEntity.getFrom().getFirstName() + " " + messageEntity.getFrom().getLastName())
-                .to(messageEntity.getTo().getFirstName() + " " + messageEntity.getTo().getLastName())
+                .date(messageDocument.getDate())
+                .message(messageDocument.getMessage())
+                .from(messageDocument.getFrom().getFirstName() + " " + messageDocument.getFrom().getLastName())
+                .to(messageDocument.getTo().getFirstName() + " " + messageDocument.getTo().getLastName())
                 .build();
     }
 

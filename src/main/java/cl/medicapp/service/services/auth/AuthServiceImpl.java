@@ -2,11 +2,11 @@ package cl.medicapp.service.services.auth;
 
 import cl.medicapp.service.annotation.FormatArgs;
 import cl.medicapp.service.constants.Constants;
+import cl.medicapp.service.document.RoleDocument;
+import cl.medicapp.service.document.UserDocument;
 import cl.medicapp.service.dto.GenericResponseDto;
 import cl.medicapp.service.dto.ResetPasswordRequestDto;
 import cl.medicapp.service.dto.UserDto;
-import cl.medicapp.service.entity.RoleEntity;
-import cl.medicapp.service.entity.UserEntity;
 import cl.medicapp.service.repository.RoleRepository;
 import cl.medicapp.service.repository.UserRepository;
 import cl.medicapp.service.services.email.EmailService;
@@ -44,18 +44,18 @@ public class AuthServiceImpl implements AuthService {
     @FormatArgs
     public UserDto register(UserDto newUser) {
         userRepository.findByEmailIgnoreCase(newUser.getEmail()).ifPresentOrElse(
-                userEntity -> {
+                userDocument -> {
                     throw GenericResponseUtil.buildGenericException(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), String.format(Constants.EMAIL_X_ALREADY_REGISTER, newUser.getEmail()));
                 },
                 () -> {
 
-                    RoleEntity roleUser = roleRepository.findByNameIgnoreCaseEndsWith("ROLE_USER").orElseThrow();
+                    RoleDocument roleUser = roleRepository.findByNameIgnoreCaseEndsWith("ROLE_USER").orElseThrow();
 
-                    UserEntity userEntity = UserUtil.toUserEntity(newUser);
-                    userEntity.setPassword(passwordEncoder.encode(newUser.getPassword()));
-                    userEntity.setRoleEntities(Collections.singletonList(roleUser));
+                    UserDocument userDocument = UserUtil.toUserDocument(newUser);
+                    userDocument.setPassword(passwordEncoder.encode(newUser.getPassword()));
+                    userDocument.setRoleEntities(Collections.singletonList(roleUser));
 
-                    userRepository.save(userEntity);
+                    userRepository.save(userDocument);
                 }
         );
         return newUser;
@@ -67,13 +67,14 @@ public class AuthServiceImpl implements AuthService {
      * @param email Email a recuperar contraseña
      * @return Respuesta con mensaje indicando que si existe el correo recibira un mensaje
      */
+    //TODO Mover esto a constantes y generar plantilla mail
     @Override
     public GenericResponseDto recoveryPassword(String email) {
-        userRepository.findByEmailIgnoreCase(email).ifPresent(userEntity -> {
-            userEntity.setResetToken(UUID.randomUUID().toString());
-            userRepository.save(userEntity);
-            String body = "token to recovery password: ".concat(userEntity.getResetToken());
-            SimpleMailMessage recoveryMail = SimpleMailMessageUtil.build("suppor@medicapp.cl", userEntity.getEmail(), "Password recovery", body);
+        userRepository.findByEmailIgnoreCase(email).ifPresent(userDocument -> {
+            userDocument.setResetToken(UUID.randomUUID().toString());
+            userRepository.save(userDocument);
+            String body = "token to recovery password: ".concat(userDocument.getResetToken());
+            SimpleMailMessage recoveryMail = SimpleMailMessageUtil.build("suppor@medicapp.cl", userDocument.getEmail(), "Password recovery", body);
             emailService.sendEmail(recoveryMail);
         });
 
@@ -99,11 +100,11 @@ public class AuthServiceImpl implements AuthService {
             throw GenericResponseUtil.buildGenericException(HttpStatus.BAD_REQUEST.value(), Constants.PASSWORD_MUST_BE_BETWEEN, Constants.PASSWORD_MUST_BE_BETWEEN);
         }
 
-        UserEntity user = userRepository.findByResetToken(request.getToken()).map(userEntity -> {
-            userEntity.setResetToken(null);
-            userEntity.setPassword(passwordEncoder.encode(request.getPassword()));
-            userRepository.save(userEntity);
-            return userEntity;
+        UserDocument user = userRepository.findByResetToken(request.getToken()).map(userDocument -> {
+            userDocument.setResetToken(null);
+            userDocument.setPassword(passwordEncoder.encode(request.getPassword()));
+            userRepository.save(userDocument);
+            return userDocument;
         }).orElseThrow(() -> GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), String.format(Constants.TOKEN_NOT_FOUND, request.getToken())));
 
         return UserUtil.toUserDto(user);

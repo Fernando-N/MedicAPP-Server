@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getAll() {
         List<UserDto> userDtoList = new ArrayList<>();
-        userRepository.findAll().forEach(userEntity -> userDtoList.add(UserUtil.toUserDto(userEntity)));
+        userRepository.findAll().forEach(userDocument -> userDtoList.add(UserUtil.toUserDto(userDocument)));
         return userDtoList;
     }
 
@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
         List<UserDto> userDtoList = new ArrayList<>();
         userRepository.findByFirstNameAndLastName(firstName, lastName).ifPresentOrElse(
                 usersList ->
-                        usersList.forEach(userEntity -> userDtoList.add(UserUtil.toUserDto(userEntity))),
+                        usersList.forEach(userDocument -> userDtoList.add(UserUtil.toUserDto(userDocument))),
                 () -> {
                     throw GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), String.format(Constants.USER_X_X_NOT_FOUND, firstName, lastName));
                 });
@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto save(UserDto userDto) {
-        userRepository.save(UserUtil.toUserEntity(userDto));
+        userRepository.save(UserUtil.toUserDocument(userDto));
         return userDto;
     }
 

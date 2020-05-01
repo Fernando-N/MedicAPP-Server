@@ -1,7 +1,7 @@
 package cl.medicapp.service.security;
 
 import cl.medicapp.service.constants.Constants;
-import cl.medicapp.service.entity.UserEntity;
+import cl.medicapp.service.document.UserDocument;
 import cl.medicapp.service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,13 +33,13 @@ public class TokenAdditionalInformation implements TokenEnhancer {
      */
     @Override
     public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
-        Optional<UserEntity> optionalUser = userRepository.findByEmailIgnoreCase(authentication.getName());
+        Optional<UserDocument> optionalUser = userRepository.findByEmailIgnoreCase(authentication.getName());
 
-        Map<String, Object> additionalInformation = optionalUser.map(userEntity -> {
+        Map<String, Object> additionalInformation = optionalUser.map(userDocument -> {
             Map<String, Object> extra = new HashMap<>();
-            extra.put(Constants.FIRST_NAME, userEntity.getFirstName());
-            extra.put(Constants.LAST_NAME, userEntity.getLastName());
-            extra.put(Constants.EMAIL, userEntity.getEmail());
+            extra.put(Constants.FIRST_NAME, userDocument.getFirstName());
+            extra.put(Constants.LAST_NAME, userDocument.getLastName());
+            extra.put(Constants.EMAIL, userDocument.getEmail());
             return extra;
         }).orElseThrow(() -> new UsernameNotFoundException(String.format(Constants.USER_X_NOT_FOUND, authentication.getName())));
 

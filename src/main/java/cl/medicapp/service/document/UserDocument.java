@@ -1,4 +1,4 @@
-package cl.medicapp.service.entity;
+package cl.medicapp.service.document;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,14 +17,14 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Entity User
+ * Document User
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "users")
-public class UserEntity implements Serializable {
+public class UserDocument implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -60,7 +60,7 @@ public class UserEntity implements Serializable {
      * Roles
      */
     @DBRef
-    private List<RoleEntity> roleEntities;
+    private List<RoleDocument> roleEntities;
 
     /**
      * Habilitado

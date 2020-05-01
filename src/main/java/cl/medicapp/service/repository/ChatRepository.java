@@ -1,18 +1,18 @@
 package cl.medicapp.service.repository;
 
-import cl.medicapp.service.entity.MessageEntity;
-import cl.medicapp.service.entity.UserEntity;
+import cl.medicapp.service.document.MessageDocument;
+import cl.medicapp.service.document.UserDocument;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.data.mongodb.repository.Tailable;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 
 @Repository
-public interface ChatRepository extends ReactiveMongoRepository<MessageEntity, String> {
+public interface ChatRepository extends ReactiveMongoRepository<MessageDocument, String> {
 
     @Tailable
-    Flux<MessageEntity> findWithTailableCursorByTo(UserEntity to);
+    Flux<MessageDocument> findWithTailableCursorByTo(UserDocument to);
 
-    Flux<MessageEntity> findAllByAlreadyReadFalse();
+    Flux<MessageDocument> findAllByAlreadyReadFalse();
 
 }

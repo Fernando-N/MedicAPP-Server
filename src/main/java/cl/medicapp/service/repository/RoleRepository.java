@@ -1,6 +1,6 @@
 package cl.medicapp.service.repository;
 
-import cl.medicapp.service.entity.RoleEntity;
+import cl.medicapp.service.document.RoleDocument;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,9 +10,9 @@ import java.util.Optional;
  * Repositorio de Roles
  */
 @Repository
-public interface RoleRepository extends PagingAndSortingRepository<RoleEntity, Long> {
+public interface RoleRepository extends PagingAndSortingRepository<RoleDocument, Long> {
 
-    Optional<RoleEntity> findByNameIgnoreCaseEndsWith(String role);
+    Optional<RoleDocument> findByNameIgnoreCaseEndsWith(String role);
 
     int deleteByNameIgnoreCase(String name);
 

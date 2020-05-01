@@ -24,6 +24,7 @@ import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Clase controladora de excepciones
@@ -80,8 +81,8 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
         StringBuilder detail = new StringBuilder();
         detail.append(exception.getMethod()).append(Constants.X_METHOD_IS_NOT_SUPPORT);
-        exception.getSupportedHttpMethods().forEach(httpMethod -> detail.append(httpMethod).append(" "));
-        GenericResponseDto error = GenericResponseDto.builder().message(HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase()).details(Collections.singletonList(detail.toString())).build();
+        Objects.requireNonNull(exception.getSupportedHttpMethods()).forEach(httpMethod -> detail.append(httpMethod).append(" "));
+        GenericResponseDto error = GenericResponseDto.builder().message(HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase()).details(Collections.singletonList(detail.toString().trim())).build();
         return new ResponseEntity<>(error, new HttpHeaders(), HttpStatus.METHOD_NOT_ALLOWED);
     }
 

@@ -24,7 +24,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<RoleDto> getAll() {
         List<RoleDto> roleDtoList = new ArrayList<>();
-        roleRepository.findAll().forEach(roleEntity -> roleDtoList.add(RoleUtil.toRoleDto(roleEntity)));
+        roleRepository.findAll().forEach(roleDocument -> roleDtoList.add(RoleUtil.toRoleDto(roleDocument)));
         return roleDtoList;
     }
 
@@ -42,11 +42,11 @@ public class RoleServiceImpl implements RoleService {
         }
 
         roleRepository.findByNameIgnoreCaseEndsWith(request.getName()).ifPresentOrElse(
-                roleEntity -> {
+                roleDocument -> {
                     throw GenericResponseUtil.buildGenericException(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), String.format(Constants.ROLE_X_ALREADY_EXIST, request.getName()));
                 },
                 () ->
-                        roleRepository.save(RoleUtil.toRoleEntity(request)));
+                        roleRepository.save(RoleUtil.toRoleDocument(request)));
 
         return request;
     }
@@ -64,9 +64,9 @@ public class RoleServiceImpl implements RoleService {
 
         String tmpRoleName = roleName;
         roleRepository.findByNameIgnoreCaseEndsWith(roleName).ifPresentOrElse(
-                roleEntity -> {
-                    roleEntity.setName(newRoleName.getName());
-                    roleRepository.save(roleEntity);
+                roleDocument -> {
+                    roleDocument.setName(newRoleName.getName());
+                    roleRepository.save(roleDocument);
                 },
                 () -> {
                     throw GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), String.format(Constants.ROLE_X_NOT_FOUND, tmpRoleName));

@@ -32,10 +32,10 @@ public class AuthenticationSuccessErrorHandler implements AuthenticationEventPub
         UserDetails userAuthenticated = (UserDetails) authentication.getPrincipal();
         log.debug(Constants.USER_JOINED_SUCCESSFUL, userAuthenticated.getUsername());
 
-        userRepository.findByEmailIgnoreCase(authentication.getName()).ifPresent(userEntity -> {
-            userEntity.setAttemps(0);
-            userEntity.setLastLogin(new Date());
-            userRepository.save(userEntity);
+        userRepository.findByEmailIgnoreCase(authentication.getName()).ifPresent(userDocument -> {
+            userDocument.setAttemps(0);
+            userDocument.setLastLogin(new Date());
+            userRepository.save(userDocument);
         });
     }
 

@@ -1,4 +1,4 @@
-package cl.medicapp.service.entity;
+package cl.medicapp.service.document;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,14 +13,14 @@ import javax.persistence.Id;
 import java.io.Serializable;
 
 /**
- * Entity Role
+ * Document Role
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "roles")
-public class RoleEntity implements Serializable {
+public class RoleDocument implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

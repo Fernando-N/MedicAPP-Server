@@ -1,4 +1,4 @@
-package cl.medicapp.service.entity;
+package cl.medicapp.service.document;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,14 +15,14 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Entity Message Chat
+ * Document Message Chat
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "chat")
-public class MessageEntity implements Serializable {
+public class MessageDocument implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -34,17 +34,17 @@ public class MessageEntity implements Serializable {
 
     /**
      * De
-     * DBRef para referenciar entity User
+     * DBRef para referenciar document User
      */
     @DBRef
-    private UserEntity from;
+    private UserDocument from;
 
     /**
      * Para
-     * DBRef para referenciar entity User
+     * DBRef para referenciar documento User
      */
     @DBRef
-    private UserEntity to;
+    private UserDocument to;
 
     /**
      * Mensajes

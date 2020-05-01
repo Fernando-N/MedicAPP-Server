@@ -1,36 +1,36 @@
 package cl.medicapp.service.util;
 
+import cl.medicapp.service.document.UserDocument;
 import cl.medicapp.service.dto.UserDto;
-import cl.medicapp.service.entity.UserEntity;
 import org.dozer.DozerBeanMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
- * Clase util para UserDto, UserEntity, RoleDto y RoleEntity
+ * Clase util para UserDto, UserDocument
  */
 public class UserUtil {
 
     private static final DozerBeanMapper mapper = new DozerBeanMapper();
 
     /**
-     * Transforma UserEntity -> UserDto
+     * Transforma UserDocument -> UserDto
      *
-     * @param userEntity userEntity
+     * @param userDocument target
      * @return UserDto
      */
-    public static UserDto toUserDto(UserEntity userEntity) {
-        return mapper.map(userEntity, UserDto.class);
+    public static UserDto toUserDto(UserDocument userDocument) {
+        return mapper.map(userDocument, UserDto.class);
     }
 
     /**
-     * Transforma UserDto -> UserEntity
+     * Transforma UserDto -> UserDocument
      *
-     * @param userDto userDto
-     * @return UserEntity
+     * @param userDto target
+     * @return UserDocument
      */
-    public static UserEntity toUserEntity(UserDto userDto) {
-        return mapper.map(userDto, UserEntity.class);
+    public static UserDocument toUserDocument(UserDto userDto) {
+        return mapper.map(userDto, UserDocument.class);
     }
 
     /**

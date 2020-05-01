@@ -1,7 +1,7 @@
 package cl.medicapp.service.util;
 
-import cl.medicapp.service.entity.RoleEntity;
-import cl.medicapp.service.entity.UserEntity;
+import cl.medicapp.service.document.RoleDocument;
+import cl.medicapp.service.document.UserDocument;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,20 +21,20 @@ public class UserDetailsUtil {
      * @param user Usuario a mapear
      * @return UserDetails
      */
-    public static UserDetails build(UserEntity user) {
+    public static UserDetails build(UserDocument user) {
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), user.getEnabled(), true, true, true, getAuthorities(user));
     }
 
     /**
      * Obtiene los authorities del usuario
      *
-     * @param retrievedUserEntity usuario
+     * @param retrievedUserDocument usuario
      * @return Set con roles/autorizaciones del usuario
      */
-    private static Set<? extends GrantedAuthority> getAuthorities(UserEntity retrievedUserEntity) {
-        List<RoleEntity> roleEntities = retrievedUserEntity.getRoleEntities();
+    private static Set<? extends GrantedAuthority> getAuthorities(UserDocument retrievedUserDocument) {
+        List<RoleDocument> roleEntities = retrievedUserDocument.getRoleEntities();
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        roleEntities.forEach(roleEntity -> authorities.add(new SimpleGrantedAuthority(roleEntity.getName())));
+        roleEntities.forEach(roleDocument -> authorities.add(new SimpleGrantedAuthority(roleDocument.getName())));
         return authorities;
     }
 
