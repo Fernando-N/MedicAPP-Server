@@ -86,6 +86,11 @@ public class UserController {
         return userService.deleteByEmail(email);
     }
 
+    @GetMapping("/disabled")
+    public List<UserDto> getAllDisabled() {
+        return userService.getAllDisabled();
+    }
+
     @PutMapping("/{id}/enable")
     public GenericResponseDto enableUser(@PathVariable String id) {
         return userService.enableUser(id, true);

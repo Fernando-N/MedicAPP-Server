@@ -17,6 +17,8 @@ public interface UserDocumentRepository extends PagingAndSortingRepository<UserD
 
     List<UserDocument> findAll();
 
+    List<UserDocument> findAllByEnabledFalse();
+
     List<UserDocument> findAllByRoleEntities(RoleDocument role);
 
     Optional<UserDocument> findByEmailIgnoreCase(String email);

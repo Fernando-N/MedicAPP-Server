@@ -33,6 +33,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserDto> getAllDisabled() {
+        return userRepository.findAllByEnabledFalse().stream().map(UserUtil::toUserDto).collect(Collectors.toList());
+    }
+
+    @Override
     public UserDto getOwnProfile() {
         String emailUser = UserUtil.getEmailUserLogged();
         return UserUtil.toUserDto(userRepository.findByEmailIgnoreCase(emailUser).orElseThrow(GenericResponseUtil::getGenericException));

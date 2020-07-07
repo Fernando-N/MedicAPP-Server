@@ -10,6 +10,8 @@ public interface UserService {
 
     List<UserDto> getAll();
 
+    List<UserDto> getAllDisabled();
+
     UserDto getOwnProfile();
 
     List<UserDto>  getAllByRole(String role);

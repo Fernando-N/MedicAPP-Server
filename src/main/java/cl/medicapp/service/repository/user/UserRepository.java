@@ -12,6 +12,8 @@ public interface UserRepository {
 
     List<UserDocument> findAll();
 
+    List<UserDocument> findAllByEnabledFalse();
+
     List<UserDocument> findAllByRole(RoleDocument roleDocument);
 
     UserDocument save(UserDocument userDocument);

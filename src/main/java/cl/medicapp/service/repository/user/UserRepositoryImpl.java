@@ -33,6 +33,11 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public List<UserDocument> findAllByEnabledFalse() {
+        return userRepository.findAllByEnabledFalse();
+    }
+
+    @Override
     public List<UserDocument> findAllByRole(RoleDocument roleDocument) {
         return userRepository.findAllByRoleEntities(roleDocument);
     }
