@@ -1,0 +1,17 @@
+package cl.medicapp.service.repository.userdetails;
+
+import cl.medicapp.service.document.UserDetailsDocument;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+/**
+ * Repositorio de Usuarios
+ */
+@Repository
+public interface UserDetailsDocumentRepository extends PagingAndSortingRepository<UserDetailsDocument, String> {
+
+    List<UserDetailsDocument> findByFirstNameAndLastName(String firstName, String lastName);
+
+}

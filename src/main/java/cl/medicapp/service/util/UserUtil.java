@@ -1,17 +1,22 @@
 package cl.medicapp.service.util;
 
+import cl.medicapp.service.document.CommuneDocument;
+import cl.medicapp.service.document.ParamedicDetailsDocument;
+import cl.medicapp.service.document.RoleDocument;
+import cl.medicapp.service.document.UserDetailsDocument;
 import cl.medicapp.service.document.UserDocument;
+import cl.medicapp.service.dto.RoleDto;
 import cl.medicapp.service.dto.UserDto;
-import org.dozer.DozerBeanMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Clase util para UserDto, UserDocument
  */
 public class UserUtil {
-
-    private static final DozerBeanMapper mapper = new DozerBeanMapper();
 
     /**
      * Transforma UserDocument -> UserDto
@@ -20,7 +25,42 @@ public class UserUtil {
      * @return UserDto
      */
     public static UserDto toUserDto(UserDocument userDocument) {
-        return mapper.map(userDocument, UserDto.class);
+        UserDto user = UserDto.builder()
+                .id(userDocument.getId())
+                .email(userDocument.getEmail())
+                .rut(userDocument.getUserDetails().getRut())
+                .firstName(userDocument.getUserDetails().getFirstName())
+                .lastName(userDocument.getUserDetails().getLastName())
+                //.birthDay(userDocument.getUserDetails().getBirthDay())
+                .commune(CommuneUtil.toCommuneDto(userDocument.getUserDetails().getCommune()))
+                .region(RegionUtil.toRegionDto(userDocument.getUserDetails().getCommune().getRegion()))
+                .address(userDocument.getUserDetails().getAddress())
+                .isParamedic(hasRoleParamedic(userDocument.getRoleEntities()))
+                .createdOn(userDocument.getCreatedOn())
+                .attempts(userDocument.getAttempts())
+                .enabled(userDocument.getEnabled())
+                .roleEntities(roleListDto(userDocument.getRoleEntities()))
+                .profileImage(userDocument.getUserDetails().getProfileImageURI())
+                .build();
+
+        if (user.isParamedic()) {
+            user.setGraduationYear(userDocument.getParamedicDetails().getGraduationYear());
+            user.setTitleImage(userDocument.getParamedicDetails().getTitleImageURI());
+            user.setCertificateNationalHealth(userDocument.getParamedicDetails().getCertificateNationalHealthURI());
+            user.setCarnetImage(userDocument.getParamedicDetails().getCarnetImageURI());
+        }
+
+        return user;
+    }
+
+    private static boolean hasRoleParamedic(List<RoleDocument> roles) {
+        return roles
+                .stream()
+                .anyMatch(roleDocument -> roleDocument.getName().equals("ROLE_PARAMEDIC"));
+    }
+
+    private static List<RoleDto> roleListDto(List<RoleDocument> roles) {
+        return roles.stream().map(RoleUtil::toRoleDto).collect(Collectors.toList());
     }
 
     /**
@@ -30,7 +70,46 @@ public class UserUtil {
      * @return UserDocument
      */
     public static UserDocument toUserDocument(UserDto userDto) {
-        return mapper.map(userDto, UserDocument.class);
+        return UserDocument.builder()
+                .email(userDto.getEmail())
+                .enabled(!userDto.isParamedic())
+                .attempts(0)
+                .build();
+    }
+
+    /**
+     * Genera UserDetailsDocument a partir de un UserDto y CommuneDocument
+     *
+     * @param newUser         usuario nuevo
+     * @param communeDocument Comuna referencia
+     * @return UserDetailsDocument
+     */
+    public static UserDetailsDocument buildUserDetailsDocument(UserDto newUser, CommuneDocument communeDocument) {
+        return UserDetailsDocument.builder()
+                .rut(newUser.getRut())
+                .firstName(newUser.getFirstName())
+                .lastName(newUser.getLastName())
+                .birthDay(newUser.getBirthDay())
+                .profileImageURI(newUser.getProfileImage())
+                .commune(communeDocument)
+                .address(newUser.getAddress())
+                .build();
+    }
+
+    /**
+     * Genera ParamedicDetailsDocument a partir de un UserDto
+     *
+     * @param newUser         usuario nuevo
+     * @return UserDetailsDocument
+     */
+    public static ParamedicDetailsDocument buildParamedicDetailsDocument(UserDto newUser) {
+
+        return ParamedicDetailsDocument.builder()
+                .graduationYear(newUser.getGraduationYear())
+                .carnetImageURI(newUser.getCarnetImage())
+                .titleImageURI(newUser.getTitleImage())
+                .certificateNationalHealthURI(newUser.getCertificateNationalHealth())
+                .build();
     }
 
     /**

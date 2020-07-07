@@ -1,40 +1,29 @@
 package cl.medicapp.service.controller;
 
 import cl.medicapp.service.dto.MessageDto;
-import cl.medicapp.service.services.chat.ChatService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Flux;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.stereotype.Controller;
 
-import javax.validation.Valid;
+import java.util.Date;
 
 /**
  * Controlador de roles
  */
-@RestController
-@RequiredArgsConstructor
-@RequestMapping("/chat")
+@Controller
+@Slf4j
 public class ChatController {
 
-    private final ChatService chatService;
+    @MessageMapping("/message")
+    @SendTo("/chat/message")
+    public MessageDto getMessage(MessageDto message) {
 
-    @PostMapping("")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void postChat(@Valid @RequestBody MessageDto messageDto) {
-        chatService.insertAndSubscribe(messageDto);
-    }
+        message.setDate(new Date());
 
-    @GetMapping(value = "/{to}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<MessageDto> streamMessages(@PathVariable String to) {
-        return chatService.openStreamToUser(to);
+        log.info("Broker receive: " + message.toString());
+
+        return message;
     }
 
 }

@@ -1,6 +1,7 @@
 package cl.medicapp.service.exception;
 
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
@@ -10,18 +11,18 @@ import java.util.List;
 @Getter
 public class GenericException extends RuntimeException {
 
-    private final int statusCode;
+    private final HttpStatus httpStatus;
     private final List<String> details;
 
-    public GenericException(int statusCode, String message, List<String> details) {
+    public GenericException(HttpStatus httpStatus, String message, List<String> details) {
         super(message);
-        this.statusCode = statusCode;
+        this.httpStatus = httpStatus;
         this.details = details;
     }
 
     public GenericException(String message, List<String> details) {
         super(message);
-        this.statusCode = 500;
+        this.httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         this.details = details;
     }
 

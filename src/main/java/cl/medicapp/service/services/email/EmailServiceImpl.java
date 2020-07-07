@@ -1,5 +1,7 @@
 package cl.medicapp.service.services.email;
 
+import cl.medicapp.service.dto.EmailDto;
+import cl.medicapp.service.util.SimpleMailMessageUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
@@ -21,7 +23,14 @@ public class EmailServiceImpl implements EmailService {
      *
      * @param email Objeto SimpleMailMessage a enviar
      */
+
+    public void sendEmail(EmailDto email) {
+        SimpleMailMessage recoveryMail = SimpleMailMessageUtil.build("suppor@medicapp.cl", email.getEmail(), email.getTitle(), email.getBody());
+        sendEmail(recoveryMail);
+    }
+
     @Async
+    //TODO Ver como mejorar esto
     public void sendEmail(SimpleMailMessage email) {
         mailSender.send(email);
         log.info("[EmailService] Password recovery token mail send to {}", Objects.requireNonNull(email.getTo())[0]);

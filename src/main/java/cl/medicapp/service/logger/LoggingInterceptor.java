@@ -33,6 +33,7 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO Dejar mas bonito esto
 public class LoggingInterceptor extends RequestBodyAdviceAdapter implements ResponseBodyAdvice<Object>, HandlerInterceptor {
 
     private final HttpServletRequest httpServletRequest;

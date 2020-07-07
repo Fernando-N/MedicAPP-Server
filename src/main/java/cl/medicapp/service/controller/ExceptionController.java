@@ -128,7 +128,7 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleErrorException(GenericException exception) {
         logError(exception);
         GenericResponseDto error = GenericResponseDto.builder().message(exception.getMessage()).details(exception.getDetails()).build();
-        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(error, exception.getHttpStatus());
     }
 
     /**

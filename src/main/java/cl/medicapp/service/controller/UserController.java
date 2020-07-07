@@ -1,21 +1,13 @@
 package cl.medicapp.service.controller;
 
+import cl.medicapp.service.dto.ContentDto;
 import cl.medicapp.service.dto.GenericResponseDto;
 import cl.medicapp.service.dto.UserDto;
 import cl.medicapp.service.services.user.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -30,18 +22,6 @@ public class UserController {
     private final UserService userService;
 
     /**
-     * Endpoint que crea un usuario
-     *
-     * @param userDto Usuario a crear
-     * @return Usuario creado
-     */
-    @PostMapping("")
-    @ResponseStatus(HttpStatus.CREATED)
-    public UserDto create(@Valid @RequestBody UserDto userDto) {
-        return userService.save(userDto);
-    }
-
-    /**
      * Endpoint que obtiene todos los usuarios
      *
      * @return Lista de usuarios
@@ -52,26 +32,47 @@ public class UserController {
     }
 
     /**
-     * Endpoint que obtiene un usuario por su correo
+     * Endpoint que obtiene el perfil del usuario logead
      *
-     * @param email Email
-     * @return Usuario encontrado
+     * @return Datos de usuario logeado
      */
-    @GetMapping("/{email}")
-    public UserDto getByEmail(@PathVariable String email) {
-        return userService.getByEmail(email);
+    @GetMapping("/me")
+    @PreAuthorize("isAuthenticated()")
+    public UserDto getOwnProfile() {
+        return userService.getOwnProfile();
     }
 
     /**
-     * Endpoint que obtiene usuarios por su nombre y apellido
+     * Endpoint que obtiene todos los usuarios
      *
-     * @param firstName Nombre
-     * @param lastName  Apellido
-     * @return Lista de usuarios encontrados
+     * @return Lista de usuarios
      */
-    @GetMapping("/{firstName}-{lastName}")
-    public List<UserDto> getByName(@PathVariable String firstName, @PathVariable String lastName) {
-        return userService.getByName(firstName, lastName);
+    @GetMapping("/paramedic")
+    @PreAuthorize("isAuthenticated()")
+    public List<UserDto> getAllByRole() {
+        return userService.getAllByRole("PARAMEDIC");
+    }
+
+    /**
+     * Endpoint que obtiene usuarios por su id
+     *
+     * @param id Id de usuario
+     * @return Usuario encontrado
+     */
+    @GetMapping("/{id}")
+    public UserDto getById(@PathVariable String id) {
+        return userService.getById(id);
+    }
+
+    /**
+     * Endpoint que devuelve el url de la imagen de perfil de un usuario, esto es para mantener actualizado en la app
+     * @param id Id de usuario
+     * @return URI de imagen de perfil de usuario
+     */
+    @GetMapping("/profile-image/{id}")
+    @PreAuthorize("permitAll()")
+    public ContentDto getProfileImage(@PathVariable String id) {
+        return userService.getUserImage(id);
     }
 
     /**
@@ -83,6 +84,16 @@ public class UserController {
     @DeleteMapping("/{email}")
     public GenericResponseDto deleteByEmail(@PathVariable String email) {
         return userService.deleteByEmail(email);
+    }
+
+    @PutMapping("/{id}/enable")
+    public GenericResponseDto enableUser(@PathVariable String id) {
+        return userService.enableUser(id, true);
+    }
+
+    @PutMapping("/{id}/disable")
+    public GenericResponseDto disableUser(@PathVariable String id) {
+        return userService.enableUser(id, false);
     }
 
 }

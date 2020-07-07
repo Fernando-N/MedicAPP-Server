@@ -1,5 +1,7 @@
-package cl.medicapp.service.repository;
+package cl.medicapp.service.repository.user;
 
+import cl.medicapp.service.document.RoleDocument;
+import cl.medicapp.service.document.UserDetailsDocument;
 import cl.medicapp.service.document.UserDocument;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
@@ -11,11 +13,15 @@ import java.util.Optional;
  * Repositorio de Usuarios
  */
 @Repository
-public interface UserRepository extends PagingAndSortingRepository<UserDocument, Long> {
+public interface UserDocumentRepository extends PagingAndSortingRepository<UserDocument, String> {
+
+    List<UserDocument> findAll();
+
+    List<UserDocument> findAllByRoleEntities(RoleDocument role);
 
     Optional<UserDocument> findByEmailIgnoreCase(String email);
 
-    Optional<List<UserDocument>> findByFirstNameAndLastName(String firstName, String lastName);
+    UserDocument findByUserDetails(UserDetailsDocument userDetails);
 
     Optional<UserDocument> findByEmailIgnoreCaseAndEnabledTrue(String username);
 

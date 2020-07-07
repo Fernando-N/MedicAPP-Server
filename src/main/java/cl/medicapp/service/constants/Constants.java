@@ -3,6 +3,7 @@ package cl.medicapp.service.constants;
 /**
  * Clase de constantes
  */
+//TODO Mover Mensajes a yml externo
 public class Constants {
 
     public static final String FIRST_NAME = "FIRST_NAME";

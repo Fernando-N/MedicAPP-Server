@@ -19,6 +19,11 @@ import java.util.Date;
 public class MessageDto {
 
     /**
+     * Id
+     */
+    private String id;
+
+    /**
      * Fecha
      */
     private Date date;

@@ -2,7 +2,7 @@ package cl.medicapp.service.security;
 
 import cl.medicapp.service.constants.Constants;
 import cl.medicapp.service.document.UserDocument;
-import cl.medicapp.service.repository.UserRepository;
+import cl.medicapp.service.repository.user.UserDocumentRepository;
 import cl.medicapp.service.util.UserDetailsUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ import java.util.Optional;
 @Slf4j
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final UserDocumentRepository userDocumentRepository;
 
     /**
      * Carga el usuario a logearse
@@ -30,9 +30,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      * @return UserDetails
      */
     @Override
+    //TODO asdfa
     public UserDetails loadUserByUsername(String username) {
         log.info("Inicializado por {}", username);
-        Optional<UserDocument> userOptional = userRepository.findByEmailIgnoreCaseAndEnabledTrue(username);
+        Optional<UserDocument> userOptional = userDocumentRepository.findByEmailIgnoreCaseAndEnabledTrue(username);
         return UserDetailsUtil.build(userOptional.orElseThrow(() -> new UsernameNotFoundException(String.format(Constants.USER_X_NOT_FOUND, username))));
     }
 

@@ -1,4 +1,4 @@
-package cl.medicapp.service.repository;
+package cl.medicapp.service.repository.chat;
 
 import cl.medicapp.service.document.MessageDocument;
 import cl.medicapp.service.document.UserDocument;

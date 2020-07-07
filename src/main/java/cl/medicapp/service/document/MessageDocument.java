@@ -21,7 +21,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "chat")
+@Document(collection = "chats")
 public class MessageDocument implements Serializable {
     private static final long serialVersionUID = 1L;
 

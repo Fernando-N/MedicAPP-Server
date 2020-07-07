@@ -22,10 +22,11 @@ public class MessageUtil {
 
     public static MessageDto toMessageDto(MessageDocument messageDocument) {
         return MessageDto.builder()
+                .id(messageDocument.getId())
                 .date(messageDocument.getDate())
                 .message(messageDocument.getMessage())
-                .from(messageDocument.getFrom().getFirstName() + " " + messageDocument.getFrom().getLastName())
-                .to(messageDocument.getTo().getFirstName() + " " + messageDocument.getTo().getLastName())
+                .from(messageDocument.getFrom().getUserDetails().getFirstName() + " " + messageDocument.getFrom().getUserDetails().getLastName())
+                .to(messageDocument.getTo().getUserDetails().getFirstName() + " " + messageDocument.getTo().getUserDetails().getLastName())
                 .build();
     }
 

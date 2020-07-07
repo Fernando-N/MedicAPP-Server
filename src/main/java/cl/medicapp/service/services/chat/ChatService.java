@@ -7,9 +7,11 @@ import java.util.List;
 
 public interface ChatService {
 
-    void insertAndSubscribe(MessageDto messageDto);
+    void sendMessage(MessageDto messageDto);
 
-    Flux<MessageDto> openStreamToUser(String to);
+    Flux<MessageDto> getMessages(String to);
+
+    List<MessageDto> getMessages2(String to);
 
     List<MessageDto> getMessagesNotRead();
 

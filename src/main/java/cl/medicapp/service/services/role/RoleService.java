@@ -15,6 +15,6 @@ public interface RoleService {
 
     RoleDto update(String roleName, RoleDto newRoleName);
 
-    GenericResponseDto deleteRoleByName(String name);
+    GenericResponseDto deleteByName(String name);
 
 }

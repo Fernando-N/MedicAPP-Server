@@ -8,7 +8,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -45,22 +44,23 @@ public class UserDocument implements Serializable {
     private String password;
 
     /**
-     * Nombres
-     */
-    @Column(name = "first_name")
-    private String firstName;
-
-    /**
-     * Apellido
-     */
-    @Column(name = "last_name")
-    private String lastName;
-
-    /**
      * Roles
      */
     @DBRef
     private List<RoleDocument> roleEntities;
+
+    /**
+     * Detalles usuario
+     */
+    @DBRef
+    private UserDetailsDocument userDetails;
+
+    /**
+     * Detalles paramedico
+     * Puede ser null si no es paramedico
+     */
+    @DBRef
+    private ParamedicDetailsDocument paramedicDetails;
 
     /**
      * Habilitado
@@ -70,7 +70,7 @@ public class UserDocument implements Serializable {
     /**
      * Intentos
      */
-    private Integer attemps = 0;
+    private Integer attempts = 0;
 
     /**
      * Fecha de creación

@@ -59,7 +59,6 @@ public class RoleController {
      * @return Rol encontrado
      */
     @GetMapping("/{name}")
-    @ResponseStatus(HttpStatus.CREATED)
     public RoleDto getByName(@PathVariable String name) {
         return roleService.getByName(name);
     }
@@ -77,7 +76,7 @@ public class RoleController {
      */
     @DeleteMapping("/{name}")
     public GenericResponseDto deleteByName(@PathVariable String name) {
-        return roleService.deleteRoleByName(name);
+        return roleService.deleteByName(name);
     }
 
 }

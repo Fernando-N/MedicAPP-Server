@@ -120,7 +120,7 @@ public class AspectManager {
                                 .filter(annotation -> annotation.getClass().getInterfaces()[0].getName().startsWith(Constants.PACKAGE_BASE))
                                 .findFirst()
                                 .map(annotation -> annotation.getClass().getInterfaces()[0].getSimpleName())
-                                .orElseThrow())
+                                .orElseThrow(GenericResponseUtil::getGenericException))
                 .build();
     }
 

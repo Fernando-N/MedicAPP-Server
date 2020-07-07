@@ -2,13 +2,19 @@ package cl.medicapp.service.services.auth;
 
 import cl.medicapp.service.annotation.FormatArgs;
 import cl.medicapp.service.constants.Constants;
-import cl.medicapp.service.document.RoleDocument;
+import cl.medicapp.service.document.CommuneDocument;
+import cl.medicapp.service.document.ParamedicDetailsDocument;
+import cl.medicapp.service.document.UserDetailsDocument;
 import cl.medicapp.service.document.UserDocument;
 import cl.medicapp.service.dto.GenericResponseDto;
 import cl.medicapp.service.dto.ResetPasswordRequestDto;
 import cl.medicapp.service.dto.UserDto;
-import cl.medicapp.service.repository.RoleRepository;
-import cl.medicapp.service.repository.UserRepository;
+import cl.medicapp.service.holder.DocumentsHolder;
+import cl.medicapp.service.repository.commune.CommuneRepository;
+import cl.medicapp.service.repository.paramedicdetails.ParamedicDetailsDocumentRepository;
+import cl.medicapp.service.repository.role.RoleRepository;
+import cl.medicapp.service.repository.user.UserDocumentRepository;
+import cl.medicapp.service.repository.userdetails.UserDetailsDocumentRepository;
 import cl.medicapp.service.services.email.EmailService;
 import cl.medicapp.service.util.GenericResponseUtil;
 import cl.medicapp.service.util.SimpleMailMessageUtil;
@@ -20,6 +26,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -29,8 +36,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private final UserRepository userRepository;
+    private final UserDocumentRepository userDocumentRepository;
     private final RoleRepository roleRepository;
+    private final UserDetailsDocumentRepository userDetailsDocumentRepository;
+    private final ParamedicDetailsDocumentRepository paramedicDetailsDocumentRepository;
+    private final CommuneRepository communeRepository;
     private final EmailService emailService;
     private final BCryptPasswordEncoder passwordEncoder;
 
@@ -42,22 +52,45 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     @FormatArgs
+    //TODO Terminar esta implementación
     public UserDto register(UserDto newUser) {
-        userRepository.findByEmailIgnoreCase(newUser.getEmail()).ifPresentOrElse(
-                userDocument -> {
-                    throw GenericResponseUtil.buildGenericException(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), String.format(Constants.EMAIL_X_ALREADY_REGISTER, newUser.getEmail()));
-                },
-                () -> {
+        Optional<UserDocument> user = userDocumentRepository.findByEmailIgnoreCase(newUser.getEmail());
 
-                    RoleDocument roleUser = roleRepository.findByNameIgnoreCaseEndsWith("ROLE_USER").orElseThrow();
+        if (user.isPresent()) {
+            throw GenericResponseUtil.buildGenericException(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.getReasonPhrase(), String.format(Constants.EMAIL_X_ALREADY_REGISTER, newUser.getEmail()));
+        }
 
-                    UserDocument userDocument = UserUtil.toUserDocument(newUser);
-                    userDocument.setPassword(passwordEncoder.encode(newUser.getPassword()));
-                    userDocument.setRoleEntities(Collections.singletonList(roleUser));
+        CommuneDocument commune = communeRepository.findById(newUser.getCommune().getValue()).orElseThrow(GenericResponseUtil::getGenericException);
+        UserDetailsDocument userDetailsDocument = userDetailsDocumentRepository.save(UserUtil.buildUserDetailsDocument(newUser, commune));
+        ParamedicDetailsDocument paramedicDetailsDocument = null;
 
-                    userRepository.save(userDocument);
-                }
+        if (newUser.isParamedic()) {
+            paramedicDetailsDocument = paramedicDetailsDocumentRepository.save(UserUtil.buildParamedicDetailsDocument(newUser));
+        }
+
+        UserDocument userDocument = UserUtil.toUserDocument(newUser);
+        userDocument.setUserDetails(userDetailsDocument);
+        userDocument.setParamedicDetails(paramedicDetailsDocument);
+        userDocument.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        userDocument.setRoleEntities(Collections.singletonList(
+                newUser.isParamedic() ?
+                        DocumentsHolder.getInstance().getRoleDocumentList()
+                                .stream()
+                                .filter(roleDocument -> roleDocument.getName().contains("PARAMEDIC"))
+                                .findFirst()
+                                .orElseThrow(GenericResponseUtil::getGenericException)
+                        :
+                        DocumentsHolder.getInstance().getRoleDocumentList()
+                                .stream()
+                                .filter(roleDocument -> roleDocument.getName().contains("USER"))
+                                .findFirst()
+                                .orElseThrow(GenericResponseUtil::getGenericException)
+                )
         );
+        userDocument.setEnabled(!newUser.isParamedic());
+
+        userDocumentRepository.save(userDocument);
+
         return newUser;
     }
 
@@ -70,9 +103,9 @@ public class AuthServiceImpl implements AuthService {
     //TODO Mover esto a constantes y generar plantilla mail
     @Override
     public GenericResponseDto recoveryPassword(String email) {
-        userRepository.findByEmailIgnoreCase(email).ifPresent(userDocument -> {
+        userDocumentRepository.findByEmailIgnoreCase(email).ifPresent(userDocument -> {
             userDocument.setResetToken(UUID.randomUUID().toString());
-            userRepository.save(userDocument);
+            userDocumentRepository.save(userDocument);
             String body = "token to recovery password: ".concat(userDocument.getResetToken());
             SimpleMailMessage recoveryMail = SimpleMailMessageUtil.build("suppor@medicapp.cl", userDocument.getEmail(), "Password recovery", body);
             emailService.sendEmail(recoveryMail);
@@ -93,19 +126,19 @@ public class AuthServiceImpl implements AuthService {
     public UserDto resetPassword(ResetPasswordRequestDto request) {
 
         if (!request.getPassword().equals(request.getPasswordConfirmation())) {
-            throw GenericResponseUtil.buildGenericException(HttpStatus.BAD_REQUEST.value(), Constants.PASSWORD_MUST_MATCH, Constants.INPUT_PASSWORDS_NOT_MATCH);
+            throw GenericResponseUtil.buildGenericException(HttpStatus.BAD_REQUEST, Constants.PASSWORD_MUST_MATCH, Constants.INPUT_PASSWORDS_NOT_MATCH);
         }
 
         if (request.getPassword().length() < 6 || request.getPassword().length() > 16) {
-            throw GenericResponseUtil.buildGenericException(HttpStatus.BAD_REQUEST.value(), Constants.PASSWORD_MUST_BE_BETWEEN, Constants.PASSWORD_MUST_BE_BETWEEN);
+            throw GenericResponseUtil.buildGenericException(HttpStatus.BAD_REQUEST, Constants.PASSWORD_MUST_BE_BETWEEN, Constants.PASSWORD_MUST_BE_BETWEEN);
         }
 
-        UserDocument user = userRepository.findByResetToken(request.getToken()).map(userDocument -> {
+        UserDocument user = userDocumentRepository.findByResetToken(request.getToken()).map(userDocument -> {
             userDocument.setResetToken(null);
             userDocument.setPassword(passwordEncoder.encode(request.getPassword()));
-            userRepository.save(userDocument);
+            userDocumentRepository.save(userDocument);
             return userDocument;
-        }).orElseThrow(() -> GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), String.format(Constants.TOKEN_NOT_FOUND, request.getToken())));
+        }).orElseThrow(() -> GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.getReasonPhrase(), String.format(Constants.TOKEN_NOT_FOUND, request.getToken())));
 
         return UserUtil.toUserDto(user);
     }

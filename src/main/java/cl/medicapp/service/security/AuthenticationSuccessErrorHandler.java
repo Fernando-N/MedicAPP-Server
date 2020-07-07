@@ -1,7 +1,7 @@
 package cl.medicapp.service.security;
 
 import cl.medicapp.service.constants.Constants;
-import cl.medicapp.service.repository.UserRepository;
+import cl.medicapp.service.repository.user.UserDocumentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationEventPublisher;
@@ -20,7 +20,7 @@ import java.util.Date;
 @Component
 public class AuthenticationSuccessErrorHandler implements AuthenticationEventPublisher {
 
-    private final UserRepository userRepository;
+    private final UserDocumentRepository userDocumentRepository;
 
     /**
      * Evento de autenticación correcta
@@ -32,10 +32,10 @@ public class AuthenticationSuccessErrorHandler implements AuthenticationEventPub
         UserDetails userAuthenticated = (UserDetails) authentication.getPrincipal();
         log.debug(Constants.USER_JOINED_SUCCESSFUL, userAuthenticated.getUsername());
 
-        userRepository.findByEmailIgnoreCase(authentication.getName()).ifPresent(userDocument -> {
-            userDocument.setAttemps(0);
+        userDocumentRepository.findByEmailIgnoreCase(authentication.getName()).ifPresent(userDocument -> {
+            userDocument.setAttempts(0);
             userDocument.setLastLogin(new Date());
-            userRepository.save(userDocument);
+            userDocumentRepository.save(userDocument);
         });
     }
 

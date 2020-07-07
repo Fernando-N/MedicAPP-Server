@@ -29,11 +29,11 @@ public class SecurityPropertiesLoaderFactory implements PropertySourceFactory {
     }
 
     private void logProperties(List<PropertySource<?>> propertySources) {
-        propertySources.forEach(propertySource -> ((Map<String, Object>) propertySource.getSource()).forEach(this::validateAndLogProperty));
+        propertySources.forEach(propertySource -> ((Map<?, ?>) propertySource.getSource()).forEach(this::validateAndLogProperty));
     }
 
-    private void validateAndLogProperty(String key, Object value) {
-        if (key.contains("auth.")) {
+    private void validateAndLogProperty(Object key, Object value) {
+        if (key instanceof String && ((String) key).contains("auth.")) {
             log.info(key + ": ************");
         } else {
             log.info(key + ": " + value.toString().replace("\n", ""));

@@ -19,8 +19,8 @@ public class GenericResponseUtil {
                 .build();
     }
 
-    public static GenericException buildGenericException(int statusCode, String message, String... details) {
-        return new GenericException(statusCode, message, Arrays.asList(details));
+    public static GenericException buildGenericException(HttpStatus httpStatus, String message, String... details) {
+        return new GenericException(httpStatus, message, Arrays.asList(details));
     }
 
     public static GenericException getGenericException() {
