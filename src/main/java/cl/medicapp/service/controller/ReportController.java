@@ -1,8 +1,9 @@
 package cl.medicapp.service.controller;
 
 import cl.medicapp.service.dto.GenericResponseDto;
+import cl.medicapp.service.dto.ReportDto;
 import cl.medicapp.service.dto.UserDto;
-import cl.medicapp.service.services.user.UserService;
+import cl.medicapp.service.services.report.ReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,7 +29,7 @@ import java.util.List;
 //@PreAuthorize("hasRole('ADMIN')")
 public class ReportController {
 
-    private final UserService userService;
+    private final ReportService reportService;
 
     /**
      * Endpoint que crea un usuario
@@ -38,8 +39,8 @@ public class ReportController {
      */
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto create(@Valid @RequestBody UserDto userDto) {
-        return userService.save(userDto);
+    public ReportDto create(@Valid @RequestBody ReportDto reportDto) {
+        return reportService.save(reportDto);
     }
 
     /**
@@ -48,8 +49,8 @@ public class ReportController {
      * @return Lista de usuarios
      */
     @GetMapping("")
-    public List<UserDto> getAll() {
-        return userService.getAll();
+    public List<ReportDto> getAll() {
+        return reportService.getAll();
     }
 
     /**
@@ -58,21 +59,14 @@ public class ReportController {
      * @param email Email
      * @return Usuario encontrado
      */
-    @GetMapping("/{email}")
-    public UserDto getByEmail(@PathVariable String email) {
-        return userService.getByEmail(email);
+    @GetMapping("/from/{idFrom}")
+    public List<ReportDto> getByFrom(@PathVariable String idFrom) {
+        return reportService.getByFromUserId(idFrom);
     }
 
-    /**
-     * Endpoint que obtiene usuarios por su nombre y apellido
-     *
-     * @param firstName Nombre
-     * @param lastName  Apellido
-     * @return Lista de usuarios encontrados
-     */
-    @GetMapping("/{firstName}-{lastName}")
-    public List<UserDto> getByName(@PathVariable String firstName, @PathVariable String lastName) {
-        return userService.getByName(firstName, lastName);
+    @GetMapping("/to/{idTo}")
+    public List<ReportDto> getByTo(@PathVariable String idTo) {
+        return reportService.getByToUserId(idTo);
     }
 
     /**
@@ -81,9 +75,9 @@ public class ReportController {
      * @param email Email
      * @return GenericResponse con detalles
      */
-    @DeleteMapping("/{email}")
-    public GenericResponseDto deleteByEmail(@PathVariable String email) {
-        return userService.deleteByEmail(email);
+    @DeleteMapping("/{id}")
+    public GenericResponseDto deleteById(@PathVariable String id) {
+        return reportService.deleteById(id);
     }
 
 }

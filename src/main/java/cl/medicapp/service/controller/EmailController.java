@@ -17,7 +17,7 @@ public class EmailController {
 
     private final EmailService emailService;
 
-    @PostMapping("/register")
+    @PostMapping("/send")
     @ResponseStatus(HttpStatus.CREATED)
     public void sendEmail(@Valid @RequestBody EmailDto user) {
         emailService.sendEmail(user);

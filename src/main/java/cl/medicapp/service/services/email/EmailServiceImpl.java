@@ -31,7 +31,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Async
     //TODO Ver como mejorar esto
-    public void sendEmail(SimpleMailMessage email) {
+    private void sendEmail(SimpleMailMessage email) {
         mailSender.send(email);
         log.info("[EmailService] Password recovery token mail send to {}", Objects.requireNonNull(email.getTo())[0]);
     }
