@@ -31,7 +31,7 @@ public class UserUtil {
                 .rut(userDocument.getUserDetails().getRut())
                 .firstName(userDocument.getUserDetails().getFirstName())
                 .lastName(userDocument.getUserDetails().getLastName())
-                //.birthDay(userDocument.getUserDetails().getBirthDay())
+                .birthDay(userDocument.getUserDetails().getBirthDay())
                 .commune(CommuneUtil.toCommuneDto(userDocument.getUserDetails().getCommune()))
                 .region(RegionUtil.toRegionDto(userDocument.getUserDetails().getCommune().getRegion()))
                 .address(userDocument.getUserDetails().getAddress())
