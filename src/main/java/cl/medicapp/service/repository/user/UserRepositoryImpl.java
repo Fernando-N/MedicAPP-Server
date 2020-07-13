@@ -1,10 +1,8 @@
 package cl.medicapp.service.repository.user;
 
-import cl.medicapp.service.document.CommuneDocument;
-import cl.medicapp.service.document.RoleDocument;
-import cl.medicapp.service.document.UserDetailsDocument;
-import cl.medicapp.service.document.UserDocument;
+import cl.medicapp.service.document.*;
 import cl.medicapp.service.repository.commune.CommuneRepository;
+import cl.medicapp.service.repository.paramedicdetails.ParamedicDetailsDocumentRepository;
 import cl.medicapp.service.repository.userdetails.UserDetailsDocumentRepository;
 import cl.medicapp.service.util.GenericResponseUtil;
 import lombok.AllArgsConstructor;
@@ -20,6 +18,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     private final UserDocumentRepository userRepository;
     private final UserDetailsDocumentRepository userDetailsRepository;
+    private final ParamedicDetailsDocumentRepository paramedicDetailsDocumentRepository;
     private final CommuneRepository communeRepository;
 
     @Override
@@ -76,6 +75,23 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public boolean deleteByEmail(String email) {
-        return userRepository.deleteByEmail(email) >= 1;
+
+        Optional<UserDocument> userDocumentOptional = userRepository.findByEmailIgnoreCase(email);
+
+        if (!userDocumentOptional.isPresent()) {
+            return false;
+        }
+
+
+        if (userDocumentOptional.get().getParamedicDetails() != null) {
+            paramedicDetailsDocumentRepository.delete(userDocumentOptional.get().getParamedicDetails());
+        }
+
+        userDetailsRepository.delete(userDocumentOptional.get().getUserDetails());
+        userRepository.delete(userDocumentOptional.get());
+
+
+
+        return true;
     }
 }

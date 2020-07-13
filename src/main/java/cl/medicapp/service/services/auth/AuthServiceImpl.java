@@ -6,6 +6,7 @@ import cl.medicapp.service.document.CommuneDocument;
 import cl.medicapp.service.document.ParamedicDetailsDocument;
 import cl.medicapp.service.document.UserDetailsDocument;
 import cl.medicapp.service.document.UserDocument;
+import cl.medicapp.service.dto.EmailDto;
 import cl.medicapp.service.dto.GenericResponseDto;
 import cl.medicapp.service.dto.ResetPasswordRequestDto;
 import cl.medicapp.service.dto.UserDto;
@@ -107,7 +108,7 @@ public class AuthServiceImpl implements AuthService {
             userDocument.setResetToken(UUID.randomUUID().toString());
             userDocumentRepository.save(userDocument);
             String body = "token to recovery password: ".concat(userDocument.getResetToken());
-            SimpleMailMessage recoveryMail = SimpleMailMessageUtil.build("suppor@medicapp.cl", userDocument.getEmail(), "Password recovery", body);
+            EmailDto recoveryMail = EmailDto.builder().email(userDocument.getEmail()).title("Password recovery").body(body).build();
             emailService.sendEmail(recoveryMail);
         });
 

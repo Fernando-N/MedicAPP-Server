@@ -1,6 +1,7 @@
 package cl.medicapp.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,31 +22,42 @@ public class MessageDto {
     /**
      * Id
      */
+    @JsonProperty(value = "_id")
     private String id;
+
+    /**
+     * Mensaje
+     */
+    @JsonProperty(value = "text")
+    private String message;
 
     /**
      * Fecha
      */
+    @JsonProperty(value = "createdAt")
     private Date date;
 
     /**
      * De
      */
-    private String from;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY, value = "user")
+    private UserChat from;
 
-    /**
-     * Para
-     */
     private String to;
 
-    /**
-     * Mensaje
-     */
-    private String message;
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public static class UserChat {
 
-    /**
-     * Fue leido
-     */
-    private boolean alreadyRead = false;
+        private String id;
+
+        private String name;
+
+        private String avatar;
+
+    }
 
 }

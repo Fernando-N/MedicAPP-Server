@@ -25,7 +25,11 @@ public class MessageUtil {
                 .id(messageDocument.getId())
                 .date(messageDocument.getDate())
                 .message(messageDocument.getMessage())
-                .from(messageDocument.getFrom().getUserDetails().getFirstName() + " " + messageDocument.getFrom().getUserDetails().getLastName())
+                .from(MessageDto.UserChat.builder()
+                        .id(messageDocument.getFrom().getId())
+                        .name(messageDocument.getFrom().getUserDetails().getFirstName() + " " + messageDocument.getFrom().getUserDetails().getLastName())
+                        .avatar(messageDocument.getFrom().getUserDetails().getProfileImageURI())
+                        .build())
                 .to(messageDocument.getTo().getUserDetails().getFirstName() + " " + messageDocument.getTo().getUserDetails().getLastName())
                 .build();
     }
