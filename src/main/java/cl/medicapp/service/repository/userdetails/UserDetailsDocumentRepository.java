@@ -1,7 +1,6 @@
 package cl.medicapp.service.repository.userdetails;
 
 import cl.medicapp.service.document.CommuneDocument;
-import cl.medicapp.service.document.RegionDocument;
 import cl.medicapp.service.document.UserDetailsDocument;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;

@@ -38,7 +38,7 @@ public class MongoConfiguration {
         if (mappingContext instanceof MongoMappingContext) {
             MongoMappingContext mongoMappingContext = (MongoMappingContext) mappingContext;
             for (BasicMongoPersistentEntity<?> persistentEntity : mongoMappingContext.getPersistentEntities()) {
-                Class clazz = persistentEntity.getType();
+                Class<?> clazz = persistentEntity.getType();
                 if (clazz.isAnnotationPresent(Document.class)) {
                     MongoPersistentEntityIndexResolver resolver = new MongoPersistentEntityIndexResolver(mongoMappingContext);
 

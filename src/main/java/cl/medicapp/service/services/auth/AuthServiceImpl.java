@@ -18,11 +18,9 @@ import cl.medicapp.service.repository.user.UserDocumentRepository;
 import cl.medicapp.service.repository.userdetails.UserDetailsDocumentRepository;
 import cl.medicapp.service.services.email.EmailService;
 import cl.medicapp.service.util.GenericResponseUtil;
-import cl.medicapp.service.util.SimpleMailMessageUtil;
 import cl.medicapp.service.util.UserUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 

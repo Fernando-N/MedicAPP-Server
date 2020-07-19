@@ -30,9 +30,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      * @return UserDetails
      */
     @Override
-    //TODO asdfa
     public UserDetails loadUserByUsername(String username) {
-        log.info("Inicializado por {}", username);
         Optional<UserDocument> userOptional = userDocumentRepository.findByEmailIgnoreCaseAndEnabledTrue(username);
         return UserDetailsUtil.build(userOptional.orElseThrow(() -> new UsernameNotFoundException(String.format(Constants.USER_X_NOT_FOUND, username))));
     }

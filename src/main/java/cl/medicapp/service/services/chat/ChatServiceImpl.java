@@ -1,5 +1,6 @@
 package cl.medicapp.service.services.chat;
 
+import cl.medicapp.service.constants.Constants;
 import cl.medicapp.service.document.MessageDocument;
 import cl.medicapp.service.document.UserDocument;
 import cl.medicapp.service.dto.MessageDto;
@@ -10,6 +11,7 @@ import cl.medicapp.service.repository.user.UserDocumentRepository;
 import cl.medicapp.service.util.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -43,15 +45,20 @@ public class ChatServiceImpl implements ChatService {
     public List<MessageOutboundDto> getMessagesToUserLoggedIn() {
         String emailSender = UserUtil.getEmailUserLogged();
         log.info("User: [{}], esta obteniendo su lista de mensajes ", emailSender);
-        UserDocument user = userDocumentRepository.findByEmailIgnoreCase(emailSender).get();
+        Optional<UserDocument> user = userDocumentRepository.findByEmailIgnoreCase(emailSender);
+
+        if (!user.isPresent()) {
+            throw GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, String.format(Constants.USER_X_NOT_FOUND, emailSender));
+        }
+
         List<MessageDocument> messages = Stream.concat(
-                chatRepository.findByToOrderByDateDesc(user).stream(),
-                MessageUtil.convertMessagesFromMe(chatRepository.findByFromOrderByDateDesc(user)).stream()
+                chatRepository.findByToOrderByDateDesc(user.get()).stream(),
+                MessageUtil.convertMessagesFromMe(chatRepository.findByFromOrderByDateDesc(user.get())).stream()
         ).collect(Collectors.toList());
 
         MessageUtil.orderMessagesByDateDesc(messages);
 
-        List<MessageDocument> filtered = MessageUtil.filterMessagesFromOneUser(messages, emailSender);
+        List<MessageDocument> filtered = MessageUtil.filterMessagesFromOneUser(messages);
 
         return filtered.stream().map(MessageUtil::toMessageOutboundDto).collect(Collectors.toList());
     }
@@ -60,11 +67,20 @@ public class ChatServiceImpl implements ChatService {
     public List<MessageOutboundDto> getMessagesFromUserId(String userId) {
         String emailSender = UserUtil.getEmailUserLogged();
         log.info("User: [{}], esta obteniendo su lista de mensajes ", emailSender);
-        UserDocument to = userDocumentRepository.findByEmailIgnoreCase(emailSender).get();
-        UserDocument from = userDocumentRepository.findById(userId).get();
+        Optional<UserDocument> userTo = userDocumentRepository.findByEmailIgnoreCase(emailSender);
+        Optional<UserDocument> userFrom = userDocumentRepository.findById(userId);
+
+        if (!userFrom.isPresent()) {
+            throw GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, String.format(Constants.USER_X_NOT_FOUND, emailSender));
+        }
+
+        if (!userTo.isPresent()) {
+            throw GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, String.format(Constants.USER_X_NOT_FOUND, userId));
+        }
+
         List<MessageDocument> messages = Stream.concat(
-                chatRepository.findFirst30ByToAndFromOrderByDateDesc(to, from).stream(),
-                chatRepository.findFirst30ByToAndFromOrderByDateDesc(from, to).stream()
+                chatRepository.findFirst30ByToAndFromOrderByDateDesc(userTo.get(), userFrom.get()).stream(),
+                chatRepository.findFirst30ByToAndFromOrderByDateDesc(userFrom.get(), userTo.get()).stream()
         ).collect(Collectors.toList());
 
         MessageUtil.orderMessagesByDateDesc(messages);
@@ -77,6 +93,14 @@ public class ChatServiceImpl implements ChatService {
 
         Optional<UserDocument> userFrom = userDocumentRepository.findById(idSender);
         Optional<UserDocument> userTo = userDocumentRepository.findById(messageInboundDto.getTo());
+
+        if (!userFrom.isPresent()) {
+            throw GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, String.format(Constants.USER_X_NOT_FOUND, idSender));
+        }
+
+        if (!userTo.isPresent()) {
+            throw GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, String.format(Constants.USER_X_NOT_FOUND, messageInboundDto.getTo()));
+        }
 
         messageInboundDto.setFrom(MessageInboundDto.UserChat.builder()
                 .id(userFrom.get().getId())

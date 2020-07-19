@@ -17,6 +17,10 @@ spring:
       mail.smtp:
         auth: true
         starttls.enable: true
+api:
+  positionStack:
+    uri: ${POSITIONSTACK_API_URI:}
+    key: ${POSITIONSTACK_API_KEY:}
 #Server configuration
 #server:
 #  port: 443

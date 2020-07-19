@@ -1,5 +1,6 @@
 package cl.medicapp.service.controller;
 
+import cl.medicapp.service.constants.Constants;
 import cl.medicapp.service.dto.ContentDto;
 import cl.medicapp.service.dto.GenericResponseDto;
 import cl.medicapp.service.dto.UserDto;
@@ -50,19 +51,19 @@ public class UserController {
     @GetMapping("/paramedic")
     @PreAuthorize("isAuthenticated()")
     public List<UserDto> getAllByRole() {
-        return userService.getAllByRole("PARAMEDIC");
+        return userService.getAllByRole(Constants.PARAMEDIC);
     }
 
     @GetMapping("/paramedic/{regionId}")
     @PreAuthorize("isAuthenticated()")
     public List<UserDto> getAllByRegionId(@PathVariable String regionId) {
-        return userService.getAllByRegionId("PARAMEDIC", regionId);
+        return userService.getAllByRegionId(Constants.PARAMEDIC, regionId);
     }
 
     @GetMapping("/paramedic/commune-{communeId}")
     @PreAuthorize("isAuthenticated()")
     public List<UserDto> getAllByRegionIdAndCommuneId(@PathVariable String communeId) {
-        return userService.getAllByCommuneId("PARAMEDIC", communeId);
+        return userService.getAllByCommuneId(Constants.PARAMEDIC, communeId);
     }
 
     /**

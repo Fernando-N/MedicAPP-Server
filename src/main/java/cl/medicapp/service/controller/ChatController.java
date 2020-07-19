@@ -1,19 +1,14 @@
 package cl.medicapp.service.controller;
 
-import cl.medicapp.service.dto.GenericResponseDto;
 import cl.medicapp.service.dto.MessageOutboundDto;
-import cl.medicapp.service.dto.ResetPasswordRequestDto;
-import cl.medicapp.service.dto.UserDto;
-import cl.medicapp.service.services.auth.AuthService;
 import cl.medicapp.service.services.chat.ChatService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 /**

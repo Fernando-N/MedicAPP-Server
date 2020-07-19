@@ -1,12 +1,12 @@
 package cl.medicapp.service.util;
 
+import cl.medicapp.service.constants.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Calendar;
 import java.util.Date;
 
 @Slf4j
@@ -20,8 +20,8 @@ public class DateUtil {
         try {
             return formatter.parse((String.valueOf(day).concat("/").concat(String.valueOf(month)).concat("/").concat(String.valueOf(year))));
         } catch (ParseException e) {
-            log.error("Error al parsear fecha", e);
-            throw GenericResponseUtil.buildGenericException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al parsear fecha");
+            log.error(Constants.ERROR_DATE_PARSE, e);
+            throw GenericResponseUtil.buildGenericException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.ERROR_DATE_PARSE);
         }
     }
 
@@ -35,7 +35,7 @@ public class DateUtil {
         try {
             return formatter.parse(dateStr);
         }catch (ParseException e) {
-            log.error("Error al parsear fecha", e);
+            log.error(Constants.ERROR_DATE_PARSE, e);
             throw GenericResponseUtil.buildGenericException(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
         }
     }

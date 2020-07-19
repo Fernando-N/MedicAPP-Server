@@ -2,7 +2,6 @@ package cl.medicapp.service.controller;
 
 import cl.medicapp.service.dto.GenericResponseDto;
 import cl.medicapp.service.dto.ReportDto;
-import cl.medicapp.service.dto.UserDto;
 import cl.medicapp.service.services.report.ReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

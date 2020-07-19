@@ -7,9 +7,11 @@ import cl.medicapp.service.dto.MessageInboundDto;
 import cl.medicapp.service.dto.MessageOutboundDto;
 import lombok.extern.slf4j.Slf4j;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Clase util para MessageDocument y MessageDto
@@ -69,13 +71,11 @@ public class MessageUtil {
         Collections.reverse(messages);
     }
 
-    public static List<MessageDocument> filterMessagesFromOneUser(List<MessageDocument> messages, String emailSender) {
+    public static List<MessageDocument> filterMessagesFromOneUser(List<MessageDocument> messages) {
         List<String> userFrom = new ArrayList<>();
         List<MessageDocument> listFiltered = new ArrayList<>();
         messages.forEach(message -> {
-            log.info(message.getDate() + " | " +message.getMessage());
             if ((!userFrom.contains(message.getFrom().getEmail()) || !userFrom.contains(message.getTo().getEmail()))) {
-                log.info(message.getDate() + " | " +message.getMessage() + " | GUARDADO");
                 userFrom.add(message.getFrom().getEmail());
                 userFrom.add(message.getTo().getEmail());
                 listFiltered.add(message);

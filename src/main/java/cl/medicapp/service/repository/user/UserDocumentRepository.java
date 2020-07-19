@@ -1,10 +1,8 @@
 package cl.medicapp.service.repository.user;
 
-import cl.medicapp.service.document.RegionDocument;
 import cl.medicapp.service.document.RoleDocument;
 import cl.medicapp.service.document.UserDetailsDocument;
 import cl.medicapp.service.document.UserDocument;
-import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 

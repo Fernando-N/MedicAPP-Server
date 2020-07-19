@@ -78,6 +78,10 @@ public class Constants {
 
     public static final String PACKAGE_BASE = "cl.medicapp";
 
+    public static final String ERROR_DATE_PARSE = "Error al parsear fecha";
+
+    public static final String PARAMEDIC = "PARAMEDIC";
+
 
     /**
      * Constructor privado para no permitir crear instancias de la clase

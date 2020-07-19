@@ -1,7 +1,6 @@
 package cl.medicapp.service.repository.region;
 
 import cl.medicapp.service.document.RegionDocument;
-import cl.medicapp.service.document.RoleDocument;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
