@@ -14,7 +14,9 @@ public interface UserService {
 
     UserDto getOwnProfile();
 
-    List<UserDto>  getAllByRole(String role);
+    List<UserDto> getAllByRole(String role);
+
+    List<UserDto> getAllByRegionId(String role, String regionId);
 
     UserDto getByEmail(String email);
 

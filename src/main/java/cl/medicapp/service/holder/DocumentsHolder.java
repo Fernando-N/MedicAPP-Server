@@ -2,6 +2,7 @@ package cl.medicapp.service.holder;
 
 import cl.medicapp.service.document.CommuneDocument;
 import cl.medicapp.service.document.NationalityDocument;
+import cl.medicapp.service.document.RegionDocument;
 import cl.medicapp.service.document.RoleDocument;
 
 import java.util.List;
@@ -12,15 +13,24 @@ public class DocumentsHolder {
 
     }
 
-    private final static DocumentsHolder instance = new DocumentsHolder();
+    private static final DocumentsHolder instance = new DocumentsHolder();
 
     public static DocumentsHolder getInstance() {
         return instance;
     }
 
+    private List<RegionDocument> regionDocumentList;
     private List<CommuneDocument> communeDocumentList;
     private List<RoleDocument> roleDocumentList;
     private List<NationalityDocument> nationalityDocumentList;
+
+    public List<RegionDocument> getRegionDocumentList() {
+        return regionDocumentList;
+    }
+
+    public void setRegionDocumentList(List<RegionDocument> regionDocumentList) {
+        this.regionDocumentList = regionDocumentList;
+    }
 
     public List<CommuneDocument> getCommuneDocumentList() {
         return communeDocumentList;

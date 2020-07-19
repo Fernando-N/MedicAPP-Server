@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-//TODO aplicar logica utilizando la clase DocumentsHolder para evitar carga a la bd
 public class ReportServiceImpl implements ReportService {
 
     private final ReportRepository reportRepository;
@@ -65,8 +64,8 @@ public class ReportServiceImpl implements ReportService {
     @FormatArgs
     public ReportDto save(ReportDto request) {
 
-        Optional<UserDocument> fromUserOptional = userRepository.findById(request.getFrom().getId());
-        Optional<UserDocument> toUserOptional = userRepository.findById(request.getTo().getId());
+        Optional<UserDocument> fromUserOptional = userRepository.findById(request.getFromUserId());
+        Optional<UserDocument> toUserOptional = userRepository.findById(request.getToUserId());
 
         if (!fromUserOptional.isPresent() || !toUserOptional.isPresent()) {
             throw GenericResponseUtil.buildGenericException(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.getReasonPhrase(), String.format(Constants.ROLE_X_ALREADY_EXIST, request.getMessage()));

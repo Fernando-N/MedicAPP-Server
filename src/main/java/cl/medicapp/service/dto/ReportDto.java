@@ -1,18 +1,10 @@
 package cl.medicapp.service.dto;
 
-import cl.medicapp.service.document.UserDocument;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.util.Date;
 
 /**
  * Dto para mensajes de chat
@@ -33,12 +25,12 @@ public class ReportDto {
      * De
      * DBRef para referenciar document User
      */
-    private UserDto from;
+    private String fromUserId;
 
     /**
      * Para
      */
-    private UserDto to;
+    private String toUserId;
 
     /**
      * Mensajes
@@ -48,7 +40,7 @@ public class ReportDto {
     /**
      * Fecha
      */
-    private Date date;
+    private String date;
 
     /**
      * Fue leido

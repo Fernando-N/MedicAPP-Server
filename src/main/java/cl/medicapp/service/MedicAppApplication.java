@@ -3,16 +3,14 @@ package cl.medicapp.service;
 import cl.medicapp.service.configuration.SecurityPropertiesLoaderFactory;
 import cl.medicapp.service.document.*;
 import cl.medicapp.service.repository.chat.ChatRepository;
-import cl.medicapp.service.repository.chat.ChatRepository2;
 import cl.medicapp.service.repository.commune.CommuneRepository;
 import cl.medicapp.service.repository.nationality.NationalityRepository;
 import cl.medicapp.service.repository.paramedicdetails.ParamedicDetailsDocumentRepository;
 import cl.medicapp.service.repository.region.RegionRepository;
+import cl.medicapp.service.repository.report.ReportRepository;
 import cl.medicapp.service.repository.role.RoleRepository;
 import cl.medicapp.service.repository.user.UserDocumentRepository;
-import cl.medicapp.service.repository.user.UserRepository;
 import cl.medicapp.service.repository.userdetails.UserDetailsDocumentRepository;
-import cl.medicapp.service.util.Base64Util;
 import cl.medicapp.service.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +21,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -65,7 +62,10 @@ public class MedicAppApplication implements CommandLineRunner {
     private NationalityRepository nationalityRepository;
 
     @Autowired
-    private ChatRepository2 chatRepository;
+    private ChatRepository chatRepository;
+
+    @Autowired
+    private ReportRepository reportRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -75,6 +75,23 @@ public class MedicAppApplication implements CommandLineRunner {
 //        generateRoles();
 //        generateUsers();
 //        generateMessages();
+//        generateReport();
+    }
+
+    public void generateReport() {
+        UserDocument userFrom = userDocumentRepository.findByEmailIgnoreCase("user@test.com").get();
+
+        UserDocument userTo = userDocumentRepository.findByEmailIgnoreCase("paramedic@test.com").get();
+
+        ReportDocument report1 = ReportDocument.builder()
+                .from(userFrom)
+                .to(userTo)
+                .alreadyRead(false)
+                .date(DateUtil.from(new Date()))
+                .message("REPORTE POR X MOTIVO")
+                .build();
+
+        reportRepository.save(report1);
     }
 
     public void generateMessages() {

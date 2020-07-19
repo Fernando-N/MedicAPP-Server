@@ -54,8 +54,7 @@ public class ReportDocument implements Serializable {
     /**
      * Fecha
      */
-    @CreatedDate
-    private Date date;
+    private String date;
 
     /**
      * Fue leido

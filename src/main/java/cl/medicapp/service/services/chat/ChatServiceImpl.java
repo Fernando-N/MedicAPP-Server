@@ -6,13 +6,13 @@ import cl.medicapp.service.dto.MessageDto;
 import cl.medicapp.service.dto.MessageInboundDto;
 import cl.medicapp.service.dto.MessageOutboundDto;
 import cl.medicapp.service.repository.chat.ChatRepository;
-import cl.medicapp.service.repository.chat.ChatRepository2;
 import cl.medicapp.service.repository.user.UserDocumentRepository;
 import cl.medicapp.service.util.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,18 +24,19 @@ import java.util.stream.Stream;
 public class ChatServiceImpl implements ChatService {
 
     private final ChatRepository chatRepository;
-    private final ChatRepository2 chatRepository2;
     private final UserDocumentRepository userDocumentRepository;
 
+    //TODO Implementar esto
     @Override
     public List<MessageDto> getMessagesNotRead() {
-        return chatRepository.findAllByAlreadyReadFalse().toStream()
-                .map(messageDocument -> {
-                    messageDocument.setAlreadyRead(true);
-                    chatRepository.save(messageDocument).subscribe();
-                    return MessageUtil.toMessageDto(messageDocument);
-                }).filter(messageDto -> false)//DateUtil.differenceNowDate(messageDto.getDate()))
-                .collect(Collectors.toList());
+        return new ArrayList<>();
+//        return chatRepository.findAllByAlreadyReadFalse().toStream()
+//                .map(messageDocument -> {
+//                    messageDocument.setAlreadyRead(true);
+//                    chatRepository.save(messageDocument).subscribe();
+//                    return MessageUtil.toMessageDto(messageDocument);
+//                }).filter(messageDto -> false)//DateUtil.differenceNowDate(messageDto.getDate()))
+//                .collect(Collectors.toList());
     }
 
     @Override
@@ -44,8 +45,8 @@ public class ChatServiceImpl implements ChatService {
         log.info("User: [{}], esta obteniendo su lista de mensajes ", emailSender);
         UserDocument user = userDocumentRepository.findByEmailIgnoreCase(emailSender).get();
         List<MessageDocument> messages = Stream.concat(
-                chatRepository2.findByToOrderByDateDesc(user).stream(),
-                MessageUtil.convertMessagesFromMe(chatRepository2.findByFromOrderByDateDesc(user)).stream()
+                chatRepository.findByToOrderByDateDesc(user).stream(),
+                MessageUtil.convertMessagesFromMe(chatRepository.findByFromOrderByDateDesc(user)).stream()
         ).collect(Collectors.toList());
 
         MessageUtil.orderMessagesByDateDesc(messages);
@@ -62,8 +63,8 @@ public class ChatServiceImpl implements ChatService {
         UserDocument to = userDocumentRepository.findByEmailIgnoreCase(emailSender).get();
         UserDocument from = userDocumentRepository.findById(userId).get();
         List<MessageDocument> messages = Stream.concat(
-                chatRepository2.findFirst30ByToAndFromOrderByDateDesc(to, from).stream(),
-                chatRepository2.findFirst30ByToAndFromOrderByDateDesc(from, to).stream()
+                chatRepository.findFirst30ByToAndFromOrderByDateDesc(to, from).stream(),
+                chatRepository.findFirst30ByToAndFromOrderByDateDesc(from, to).stream()
         ).collect(Collectors.toList());
 
         MessageUtil.orderMessagesByDateDesc(messages);
@@ -83,7 +84,7 @@ public class ChatServiceImpl implements ChatService {
                 .avatarURI(userFrom.get().getUserDetails().getProfileImageURI())
                 .build());
 
-        MessageDocument message = chatRepository2.save(MessageUtil.buildDocument(messageInboundDto, userFrom.get(), userTo.get()));
+        MessageDocument message = chatRepository.save(MessageUtil.buildDocument(messageInboundDto, userFrom.get(), userTo.get()));
 
         log.info("Message send: " + message.toString());
 

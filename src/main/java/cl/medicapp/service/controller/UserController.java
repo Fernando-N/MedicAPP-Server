@@ -53,6 +53,12 @@ public class UserController {
         return userService.getAllByRole("PARAMEDIC");
     }
 
+    @GetMapping("/paramedic/{regionId}/")
+    @PreAuthorize("isAuthenticated()")
+    public List<UserDto> getAllByRegionId(@PathVariable String regionId) {
+        return userService.getAllByRegionId("PARAMEDIC", regionId);
+    }
+
     /**
      * Endpoint que obtiene usuarios por su id
      *

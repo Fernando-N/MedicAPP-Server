@@ -63,6 +63,39 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserDto> getAllByRegionId(String role, String regionId) {
+        return userRepository.findAllByRoleAndRegion(
+                DocumentsHolder.getInstance().getRoleDocumentList()
+                        .stream()
+                        .filter(roleDocument -> roleDocument.getName().contains(role))
+                        .findFirst()
+                        .orElseThrow(
+                                () ->
+                                        GenericResponseUtil.buildGenericException(
+                                                HttpStatus.NOT_FOUND,
+                                                "Rol no encontrado",
+                                                String.format("Rol %s no encontrado", role)
+                                        )
+                        ),
+                DocumentsHolder.getInstance().getRegionDocumentList()
+                        .stream()
+                        .filter(regionDocument -> regionDocument.getId().contains(regionId))
+                        .findFirst()
+                        .orElseThrow(
+                                () ->
+                                        GenericResponseUtil.buildGenericException(
+                                                HttpStatus.NOT_FOUND,
+                                                "Region no encontrada",
+                                                String.format("Region %s no encontrada", role)
+                                        )
+                        )
+        )
+                .stream()
+                .map(UserUtil::toUserDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public UserDto getByEmail(String email) {
         return userRepository.findByEmailIgnoreCase(email).map(UserUtil::toUserDto)
                 .orElseThrow(() -> GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.getReasonPhrase(), String.format(Constants.USER_X_NOT_FOUND, email)));

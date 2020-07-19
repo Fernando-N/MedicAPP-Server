@@ -1,6 +1,7 @@
 package cl.medicapp.service.repository.user;
 
 import cl.medicapp.service.document.*;
+import cl.medicapp.service.holder.DocumentsHolder;
 import cl.medicapp.service.repository.commune.CommuneRepository;
 import cl.medicapp.service.repository.paramedicdetails.ParamedicDetailsDocumentRepository;
 import cl.medicapp.service.repository.userdetails.UserDetailsDocumentRepository;
@@ -39,6 +40,19 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public List<UserDocument> findAllByRole(RoleDocument roleDocument) {
         return userRepository.findAllByRoleEntities(roleDocument);
+    }
+
+    @Override
+    public List<UserDocument> findAllByRoleAndRegion(RoleDocument roleDocument, RegionDocument regionDocument) {
+        List<CommuneDocument> communeDocumentList = DocumentsHolder.getInstance()
+                .getCommuneDocumentList()
+                .stream()
+                .filter(communeDocument -> communeDocument.getRegion().equals(regionDocument))
+                .collect(Collectors.toList());
+
+        List<UserDetailsDocument> userDetailsDocumentList = userDetailsRepository.findAllByCommuneIn(communeDocumentList);
+
+        return userRepository.findAllByUserDetailsIn(userDetailsDocumentList);
     }
 
     @Override

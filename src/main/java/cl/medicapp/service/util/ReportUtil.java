@@ -4,6 +4,8 @@ import cl.medicapp.service.document.ReportDocument;
 import cl.medicapp.service.dto.ReportDto;
 import org.dozer.DozerBeanMapper;
 
+import java.util.Date;
+
 /**
  * Clase util para RoleDto y RoleDocument
  */
@@ -16,7 +18,9 @@ public class ReportUtil {
     }
 
     public static ReportDocument toReportDocument(ReportDto reportDto) {
-        return mapper.map(reportDto, ReportDocument.class);
+        ReportDocument report = mapper.map(reportDto, ReportDocument.class);
+        report.setDate(DateUtil.from(new Date()));
+        return report;
     }
 
     /**
