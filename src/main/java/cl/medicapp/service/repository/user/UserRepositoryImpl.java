@@ -1,6 +1,10 @@
 package cl.medicapp.service.repository.user;
 
-import cl.medicapp.service.document.*;
+import cl.medicapp.service.document.CommuneDocument;
+import cl.medicapp.service.document.RegionDocument;
+import cl.medicapp.service.document.RoleDocument;
+import cl.medicapp.service.document.UserDetailsDocument;
+import cl.medicapp.service.document.UserDocument;
 import cl.medicapp.service.holder.DocumentsHolder;
 import cl.medicapp.service.repository.commune.CommuneRepository;
 import cl.medicapp.service.repository.paramedicdetails.ParamedicDetailsDocumentRepository;

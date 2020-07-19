@@ -1,7 +1,15 @@
 package cl.medicapp.service;
 
 import cl.medicapp.service.configuration.SecurityPropertiesLoaderFactory;
-import cl.medicapp.service.document.*;
+import cl.medicapp.service.document.CommuneDocument;
+import cl.medicapp.service.document.MessageDocument;
+import cl.medicapp.service.document.NationalityDocument;
+import cl.medicapp.service.document.ParamedicDetailsDocument;
+import cl.medicapp.service.document.RegionDocument;
+import cl.medicapp.service.document.ReportDocument;
+import cl.medicapp.service.document.RoleDocument;
+import cl.medicapp.service.document.UserDetailsDocument;
+import cl.medicapp.service.document.UserDocument;
 import cl.medicapp.service.repository.chat.ChatRepository;
 import cl.medicapp.service.repository.commune.CommuneRepository;
 import cl.medicapp.service.repository.nationality.NationalityRepository;
