@@ -1,8 +1,8 @@
 package cl.medicapp.service.util;
 
 import cl.medicapp.service.document.ReportDocument;
+import cl.medicapp.service.document.UserDocument;
 import cl.medicapp.service.dto.ReportDto;
-import org.dozer.DozerBeanMapper;
 
 import java.util.Date;
 
@@ -11,16 +11,25 @@ import java.util.Date;
  */
 public class ReportUtil {
 
-    private static final DozerBeanMapper mapper = new DozerBeanMapper();
-
     public static ReportDto toReporDto(ReportDocument reportDocument) {
-        return mapper.map(reportDocument, ReportDto.class);
+        return ReportDto.builder()
+                .id(reportDocument.getId())
+                .alreadyRead(reportDocument.isAlreadyRead())
+                .date(reportDocument.getDate())
+                .fromUser(UserUtil.toUserDto(reportDocument.getFrom()))
+                .toUser(UserUtil.toUserDto(reportDocument.getTo()))
+                .message(reportDocument.getMessage())
+                .build();
     }
 
-    public static ReportDocument toReportDocument(ReportDto reportDto) {
-        ReportDocument report = mapper.map(reportDto, ReportDocument.class);
-        report.setDate(DateUtil.from(new Date()));
-        return report;
+    public static ReportDocument toReportDocument(ReportDto reportDto, UserDocument from, UserDocument to) {
+        return ReportDocument.builder()
+                .message(reportDto.getMessage())
+                .date(DateUtil.from(new Date()))
+                .alreadyRead(false)
+                .from(from)
+                .to(to)
+                .build();
     }
 
     /**

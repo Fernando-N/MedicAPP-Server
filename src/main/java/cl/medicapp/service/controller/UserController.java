@@ -53,10 +53,16 @@ public class UserController {
         return userService.getAllByRole("PARAMEDIC");
     }
 
-    @GetMapping("/paramedic/{regionId}/")
+    @GetMapping("/paramedic/{regionId}")
     @PreAuthorize("isAuthenticated()")
     public List<UserDto> getAllByRegionId(@PathVariable String regionId) {
         return userService.getAllByRegionId("PARAMEDIC", regionId);
+    }
+
+    @GetMapping("/paramedic/commune-{communeId}")
+    @PreAuthorize("isAuthenticated()")
+    public List<UserDto> getAllByRegionIdAndCommuneId(@PathVariable String communeId) {
+        return userService.getAllByCommuneId("PARAMEDIC", communeId);
     }
 
     /**

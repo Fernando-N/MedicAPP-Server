@@ -1,5 +1,6 @@
 package cl.medicapp.service.repository.user;
 
+import cl.medicapp.service.document.CommuneDocument;
 import cl.medicapp.service.document.RegionDocument;
 import cl.medicapp.service.document.RoleDocument;
 import cl.medicapp.service.document.UserDocument;
@@ -18,6 +19,8 @@ public interface UserRepository {
     List<UserDocument> findAllByRole(RoleDocument roleDocument);
 
     List<UserDocument> findAllByRoleAndRegion(RoleDocument roleDocument, RegionDocument regionDocument);
+
+    List<UserDocument> findAllByRoleAndCommune(RoleDocument roleDocument, CommuneDocument regionDocument);
 
     UserDocument save(UserDocument userDocument);
 

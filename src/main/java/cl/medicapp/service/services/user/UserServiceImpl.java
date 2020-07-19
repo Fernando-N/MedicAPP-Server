@@ -96,6 +96,39 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserDto> getAllByCommuneId(String role, String communeId) {
+        return userRepository.findAllByRoleAndCommune(
+                DocumentsHolder.getInstance().getRoleDocumentList()
+                        .stream()
+                        .filter(roleDocument -> roleDocument.getName().contains(role))
+                        .findFirst()
+                        .orElseThrow(
+                                () ->
+                                        GenericResponseUtil.buildGenericException(
+                                                HttpStatus.NOT_FOUND,
+                                                "Rol no encontrado",
+                                                String.format("Rol %s no encontrado", role)
+                                        )
+                        ),
+                DocumentsHolder.getInstance().getCommuneDocumentList()
+                        .stream()
+                        .filter(communeDocument -> communeDocument.getId().contains(communeId))
+                        .findFirst()
+                        .orElseThrow(
+                                () ->
+                                        GenericResponseUtil.buildGenericException(
+                                                HttpStatus.NOT_FOUND,
+                                                "Communa no encontrada",
+                                                String.format("Communa %s no encontrada", role)
+                                        )
+                        )
+        )
+                .stream()
+                .map(UserUtil::toUserDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public UserDto getByEmail(String email) {
         return userRepository.findByEmailIgnoreCase(email).map(UserUtil::toUserDto)
                 .orElseThrow(() -> GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.getReasonPhrase(), String.format(Constants.USER_X_NOT_FOUND, email)));

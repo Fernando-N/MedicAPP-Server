@@ -64,14 +64,14 @@ public class ReportServiceImpl implements ReportService {
     @FormatArgs
     public ReportDto save(ReportDto request) {
 
-        Optional<UserDocument> fromUserOptional = userRepository.findById(request.getFromUserId());
-        Optional<UserDocument> toUserOptional = userRepository.findById(request.getToUserId());
+        Optional<UserDocument> fromUserOptional = userRepository.findById(request.getFromUser().getId());
+        Optional<UserDocument> toUserOptional = userRepository.findById(request.getToUser().getId());
 
         if (!fromUserOptional.isPresent() || !toUserOptional.isPresent()) {
             throw GenericResponseUtil.buildGenericException(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.getReasonPhrase(), String.format(Constants.ROLE_X_ALREADY_EXIST, request.getMessage()));
         }
 
-        reportRepository.save(ReportUtil.toReportDocument(request));
+        reportRepository.save(ReportUtil.toReportDocument(request, fromUserOptional.get(), toUserOptional.get()));
 
         return request;
     }

@@ -9,6 +9,7 @@ import cl.medicapp.service.util.GenericResponseUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -52,7 +53,13 @@ public class UserRepositoryImpl implements UserRepository {
 
         List<UserDetailsDocument> userDetailsDocumentList = userDetailsRepository.findAllByCommuneIn(communeDocumentList);
 
-        return userRepository.findAllByUserDetailsIn(userDetailsDocumentList);
+        return userRepository.findAllByRoleEntitiesAndUserDetailsIn(roleDocument, userDetailsDocumentList);
+    }
+
+    @Override
+    public List<UserDocument> findAllByRoleAndCommune(RoleDocument roleDocument, CommuneDocument communeDocument) {
+        List<UserDetailsDocument> userDetailsDocumentList = userDetailsRepository.findAllByCommuneIn(Collections.singletonList(communeDocument));
+        return userRepository.findAllByRoleEntitiesAndUserDetailsIn(roleDocument, userDetailsDocumentList);
     }
 
     @Override

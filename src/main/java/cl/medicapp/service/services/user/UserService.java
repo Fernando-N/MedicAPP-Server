@@ -18,6 +18,8 @@ public interface UserService {
 
     List<UserDto> getAllByRegionId(String role, String regionId);
 
+    List<UserDto> getAllByCommuneId(String role, String communeId);
+
     UserDto getByEmail(String email);
 
     List<UserDto> getByName(String name, String lastName);

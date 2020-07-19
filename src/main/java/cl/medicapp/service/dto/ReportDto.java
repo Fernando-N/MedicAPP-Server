@@ -25,12 +25,12 @@ public class ReportDto {
      * De
      * DBRef para referenciar document User
      */
-    private String fromUserId;
+    private UserDto fromUser;
 
     /**
      * Para
      */
-    private String toUserId;
+    private UserDto toUser;
 
     /**
      * Mensajes

@@ -23,7 +23,7 @@ public interface UserDocumentRepository extends PagingAndSortingRepository<UserD
 
     List<UserDocument> findAllByRoleEntities(RoleDocument role);
 
-    List<UserDocument> findAllByUserDetailsIn(List<UserDetailsDocument> userDetailsDocuments);
+    List<UserDocument> findAllByRoleEntitiesAndUserDetailsIn(RoleDocument role, List<UserDetailsDocument> userDetailsDocuments);
 
     Optional<UserDocument> findByEmailIgnoreCase(String email);
 
