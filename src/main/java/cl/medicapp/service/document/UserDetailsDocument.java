@@ -58,10 +58,20 @@ public class UserDetailsDocument implements Serializable {
     private CommuneDocument commune;
 
     /**
+     * Sobre mi
+     */
+    private String aboutMe;
+
+    /**
      * Nacionalidad
      */
     @DBRef
     private NationalityDocument nationality;
+
+    /**
+     * Flag para mostrar dirección en perfil
+     */
+    private boolean showAddress;
 
     /**
      * Dirección

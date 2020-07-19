@@ -5,7 +5,6 @@ import cl.medicapp.service.document.UserDocument;
 import cl.medicapp.service.dto.ContentDto;
 import cl.medicapp.service.dto.GenericResponseDto;
 import cl.medicapp.service.dto.UserDto;
-import cl.medicapp.service.exception.GenericException;
 import cl.medicapp.service.holder.DocumentsHolder;
 import cl.medicapp.service.repository.user.UserRepository;
 import cl.medicapp.service.util.GenericResponseUtil;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
@@ -117,11 +115,11 @@ public class UserServiceImpl implements UserService {
 
     //TODO Agregar implementación para que borre de UserDetails igualmente.
     @Override
-    public GenericResponseDto deleteByEmail(String email) {
-        if (userRepository.deleteByEmail(email)) {
-            return GenericResponseDto.builder().message("User deleted").details(Collections.singletonList("User " + email + " delete")).build();
+    public GenericResponseDto deleteById(String id) {
+        if (userRepository.deleteById(id)) {
+            return GenericResponseDto.builder().message("User deleted").details(Collections.singletonList("User " + id + " delete")).build();
         }
-        return GenericResponseUtil.buildGenericResponse(HttpStatus.NOT_FOUND.getReasonPhrase(), String.format(Constants.USER_X_NOT_FOUND, email));
+        return GenericResponseUtil.buildGenericResponse(HttpStatus.NOT_FOUND.getReasonPhrase(), String.format(Constants.USER_X_NOT_FOUND, id));
     }
 
     @Override

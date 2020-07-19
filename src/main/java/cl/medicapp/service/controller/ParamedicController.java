@@ -66,7 +66,7 @@ public class ParamedicController {
      */
     @DeleteMapping("/{email}")
     public GenericResponseDto deleteByEmail(@PathVariable String email) {
-        return userService.deleteByEmail(email);
+        return userService.deleteById(email);
     }
 
 }

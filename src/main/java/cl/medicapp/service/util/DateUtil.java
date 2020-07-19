@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -24,12 +25,25 @@ public class DateUtil {
         }
     }
 
-    public static boolean differenceNowDate(Date target) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        calendar.add(Calendar.MINUTE, 15);
-        Date nowWithFiftyMinutes = calendar.getTime();
-        return target.before(nowWithFiftyMinutes);
+    public static String from(Date date) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return formatter.format(date);
+    }
+
+    public static Date from(String dateStr) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            return formatter.parse(dateStr);
+        }catch (ParseException e) {
+            log.error("Error al parsear fecha", e);
+            throw GenericResponseUtil.buildGenericException(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+        }
+    }
+
+    public static boolean differenceNowDate(LocalDateTime target) {
+        LocalDateTime now = LocalDateTime.now();
+        now = now.plusMinutes(15);
+        return false;//target.isBefore(now);
     }
 
 }

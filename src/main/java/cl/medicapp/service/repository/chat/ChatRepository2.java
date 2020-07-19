@@ -13,7 +13,11 @@ import java.util.List;
 @Repository
 public interface ChatRepository2 extends PagingAndSortingRepository<MessageDocument, String> {
 
-    List<MessageDocument> findByTo(UserDocument to);
+    List<MessageDocument> findByToOrderByDateDesc(UserDocument to);
+
+    List<MessageDocument> findByFromOrderByDateDesc(UserDocument from);
+
+    List<MessageDocument> findFirst30ByToAndFromOrderByDateDesc(UserDocument to, UserDocument from);
 
     List<MessageDocument> findAllByAlreadyReadFalse();
 

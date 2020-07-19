@@ -6,6 +6,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.mapping.context.MappingContext;
+import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.MongoConverter;
 import org.springframework.data.mongodb.core.index.IndexOperations;
@@ -17,6 +18,7 @@ import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 @Slf4j
 @RequiredArgsConstructor
 @Configuration
+@EnableMongoAuditing
 public class MongoConfiguration {
 
     private final MongoTemplate mongoTemplate;

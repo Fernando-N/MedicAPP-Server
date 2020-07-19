@@ -31,7 +31,7 @@ public class UserDto implements Serializable {
     /**
      * Id de usuario
      */
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY, value = "key")
     private String id;
 
     /**
@@ -88,10 +88,20 @@ public class UserDto implements Serializable {
     private RegionDto region;
 
     /**
+     * Flag para mostrar dirección en perfil
+     */
+    private boolean showAddress;
+
+    /**
      * Direccion
      */
     @NotBlank(message = "Address can't be empty!")
     private String address;
+
+    /**
+     * Sobre mi
+     */
+    private String aboutMe;
 
     /**
      * Flag es paramedico

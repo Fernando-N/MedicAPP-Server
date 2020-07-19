@@ -74,14 +74,13 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public boolean deleteByEmail(String email) {
+    public boolean deleteById(String id) {
 
-        Optional<UserDocument> userDocumentOptional = userRepository.findByEmailIgnoreCase(email);
+        Optional<UserDocument> userDocumentOptional = userRepository.findById(id);
 
         if (!userDocumentOptional.isPresent()) {
             return false;
         }
-
 
         if (userDocumentOptional.get().getParamedicDetails() != null) {
             paramedicDetailsDocumentRepository.delete(userDocumentOptional.get().getParamedicDetails());
@@ -89,8 +88,6 @@ public class UserRepositoryImpl implements UserRepository {
 
         userDetailsRepository.delete(userDocumentOptional.get().getUserDetails());
         userRepository.delete(userDocumentOptional.get());
-
-
 
         return true;
     }

@@ -2,12 +2,15 @@ package cl.medicapp.service;
 
 import cl.medicapp.service.configuration.SecurityPropertiesLoaderFactory;
 import cl.medicapp.service.document.*;
+import cl.medicapp.service.repository.chat.ChatRepository;
+import cl.medicapp.service.repository.chat.ChatRepository2;
 import cl.medicapp.service.repository.commune.CommuneRepository;
 import cl.medicapp.service.repository.nationality.NationalityRepository;
 import cl.medicapp.service.repository.paramedicdetails.ParamedicDetailsDocumentRepository;
 import cl.medicapp.service.repository.region.RegionRepository;
 import cl.medicapp.service.repository.role.RoleRepository;
 import cl.medicapp.service.repository.user.UserDocumentRepository;
+import cl.medicapp.service.repository.user.UserRepository;
 import cl.medicapp.service.repository.userdetails.UserDetailsDocumentRepository;
 import cl.medicapp.service.util.Base64Util;
 import cl.medicapp.service.util.DateUtil;
@@ -20,6 +23,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -32,6 +36,7 @@ import java.util.List;
 public class MedicAppApplication implements CommandLineRunner {
 
     public static void main(String[] args) {
+        log.info("Spring boot application running in UTC timezone :"+new Date());
         SpringApplication.run(MedicAppApplication.class, args);
     }
 
@@ -59,6 +64,9 @@ public class MedicAppApplication implements CommandLineRunner {
     @Autowired
     private NationalityRepository nationalityRepository;
 
+    @Autowired
+    private ChatRepository2 chatRepository;
+
     @Override
     public void run(String... args) throws Exception {
 //        generateNationalities();
@@ -66,6 +74,72 @@ public class MedicAppApplication implements CommandLineRunner {
 //        generateCommunes();
 //        generateRoles();
 //        generateUsers();
+//        generateMessages();
+    }
+
+    public void generateMessages() {
+        UserDocument user = userDocumentRepository.findByEmailIgnoreCase("user@test.com").get();
+        UserDocument admin = userDocumentRepository.findByEmailIgnoreCase("admin@test.com").get();
+        UserDocument paramedic = userDocumentRepository.findByEmailIgnoreCase("paramedic@test.com").get();
+
+
+        MessageDocument msg1 = MessageDocument.builder()
+                //.id()
+                .date(DateUtil.from(new Date()))
+                .from(user)
+                .to(admin)
+                .message("Hola admin soy user")
+                .alreadyRead(false)
+                .build();
+
+        MessageDocument msg2 = MessageDocument.builder()
+                //.id()
+                .date(DateUtil.from(new Date()))
+                .from(paramedic)
+                .to(admin)
+                .message("Hola admin soy paramedic")
+                .alreadyRead(false)
+                .build();
+
+        MessageDocument msg3 = MessageDocument.builder()
+                //.id()
+                .date(DateUtil.from(new Date()))
+                .from(paramedic)
+                .to(user)
+                .message("Hola user soy paramedic")
+                .alreadyRead(false)
+                .build();
+
+        MessageDocument msg4 = MessageDocument.builder()
+                //.id()
+                .date(DateUtil.from(new Date()))
+                .from(admin)
+                .to(user)
+                .message("Hola user soy admin")
+                .alreadyRead(false)
+                .build();
+
+        MessageDocument msg5 = MessageDocument.builder()
+                //.id()
+                .date(DateUtil.from(new Date()))
+                .from(user)
+                .to(paramedic)
+                .message("Hola paramedic soy user")
+                .alreadyRead(false)
+                .build();
+
+        MessageDocument msg6 = MessageDocument.builder()
+                //.id()
+                .date(DateUtil.from(new Date()))
+                .from(admin)
+                .to(paramedic)
+                .message("Hola paramedic soy admin")
+                .alreadyRead(false)
+                .build();
+
+        chatRepository.saveAll(Arrays.asList(msg1, msg2, msg3, msg4, msg5, msg6));
+
+
     }
 
     public void generateUsers() {

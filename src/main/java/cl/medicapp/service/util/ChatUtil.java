@@ -23,16 +23,21 @@ public class ChatUtil {
             throw GenericResponseUtil.buildGenericException(HttpStatus.UNAUTHORIZED, HttpStatus.UNAUTHORIZED.getReasonPhrase());
         }
 
-        TokenUtil.validateJwtToken(token.get().get(0).replace("Bearer ", ""));
+        TokenUtil.validateJwtToken(getTokenFromSimpMessageHeaderAccessor(simpMessageHeaderAccessor));
 
     }
 
     public static String getEmailSender(SimpMessageHeaderAccessor simpMessageHeaderAccessor) {
+        return TokenUtil.getClaim(getTokenFromSimpMessageHeaderAccessor(simpMessageHeaderAccessor), "EMAIL");
+    }
 
+    public static String getIdSender(SimpMessageHeaderAccessor simpMessageHeaderAccessor) {
+        return TokenUtil.getClaim(getTokenFromSimpMessageHeaderAccessor(simpMessageHeaderAccessor), "USER_ID");
+    }
 
-
-
-        return "";
+    private static String getTokenFromSimpMessageHeaderAccessor(SimpMessageHeaderAccessor simpMessageHeaderAccessor) {
+        String[] tokenSplit = simpMessageHeaderAccessor.getNativeHeader("Authorization").get(0).split(" ");
+        return tokenSplit[1];
     }
 
 

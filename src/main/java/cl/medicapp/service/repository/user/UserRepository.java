@@ -26,6 +26,6 @@ public interface UserRepository {
 
     Optional<UserDocument> findByResetToken(String resetToken);
 
-    boolean deleteByEmail(String email);
+    boolean deleteById(String id);
 
 }

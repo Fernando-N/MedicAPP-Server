@@ -34,7 +34,9 @@ public class UserUtil {
                 .birthDay(userDocument.getUserDetails().getBirthDay())
                 .commune(CommuneUtil.toCommuneDto(userDocument.getUserDetails().getCommune()))
                 .region(RegionUtil.toRegionDto(userDocument.getUserDetails().getCommune().getRegion()))
+                .showAddress(userDocument.getUserDetails().isShowAddress())
                 .address(userDocument.getUserDetails().getAddress())
+                .aboutMe(userDocument.getUserDetails().getAboutMe())
                 .isParamedic(hasRoleParamedic(userDocument.getRoleEntities()))
                 .createdOn(userDocument.getCreatedOn())
                 .attempts(userDocument.getAttempts())
@@ -91,7 +93,9 @@ public class UserUtil {
                 .lastName(newUser.getLastName())
                 .birthDay(newUser.getBirthDay())
                 .profileImageURI(newUser.getProfileImage())
+                .aboutMe(newUser.getAboutMe())
                 .commune(communeDocument)
+                .showAddress(newUser.isShowAddress())
                 .address(newUser.getAddress())
                 .build();
     }

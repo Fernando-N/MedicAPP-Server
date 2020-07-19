@@ -28,7 +28,7 @@ public interface UserService {
 
     UserDto save(UserDto userDto);
 
-    GenericResponseDto deleteByEmail(String email);
+    GenericResponseDto deleteById(String id);
 
     GenericResponseDto enableUser(String userId, boolean enable);
 

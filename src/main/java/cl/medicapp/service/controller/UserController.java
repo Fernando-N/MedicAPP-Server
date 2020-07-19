@@ -60,6 +60,7 @@ public class UserController {
      * @return Usuario encontrado
      */
     @GetMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public UserDto getById(@PathVariable String id) {
         return userService.getById(id);
     }
@@ -76,14 +77,14 @@ public class UserController {
     }
 
     /**
-     * Endpoint que elimina un usuario por su correo
+     * Endpoint que elimina un usuario por su id
      *
-     * @param email Email
+     * @param id Id de usuario
      * @return GenericResponse con detalles
      */
-    @DeleteMapping("/{email}")
-    public GenericResponseDto deleteByEmail(@PathVariable String email) {
-        return userService.deleteByEmail(email);
+    @DeleteMapping("/{id}")
+    public GenericResponseDto deleteByEmail(@PathVariable String id) {
+        return userService.deleteById(id);
     }
 
     @GetMapping("/disabled")

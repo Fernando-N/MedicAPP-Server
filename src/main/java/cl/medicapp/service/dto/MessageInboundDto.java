@@ -7,43 +7,28 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
-/**
- * Dto para mensajes de chat
- */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class MessageDto {
+public class MessageInboundDto {
 
-    /**
-     * Id
-     */
-    @JsonProperty(value = "_id")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY, value = "_id")
     private String id;
 
-    /**
-     * Mensaje
-     */
     @JsonProperty(value = "text")
-    private String message;
+    private String text;
 
-    /**
-     * Fecha
-     */
     @JsonProperty(value = "createdAt")
     private Date date;
 
-    /**
-     * De
-     */
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY, value = "user")
+    @JsonProperty(value = "user")
     private UserChat from;
 
+    @JsonProperty(value = "to")
     private String to;
 
     @Data
@@ -53,11 +38,14 @@ public class MessageDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class UserChat {
 
+        @JsonProperty(value = "_id")
         private String id;
 
+        @JsonProperty(value = "name")
         private String name;
 
-        private String avatar;
+        @JsonProperty(value = "avatar")
+        private String avatarURI;
 
     }
 
