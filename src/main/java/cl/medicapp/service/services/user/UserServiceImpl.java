@@ -166,13 +166,16 @@ public class UserServiceImpl implements UserService {
     public List<UserDto> getByName(String firstName, String lastName) {
         List<UserDto> userDtoList = new ArrayList<>();
 
-        Optional<List<UserDocument>> user = userRepository.findByFirstNameAndLastName(firstName, lastName);
+        List<Optional<UserDocument>> listUser = userRepository.findByFirstNameAndLastName(firstName, lastName);
 
-        if (!user.isPresent()) {
-            throw GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.getReasonPhrase(), String.format(Constants.USER_X_X_NOT_FOUND, firstName, lastName));
-        }
+        listUser.forEach(userDocument -> {
 
-        user.get().forEach(userDocument -> userDtoList.add(UserUtil.toUserDto(userDocument)));
+            if (!userDocument.isPresent()) {
+                throw GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.getReasonPhrase(), String.format(Constants.USER_X_X_NOT_FOUND, firstName, lastName));
+            }
+
+            userDtoList.add(UserUtil.toUserDto(userDocument.get()));
+        });
 
         return userDtoList;
     }

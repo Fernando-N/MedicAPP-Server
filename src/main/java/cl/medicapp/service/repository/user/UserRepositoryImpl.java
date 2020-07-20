@@ -146,7 +146,7 @@ public class UserRepositoryImpl implements UserRepository {
      * @return Lista de usuarios encontrados
      */
     @Override
-    public Optional<List<UserDocument>> findByFirstNameAndLastName(String firstName, String lastName) {
+    public List<Optional<UserDocument>> findByFirstNameAndLastName(String firstName, String lastName) {
         List<UserDetailsDocument> usersDetailsDocuments = userDetailsRepository.findByFirstNameAndLastName(firstName, lastName);
         return usersDetailsDocuments.stream()
                 .map(userRepository::findByUserDetails)

@@ -56,7 +56,7 @@ public interface UserRepository {
     /**
      * @see UserRepositoryImpl#findByFirstNameAndLastName(String, String)
      */
-    Optional<List<UserDocument>> findByFirstNameAndLastName(String firstName, String lastName);
+    List<Optional<UserDocument>> findByFirstNameAndLastName(String firstName, String lastName);
 
     /**
      * @see UserRepositoryImpl#findByEmailIgnoreCaseAndEnabledTrue(String)
