@@ -19,6 +19,13 @@ import java.util.List;
 @Slf4j
 public class MessageUtil {
 
+    /**
+     * Genera MessageDocument
+     * @param messageInboundDto Mensaje
+     * @param from Remitente
+     * @param to Destinatario
+     * @return MessageDocument
+     */
     public static MessageDocument buildDocument(MessageInboundDto messageInboundDto, UserDocument from, UserDocument to) {
         return MessageDocument.builder()
                 .date(DateUtil.from(new Date()))
@@ -29,6 +36,11 @@ public class MessageUtil {
                 .build();
     }
 
+    /**
+     * Convierte un messageDocument en MessageOutboundDto
+     * @param messageDocument target
+     * @return target como MessageOutboundDto
+     */
     public static MessageOutboundDto toMessageOutboundDto(MessageDocument messageDocument) {
         return MessageOutboundDto.builder()
                 .id(messageDocument.getId())
@@ -42,6 +54,11 @@ public class MessageUtil {
                 .build();
     }
 
+    /**
+     * Convierte los mensajes mios agregandole un prefijo "Yo: " a cada uno
+     * @param messages Lista de mensajes
+     * @return Lista de mensajes con prefijo
+     */
     public static List<MessageDocument> convertMessagesFromMe(List<MessageDocument> messages) {
         messages.forEach(message -> {
             UserDocument tmp = message.getFrom();
@@ -52,11 +69,20 @@ public class MessageUtil {
         return messages;
     }
 
+    /**
+     * Ordenar mensajes por fecha descendente (esto lo hace con referencia)
+     * @param messages Lista de mensajes
+     */
     public static void orderMessagesByDateDesc(List<MessageDocument> messages) {
         messages.sort(Comparator.comparing(MessageDocument::getDate));
         Collections.reverse(messages);
     }
 
+    /**
+     * Filtra el primer mensaje de cada usuario
+     * @param messages Lista de mensajes
+     * @return Lista de mensajes filtrados
+     */
     public static List<MessageDocument> filterMessagesFromOneUser(List<MessageDocument> messages) {
         List<String> userFrom = new ArrayList<>();
         List<MessageDocument> listFiltered = new ArrayList<>();

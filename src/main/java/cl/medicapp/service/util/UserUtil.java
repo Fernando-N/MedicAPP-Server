@@ -20,7 +20,6 @@ public class UserUtil {
 
     /**
      * Transforma UserDocument -> UserDto
-     *
      * @param userDocument target
      * @return UserDto
      */
@@ -55,12 +54,22 @@ public class UserUtil {
         return user;
     }
 
+    /**
+     * Verifica si en una lista de roles se encuentra el rol de paramedico
+     * @param roles Lista de roles
+     * @return Resultado
+     */
     private static boolean hasRoleParamedic(List<RoleDocument> roles) {
         return roles
                 .stream()
                 .anyMatch(roleDocument -> roleDocument.getName().equals("ROLE_PARAMEDIC"));
     }
 
+    /**
+     * Convierte una lista de RoleDocument a RoleDto
+     * @param roles target
+     * @return target como RoleDto
+     */
     private static List<RoleDto> roleListDto(List<RoleDocument> roles) {
         return roles.stream().map(RoleUtil::toRoleDto).collect(Collectors.toList());
     }
@@ -79,6 +88,12 @@ public class UserUtil {
                 .build();
     }
 
+    /**
+     * Setea nuevos valores de usuario a anterior usuario
+     * @param newUser Objeto nuevo usuario
+     * @param actualUser Objeto usuario anterior
+     * @return Usuario con nuevos valores
+     */
     public static UserDocument merge(UserDto newUser, UserDocument actualUser) {
         return UserDocument.builder()
                 .id(actualUser.getId())
@@ -95,7 +110,6 @@ public class UserUtil {
 
     /**
      * Genera UserDetailsDocument a partir de un UserDto y CommuneDocument
-     *
      * @param newUser         usuario nuevo
      * @param communeDocument Comuna referencia
      * @return UserDetailsDocument
@@ -116,7 +130,6 @@ public class UserUtil {
 
     /**
      * Genera ParamedicDetailsDocument a partir de un UserDto
-     *
      * @param newUser         usuario nuevo
      * @return UserDetailsDocument
      */
@@ -132,7 +145,6 @@ public class UserUtil {
 
     /**
      * Obtiene el email del usuario logeado
-     *
      * @return email usuario logeado
      */
     public static String getEmailUserLogged() {

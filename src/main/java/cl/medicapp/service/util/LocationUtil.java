@@ -8,6 +8,11 @@ import cl.medicapp.service.dto.LocationResponseDto;
  */
 public class LocationUtil {
 
+    /**
+     * Transforma respuesta de API a LocationDto
+     * @param locationResponseDto target
+     * @return target convertido a LocationDto
+     */
     public static LocationDto toLocationDto(LocationResponseDto.Location locationResponseDto) {
         return LocationDto.builder()
                 .latitude(locationResponseDto.getLatitude())

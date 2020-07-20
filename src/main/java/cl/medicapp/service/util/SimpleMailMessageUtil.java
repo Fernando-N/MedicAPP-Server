@@ -7,6 +7,14 @@ import org.springframework.mail.SimpleMailMessage;
  */
 public class SimpleMailMessageUtil {
 
+    /**
+     * Genera SimpleMailMessage
+     * @param from Remitente
+     * @param to Destinatario
+     * @param subject Sujeto
+     * @param body Cuerpo
+     * @return SimlpeMailMessage generado
+     */
     public static SimpleMailMessage build(String from, String to, String subject, String body) {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom(from);

@@ -5,6 +5,11 @@ package cl.medicapp.service.util;
  */
 public class StringUtil {
 
+    /**
+     * Capitaliza todas las palabras de un String
+     * @param target
+     * @return
+     */
     public static String capitalizeAllWords(String target) {
         String[] arr = target.toLowerCase().split(" ");
         StringBuilder sb = new StringBuilder();

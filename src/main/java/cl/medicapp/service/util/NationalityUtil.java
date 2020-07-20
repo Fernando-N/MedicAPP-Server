@@ -8,6 +8,11 @@ import cl.medicapp.service.dto.NationalityDto;
  */
 public class NationalityUtil {
 
+    /**
+     * Convierte NationalityDocument a NationalityDto
+     * @param nationalityDocument target
+     * @return target como NationalityDto
+     */
     public static NationalityDto toNationalityDto(NationalityDocument nationalityDocument) {
         return NationalityDto.builder()
                 .id(nationalityDocument.getId())
@@ -15,6 +20,11 @@ public class NationalityUtil {
                 .build();
     }
 
+    /**
+     * Convierte NationalityDto a NationalityDocument
+     * @param nationalityDto target
+     * @return target como NationalityDocument
+     */
     public static NationalityDocument toNationalityDocument(NationalityDto nationalityDto) {
         return NationalityDocument.builder()
                 .name(nationalityDto.getName())
