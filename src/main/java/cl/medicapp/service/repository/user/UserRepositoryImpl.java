@@ -11,6 +11,7 @@ import cl.medicapp.service.repository.paramedicdetails.ParamedicDetailsDocumentR
 import cl.medicapp.service.repository.userdetails.UserDetailsDocumentRepository;
 import cl.medicapp.service.util.GenericResponseUtil;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collections;
@@ -147,9 +148,9 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Optional<List<UserDocument>> findByFirstNameAndLastName(String firstName, String lastName) {
         List<UserDetailsDocument> usersDetailsDocuments = userDetailsRepository.findByFirstNameAndLastName(firstName, lastName);
-        return Optional.of(usersDetailsDocuments.stream()
+        return usersDetailsDocuments.stream()
                 .map(userRepository::findByUserDetails)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
     }
 
     /**
@@ -170,6 +171,17 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Optional<UserDocument> findByResetToken(String resetToken) {
         return userRepository.findByResetToken(resetToken);
+    }
+
+    @Override
+    public Optional<UserDocument> findByRut(String rut) {
+        Optional<UserDetailsDocument> userDetailsDocumentOptional = userDetailsRepository.findByRut(rut);
+
+        if (!userDetailsDocumentOptional.isPresent()) {
+            throw GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, "User not found", String.format("User id %s not found", rut));
+        }
+
+        return userRepository.findByUserDetails(userDetailsDocumentOptional.get());
     }
 
     /**

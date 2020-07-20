@@ -6,6 +6,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Repositorio de detalles de usuario
@@ -27,5 +28,12 @@ public interface UserDetailsDocumentRepository extends PagingAndSortingRepositor
      * @return Lista de usuarios encontrados
      */
     List<UserDetailsDocument> findByFirstNameAndLastName(String firstName, String lastName);
+
+    /**
+     * Obtener usuario por rut
+     * @param rut Rut
+     * @return Usuario encontrado
+     */
+    Optional<UserDetailsDocument> findByRut(String rut);
 
 }

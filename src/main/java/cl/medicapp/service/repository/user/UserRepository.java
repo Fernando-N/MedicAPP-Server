@@ -69,6 +69,11 @@ public interface UserRepository {
     Optional<UserDocument> findByResetToken(String resetToken);
 
     /**
+     * @see UserRepositoryImpl#findByRut(String)
+     */
+    Optional<UserDocument> findByRut(String rut);
+
+    /**
      * @see UserRepositoryImpl#deleteById(String)
      */
     boolean deleteById(String id);

@@ -90,7 +90,7 @@ class UserServiceImplTest {
     void testGetAllByRegionId() {
         when(userRepository.findAllByRoleAndRegion(any(), any())).thenReturn(Arrays.<UserDocument>asList(new UserDocument("id", "email", "password", Arrays.<RoleDocument>asList(null), null, null, Boolean.TRUE, Integer.valueOf(0), new GregorianCalendar(2020, Calendar.JULY, 20, 12, 25).getTime(), new GregorianCalendar(2020, Calendar.JULY, 20, 12, 25).getTime(), "resetToken")));
 
-        List<UserDto> result = userServiceImpl.getAllByRegionId("role", "regionId");
+        List<UserDto> result = userServiceImpl.getAllByRoleAndRegionId("role", "regionId");
         Assertions.assertEquals(Arrays.<UserDto>asList(new UserDto("id", "email", "password", "rut", "firstName", "lastName", new GregorianCalendar(2020, Calendar.JULY, 20, 12, 25).getTime(), new CommuneDto("value", "label", new RegionDto("value", "label")), new RegionDto("value", "label"), true, "address", "aboutMe", true, "profileImage", "titleImage", 0, "certificateNationalHealth", "carnetImage", new GregorianCalendar(2020, Calendar.JULY, 20, 12, 25).getTime(), Integer.valueOf(0), Boolean.TRUE, new StatsDto(0, 0, 0), Arrays.<RoleDto>asList(new RoleDto("id", "name")))), result);
     }
 
@@ -98,7 +98,7 @@ class UserServiceImplTest {
     void testGetAllByCommuneId() {
         when(userRepository.findAllByRoleAndCommune(any(), any())).thenReturn(Arrays.<UserDocument>asList(new UserDocument("id", "email", "password", Arrays.<RoleDocument>asList(null), null, null, Boolean.TRUE, Integer.valueOf(0), new GregorianCalendar(2020, Calendar.JULY, 20, 12, 25).getTime(), new GregorianCalendar(2020, Calendar.JULY, 20, 12, 25).getTime(), "resetToken")));
 
-        List<UserDto> result = userServiceImpl.getAllByCommuneId("role", "communeId");
+        List<UserDto> result = userServiceImpl.getAllByRoleAndCommuneId("role", "communeId");
         Assertions.assertEquals(Arrays.<UserDto>asList(new UserDto("id", "email", "password", "rut", "firstName", "lastName", new GregorianCalendar(2020, Calendar.JULY, 20, 12, 25).getTime(), new CommuneDto("value", "label", new RegionDto("value", "label")), new RegionDto("value", "label"), true, "address", "aboutMe", true, "profileImage", "titleImage", 0, "certificateNationalHealth", "carnetImage", new GregorianCalendar(2020, Calendar.JULY, 20, 12, 25).getTime(), Integer.valueOf(0), Boolean.TRUE, new StatsDto(0, 0, 0), Arrays.<RoleDto>asList(new RoleDto("id", "name")))), result);
     }
 

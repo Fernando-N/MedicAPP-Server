@@ -6,6 +6,7 @@ import cl.medicapp.service.constants.Constants;
 import cl.medicapp.service.document.RegionDocument;
 import cl.medicapp.service.dto.GenericResponseDto;
 import cl.medicapp.service.dto.RegionDto;
+import cl.medicapp.service.holder.DocumentsHolder;
 import cl.medicapp.service.repository.region.RegionRepository;
 import cl.medicapp.service.util.GenericResponseUtil;
 import cl.medicapp.service.util.RegionUtil;
@@ -16,27 +17,52 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+/**
+ * Implementacion de servicio de regiones
+ */
 @Service
 @RequiredArgsConstructor
-//TODO aplicar logica utilizando la clase DocumentsHolder para evitar carga a la bd
 public class RegionServiceImpl implements RegionService {
 
+    /**
+     * Bean de repositorio de regiones
+     */
     private final RegionRepository regionRepository;
 
+    /**
+     * Obtener todas las regiones
+     * @return Lista de regiones
+     */
     @Override
     public List<RegionDto> getAll() {
-        List<RegionDto> regionList = new ArrayList<>();
-        regionRepository.findAll().forEach(region -> regionList.add(RegionUtil.toRegionDto(region)));
-        return regionList;
+        return DocumentsHolder.getInstance().getRegionDocumentList()
+                .stream()
+                .map(RegionUtil::toRegionDto)
+                .collect(Collectors.toList());
     }
 
+    /**
+     * Obtener una region por su nombre
+     * @param name Nombre de region
+     * @return Region encontrada
+     */
     @Override
     public RegionDto getByName(String name) {
-        return regionRepository.findByNameIgnoreCase(name).map(RegionUtil::toRegionDto)
+        return DocumentsHolder.getInstance().getRegionDocumentList()
+                .stream()
+                .filter(region -> region.getName().equalsIgnoreCase(name))
+                .findFirst()
+                .map(RegionUtil::toRegionDto)
                 .orElseThrow(() -> GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.getReasonPhrase(), String.format("Region %s NOT FOUND!", name)));
     }
 
+    /**
+     * Guardar region
+     * @param request objeto con datos de region
+     * @return Region guardada
+     */
     @Override
     @FormatArgs
     public RegionDto save(RegionDto request) {
@@ -51,6 +77,12 @@ public class RegionServiceImpl implements RegionService {
     return request;
     }
 
+    /**
+     * Actualizar una region
+     * @param regionName Nombre de region
+     * @param newRegion Region con cambios
+     * @return Region actualizada
+     */
     @Override
     @FormatArgs
     public RegionDto update(@Capitalize String regionName, RegionDto newRegion) {
@@ -66,6 +98,11 @@ public class RegionServiceImpl implements RegionService {
         return newRegion;
     }
 
+    /**
+     * Eliminar por nombre
+     * @param name Nombre de region
+     * @return Resultado
+     */
     @Override
     @FormatArgs
     public GenericResponseDto deleteByName(@Capitalize String name) {

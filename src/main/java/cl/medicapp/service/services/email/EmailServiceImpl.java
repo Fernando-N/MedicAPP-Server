@@ -16,11 +16,13 @@ import java.util.Objects;
 @Slf4j
 public class EmailServiceImpl implements EmailService {
 
+    /**
+     * Bean de JavaMailSender
+     */
     private final JavaMailSender mailSender;
 
     /**
      * Metodo que envia un mail de manera asíncrona
-     *
      * @param email Objeto SimpleMailMessage a enviar
      */
     @Async
@@ -29,8 +31,13 @@ public class EmailServiceImpl implements EmailService {
         sendEmail(recoveryMail);
     }
 
-    @Async
     //TODO Ver como mejorar esto
+
+    /**
+     * Enviar email
+     * @param email objeto email
+     */
+    @Async
     void sendEmail(SimpleMailMessage email) {
         mailSender.send(email);
         log.info("[EmailService] Password recovery token mail send to {}", Objects.requireNonNull(email.getTo())[0]);

@@ -17,6 +17,7 @@ import cl.medicapp.service.repository.role.RoleRepository;
 import cl.medicapp.service.repository.user.UserDocumentRepository;
 import cl.medicapp.service.repository.userdetails.UserDetailsDocumentRepository;
 import cl.medicapp.service.services.email.EmailService;
+import cl.medicapp.service.util.DocumentsHolderUtil;
 import cl.medicapp.service.util.GenericResponseUtil;
 import cl.medicapp.service.util.UserUtil;
 import lombok.RequiredArgsConstructor;
@@ -29,23 +30,44 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Clase de servicio de autenticación
+ * Implementacion de servicio de autenticación
  */
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
+    /**
+     * Bean de repositorio de usuarios
+     */
     private final UserDocumentRepository userDocumentRepository;
-    private final RoleRepository roleRepository;
+
+    /**
+     * Bean de repositorio de detalles de usuario
+     */
     private final UserDetailsDocumentRepository userDetailsDocumentRepository;
+
+    /**
+     * Bean de repositorio de detalles de paramedico
+     */
     private final ParamedicDetailsDocumentRepository paramedicDetailsDocumentRepository;
+
+    /**
+     * Bean de repositorio de comunas
+     */
     private final CommuneRepository communeRepository;
+
+    /**
+     * Bean de servicio de email
+     */
     private final EmailService emailService;
+
+    /**
+     * Bean de BcryptPasswordEncoder
+     */
     private final BCryptPasswordEncoder passwordEncoder;
 
     /**
      * Implementación endpoint de registro
-     *
      * @param newUser Nuevo usuario
      * @return Usuario nuevo
      */
@@ -73,17 +95,9 @@ public class AuthServiceImpl implements AuthService {
         userDocument.setPassword(passwordEncoder.encode(newUser.getPassword()));
         userDocument.setRoleEntities(Collections.singletonList(
                 newUser.isParamedic() ?
-                        DocumentsHolder.getInstance().getRoleDocumentList()
-                                .stream()
-                                .filter(roleDocument -> roleDocument.getName().contains("PARAMEDIC"))
-                                .findFirst()
-                                .orElseThrow(GenericResponseUtil::getGenericException)
+                        DocumentsHolderUtil.getRoleDocumentByName(Constants.PARAMEDIC)
                         :
-                        DocumentsHolder.getInstance().getRoleDocumentList()
-                                .stream()
-                                .filter(roleDocument -> roleDocument.getName().contains("USER"))
-                                .findFirst()
-                                .orElseThrow(GenericResponseUtil::getGenericException)
+                        DocumentsHolderUtil.getRoleDocumentByName(Constants.USER)
                 )
         );
         userDocument.setEnabled(!newUser.isParamedic());
@@ -95,7 +109,6 @@ public class AuthServiceImpl implements AuthService {
 
     /**
      * Implementación endpoint de recuperar contraseña
-     *
      * @param email Email a recuperar contraseña
      * @return Respuesta con mensaje indicando que si existe el correo recibira un mensaje
      */
@@ -116,10 +129,9 @@ public class AuthServiceImpl implements AuthService {
     }
 
     /**
-     * Implementación endpoint de restablecer contraseña
-     *
-     * @param request Request con token y contraseña
-     *                return Usuario actualizado
+     * Restablece la constraseña de un usuario
+     * @param request Request que contiene token y nueva contraseña
+     * @return Usuario restablecido
      */
     @Override
     public UserDto resetPassword(ResetPasswordRequestDto request) {

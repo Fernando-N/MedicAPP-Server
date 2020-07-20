@@ -1,6 +1,7 @@
 package cl.medicapp.service.util;
 
 import cl.medicapp.service.document.CommuneDocument;
+import cl.medicapp.service.document.RegionDocument;
 import cl.medicapp.service.dto.CommuneDto;
 
 /**
@@ -26,11 +27,11 @@ public class CommuneUtil {
      * @param communeDto target
      * @return target convertido a CommuneDocument
      */
-    public static CommuneDocument toCommuneDocument(CommuneDto communeDto) {
+    public static CommuneDocument toCommuneDocument(CommuneDto communeDto, RegionDocument regionDocument) {
         return CommuneDocument.builder()
                 .id(communeDto.getId())
                 .name(communeDto.getName())
-                .region(communeDto.getRegion() != null ? RegionUtil.toRegionDocument(communeDto.getRegion()) : null)
+                .region(regionDocument)
                 .build();
     }
 

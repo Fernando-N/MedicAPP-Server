@@ -10,21 +10,40 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * Implementacion de servicio de localizacion
+ */
 @Service
 @Slf4j
 public class LocationServiceImpl implements LocationService {
 
+    /**
+     * API Key de PositionStack
+     */
     @Value("${api.positionStack.key}")
     private String apiKey;
 
+    /**
+     * API Uri de PositionStack
+     */
     @Value("${api.positionStack.uri}")
     private String apiUri;
 
+    /**
+     * Obtener longitud y latitud de una direccion
+     * @param address Direccion
+     * @return Objeto con respuesta
+     */
     @Override
     public LocationDto getLongitudeAndLatitude(String address) {
         return LocationUtil.toLocationDto(consumeAPI(address));
     }
 
+    /**
+     * Metodo que consume la API
+     * @param address Direccion
+     * @return Respuesta de API
+     */
     private LocationResponseDto.Location consumeAPI(String address) {
         RestTemplate restTemplate = new RestTemplate();
         String endpoint = String.format("%s/forward?access_key=%s&query=%s", apiUri, apiKey, address);

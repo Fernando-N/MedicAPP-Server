@@ -103,7 +103,7 @@ public class UserUtil {
                 .enabled(newUser.getEnabled())
                 .createdOn(actualUser.getCreatedOn())
                 .roleEntities(actualUser.getRoleEntities())
-                .userDetails(buildUserDetailsDocument(newUser, CommuneUtil.toCommuneDocument(newUser.getCommune())))
+                .userDetails(buildUserDetailsDocument(newUser, CommuneUtil.toCommuneDocument(newUser.getCommune(), null)))
                 .lastLogin(actualUser.getLastLogin())
                 .build();
     }

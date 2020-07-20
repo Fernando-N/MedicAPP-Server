@@ -1,7 +1,6 @@
 package cl.medicapp.service.services.report;
 
 import cl.medicapp.service.annotation.FormatArgs;
-import cl.medicapp.service.annotation.UpperCase;
 import cl.medicapp.service.constants.Constants;
 import cl.medicapp.service.document.ReportDocument;
 import cl.medicapp.service.document.UserDocument;
@@ -11,6 +10,7 @@ import cl.medicapp.service.repository.report.ReportRepository;
 import cl.medicapp.service.repository.user.UserRepository;
 import cl.medicapp.service.util.GenericResponseUtil;
 import cl.medicapp.service.util.ReportUtil;
+import cl.medicapp.service.util.UserUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,14 +21,27 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Implementacion de servicio de reportes
+ */
 @Service
 @RequiredArgsConstructor
 public class ReportServiceImpl implements ReportService {
 
+    /**
+     * Bean de repositorio de reportes
+     */
     private final ReportRepository reportRepository;
+
+    /**
+     * Bean de repositorio de usuarios
+     */
     private final UserRepository userRepository;
 
-
+    /**
+     * Obtener todos los reportes
+     * @return Lista de reportes
+     */
     @Override
     public List<ReportDto> getAll() {
         List<ReportDto> reportDtoList = new ArrayList<>();
@@ -36,6 +49,11 @@ public class ReportServiceImpl implements ReportService {
         return reportDtoList;
     }
 
+    /**
+     * Obtener reportes creados por un usuario
+     * @param id Id usuario a buscar
+     * @return Lista de reportes
+     */
     @Override
     public List<ReportDto> getByFromUserId(String id) {
 
@@ -48,6 +66,11 @@ public class ReportServiceImpl implements ReportService {
         return reportRepository.findByFrom(userDocumentOptional.get()).stream().map(ReportUtil::toReporDto).collect(Collectors.toList());
     }
 
+    /**
+     * Obtener reportes dirigidos a un usuario
+     * @param id Id usuario a buscar
+     * @return Lista de reportes
+     */
     @Override
     public List<ReportDto> getByToUserId(String id) {
         Optional<UserDocument> userDocumentOptional = userRepository.findById(id);
@@ -59,11 +82,16 @@ public class ReportServiceImpl implements ReportService {
         return reportRepository.findByTo(userDocumentOptional.get()).stream().map(ReportUtil::toReporDto).collect(Collectors.toList());
     }
 
+    /**
+     * Guardar un reporte
+     * @param request Objeto con datos a guardar
+     * @return Reporte guardado
+     */
     @Override
     @FormatArgs
     public ReportDto save(ReportDto request) {
 
-        Optional<UserDocument> fromUserOptional = userRepository.findById(request.getFromUser().getId());
+        Optional<UserDocument> fromUserOptional = userRepository.findByEmailIgnoreCase(UserUtil.getEmailUserLogged());
         Optional<UserDocument> toUserOptional = userRepository.findById(request.getToUser().getId());
 
         if (!fromUserOptional.isPresent() || !toUserOptional.isPresent()) {
@@ -75,6 +103,12 @@ public class ReportServiceImpl implements ReportService {
         return request;
     }
 
+    /**
+     * Actualizar reporte
+     * @param idReport Id reporte
+     * @param newReport Reporte con nuevos datos
+     * @return Reporte actualizado
+     */
     @Override
     public ReportDto update(String idReport, ReportDto newReport) {
 
@@ -91,6 +125,11 @@ public class ReportServiceImpl implements ReportService {
         return newReport;
     }
 
+    /**
+     * Marcar como resuelto un reporte
+     * @param idReport Id reporte
+     * @return Resultado
+     */
     @Override
     public GenericResponseDto resolveReportId(String idReport) {
         Optional<ReportDocument> reportDocumentOptional = reportRepository.findById(idReport);
@@ -108,11 +147,15 @@ public class ReportServiceImpl implements ReportService {
                 .build();
     }
 
+    /**
+     * Eliminar reporte
+     * @param idReporte Id reporte
+     * @return Resultado
+     */
     @Override
-    @FormatArgs
-    public GenericResponseDto deleteById(@UpperCase String name) {
-        reportRepository.deleteById(name);
+    public GenericResponseDto deleteById(String idReporte) {
+        reportRepository.deleteById(idReporte);
 
-        return GenericResponseUtil.buildGenericResponse(HttpStatus.NOT_FOUND.getReasonPhrase(), String.format(Constants.ROLE_X_NOT_FOUND, name));
+        return GenericResponseUtil.buildGenericResponse(HttpStatus.NOT_FOUND.getReasonPhrase(), String.format(Constants.ROLE_X_NOT_FOUND, idReporte));
     }
 }

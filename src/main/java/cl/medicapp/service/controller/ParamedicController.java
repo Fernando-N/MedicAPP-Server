@@ -47,7 +47,7 @@ public class ParamedicController {
     @GetMapping("/region/{regionId}")
     @PreAuthorize("isAuthenticated()")
     public List<UserDto> getAllByRegionId(@PathVariable String regionId) {
-        return userService.getAllByRegionId(Constants.PARAMEDIC, regionId);
+        return userService.getAllByRoleAndRegionId(Constants.PARAMEDIC, regionId);
     }
 
     /**
@@ -58,7 +58,7 @@ public class ParamedicController {
     @GetMapping("/paramedic/commune-{communeId}")
     @PreAuthorize("isAuthenticated()")
     public List<UserDto> getAllByRegionIdAndCommuneId(@PathVariable String communeId) {
-        return userService.getAllByCommuneId(Constants.PARAMEDIC, communeId);
+        return userService.getAllByRoleAndCommuneId(Constants.PARAMEDIC, communeId);
     }
 
     /**

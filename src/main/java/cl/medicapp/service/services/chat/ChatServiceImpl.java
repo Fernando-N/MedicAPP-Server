@@ -43,6 +43,10 @@ public class ChatServiceImpl implements ChatService {
 //                .collect(Collectors.toList());
     }
 
+    /**
+     * Obtiene los mensajes del usuario en sesión
+     * @return Lista de mensajes
+     */
     @Override
     public List<MessageOutboundDto> getMessagesToUserLoggedIn() {
         String emailSender = UserUtil.getEmailUserLogged();
@@ -50,6 +54,12 @@ public class ChatServiceImpl implements ChatService {
         return getMessagesToUser(emailSender, true);
     }
 
+    /**
+     * Obtienes los mensajes de un usuario
+     * @param userTarget target
+     * @param findByEmail Flag si el target es un correo o id
+     * @return Lista de mensajes
+     */
     @Override
     public List<MessageOutboundDto> getMessagesToUser(String userTarget, boolean findByEmail) {
 
@@ -77,6 +87,11 @@ public class ChatServiceImpl implements ChatService {
         return filtered.stream().map(MessageUtil::toMessageOutboundDto).collect(Collectors.toList());
     }
 
+    /**
+     * Obtiene el historial de mensajes de un usuario con el usuario en sesion
+     * @param userId Id de usuario
+     * @return Lista de mensajes
+     */
     @Override
     public List<MessageOutboundDto> getMessagesFromUserId(String userId) {
         String emailSender = UserUtil.getEmailUserLogged();
@@ -102,6 +117,12 @@ public class ChatServiceImpl implements ChatService {
         return messages.stream().map(MessageUtil::toMessageOutboundDto).collect(Collectors.toList());
     }
 
+    /**
+     * Guarda y retorna un mensaje entrante
+     * @param messageInboundDto Mensaje entrante
+     * @param idSender Id remitente
+     * @return Mensaje entrante convertido a MessageOutboundDto
+     */
     @Override
     public MessageOutboundDto saveAndSendMessage(MessageInboundDto messageInboundDto, String idSender) {
 

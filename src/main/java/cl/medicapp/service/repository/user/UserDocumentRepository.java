@@ -48,7 +48,7 @@ public interface UserDocumentRepository extends PagingAndSortingRepository<UserD
      * @param userDetails UserDetailsDocument a buscar
      * @return Usuario encontrado
      */
-    UserDocument findByUserDetails(UserDetailsDocument userDetails);
+    Optional<UserDocument> findByUserDetails(UserDetailsDocument userDetails);
 
     /**
      * @see UserRepositoryImpl#findByEmailIgnoreCaseAndEnabledTrue(String)
