@@ -11,6 +11,7 @@ import cl.medicapp.service.repository.report.ReportRepository;
 import cl.medicapp.service.repository.user.UserRepository;
 import cl.medicapp.service.util.GenericResponseUtil;
 import cl.medicapp.service.util.ReportUtil;
+import cl.medicapp.service.util.UserUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -62,8 +63,8 @@ public class ReportServiceImpl implements ReportService {
     @FormatArgs
     public ReportDto save(ReportDto request) {
 
-        Optional<UserDocument> fromUserOptional = userRepository.findById(request.getFromUser().getId());
-        Optional<UserDocument> toUserOptional = userRepository.findById(request.getToUser().getId());
+        Optional<UserDocument> fromUserOptional = userRepository.findByEmailIgnoreCaseAndEnabledTrue(UserUtil.getEmailUserLogged());
+        Optional<UserDocument> toUserOptional = userRepository.findById(request.getToUserId());
 
         if (!fromUserOptional.isPresent() || !toUserOptional.isPresent()) {
             throw GenericResponseUtil.buildGenericException(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.getReasonPhrase(), String.format(Constants.ROLE_X_ALREADY_EXIST, request.getMessage()));

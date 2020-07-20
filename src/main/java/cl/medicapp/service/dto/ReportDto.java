@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * Dto para mensajes de chat
  */
@@ -20,6 +22,8 @@ public class ReportDto {
      * Identificador
      */
     private String id;
+
+    private String toUserId;
 
     /**
      * De

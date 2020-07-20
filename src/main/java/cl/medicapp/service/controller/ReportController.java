@@ -38,7 +38,7 @@ public class ReportController {
      */
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public ReportDto create(@Valid @RequestBody ReportDto reportDto) {
+    public ReportDto create(@RequestBody ReportDto reportDto) {
         return reportService.save(reportDto);
     }
 
