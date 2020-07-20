@@ -22,7 +22,7 @@ public class RegionDto implements Serializable {
     /**
      * Identificado
      */
-    @JsonProperty(value = "value", access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(value = "value")
     private String id;
 
     /**

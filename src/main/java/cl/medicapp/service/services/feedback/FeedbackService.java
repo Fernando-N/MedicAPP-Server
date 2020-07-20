@@ -2,7 +2,6 @@ package cl.medicapp.service.services.feedback;
 
 import cl.medicapp.service.dto.FeedbackDto;
 import cl.medicapp.service.dto.GenericResponseDto;
-import cl.medicapp.service.dto.ReportDto;
 
 import java.util.List;
 

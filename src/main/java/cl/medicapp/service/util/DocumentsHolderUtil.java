@@ -11,6 +11,11 @@ import org.springframework.http.HttpStatus;
  */
 public class DocumentsHolderUtil {
 
+    /**
+     * Busca un rol por su nombre
+     * @param name Nombre
+     * @return Rol encontrado
+     */
     public static RoleDocument getRoleDocumentByName(String name) {
         return DocumentsHolder.getInstance().getRoleDocumentList().stream()
                 .filter(roleDocument -> roleDocument.getName().toUpperCase().contains(name.toUpperCase()))
@@ -25,6 +30,11 @@ public class DocumentsHolderUtil {
                 );
     }
 
+    /**
+     * Busca una comuna por su id
+     * @param communeId Id de comuna
+     * @return Comuna encontrada
+     */
     public static CommuneDocument getCommuneDocumentById(String communeId) {
         return DocumentsHolder.getInstance().getCommuneDocumentList()
                 .stream()
@@ -40,6 +50,11 @@ public class DocumentsHolderUtil {
                 );
     }
 
+    /**
+     * Busca region por su id
+     * @param regionId Id de region a buscar
+     * @return Region encontrada
+     */
     public static RegionDocument getRegionDocumentById(String regionId) {
         return DocumentsHolder.getInstance().getRegionDocumentList()
                 .stream()
