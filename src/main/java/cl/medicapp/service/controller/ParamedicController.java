@@ -1,6 +1,7 @@
 package cl.medicapp.service.controller;
 
 import cl.medicapp.service.dto.GenericResponseDto;
+import cl.medicapp.service.dto.StatsDto;
 import cl.medicapp.service.dto.UserDto;
 import cl.medicapp.service.services.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/paramedic")
-@PreAuthorize("isAuthenticated()")
+//@PreAuthorize("isAuthenticated()")
 public class ParamedicController {
 
     private final UserService userService;
@@ -32,6 +33,14 @@ public class ParamedicController {
     @GetMapping("")
     public List<UserDto> getAll() {
         return userService.getAllByRole("PARAMEDIC");
+    }
+
+    /**
+     * Endpoint que obtiene los stats de un paramedico
+     */
+    @GetMapping("/{id}/stats")
+    public StatsDto getStats(@PathVariable String id) {
+        return userService.getStats(id);
     }
 
     /**

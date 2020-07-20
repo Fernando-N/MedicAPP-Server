@@ -79,6 +79,20 @@ public class UserUtil {
                 .build();
     }
 
+    public static UserDocument merge(UserDto newUser, UserDocument actualUser) {
+        return UserDocument.builder()
+                .id(actualUser.getId())
+                .paramedicDetails(newUser.isParamedic() ? buildParamedicDetailsDocument(newUser) : null)
+                .attempts(actualUser.getAttempts())
+                .email(newUser.getEmail())
+                .enabled(newUser.getEnabled())
+                .createdOn(actualUser.getCreatedOn())
+                .roleEntities(actualUser.getRoleEntities())
+                .userDetails(buildUserDetailsDocument(newUser, CommuneUtil.toCommuneDocument(newUser.getCommune())))
+                .lastLogin(actualUser.getLastLogin())
+                .build();
+    }
+
     /**
      * Genera UserDetailsDocument a partir de un UserDto y CommuneDocument
      *

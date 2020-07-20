@@ -45,7 +45,6 @@ public class UserDto implements Serializable {
     /**
      * Contraseña
      */
-    @NotBlank(message = Constants.PASSWORD_CANT_BE_EMPTY)
     @Size(min = 6, max = 16, message = Constants.PASSWORD_MUST_BE_BETWEEN)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
@@ -73,13 +72,11 @@ public class UserDto implements Serializable {
     /**
      * Fecha de nacimiento
      */
-    @NotBlank(message = "Birthday can't be empty!")
     private Date birthDay;
 
     /**
      * Comuna
      */
-    @NotBlank(message = "Commune can't be empty!")
     private CommuneDto commune;
 
     /**
@@ -152,6 +149,11 @@ public class UserDto implements Serializable {
      */
     private Boolean enabled = true;
 
+    /**
+     * Stats de paramedico
+     * puede ser null si no es paramedico
+     */
+    private StatsDto stats;
 
     /**
      * Roles

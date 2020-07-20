@@ -2,6 +2,7 @@ package cl.medicapp.service.services.user;
 
 import cl.medicapp.service.dto.ContentDto;
 import cl.medicapp.service.dto.GenericResponseDto;
+import cl.medicapp.service.dto.StatsDto;
 import cl.medicapp.service.dto.UserDto;
 
 import java.util.List;
@@ -29,6 +30,10 @@ public interface UserService {
     UserDto getByRut(String rut);
 
     ContentDto getUserImage(String id);
+
+    StatsDto getStats(String userId);
+
+    UserDto edit(String userId, UserDto userDto);
 
     UserDto save(UserDto userDto);
 

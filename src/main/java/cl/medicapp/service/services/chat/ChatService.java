@@ -12,6 +12,8 @@ public interface ChatService {
 
     List<MessageOutboundDto> getMessagesToUserLoggedIn();
 
+    List<MessageOutboundDto> getMessagesToUser(String userId, boolean findByEmail);
+
     List<MessageOutboundDto> getMessagesFromUserId(String userId);
 
     MessageOutboundDto saveAndSendMessage(MessageInboundDto messageInboundDto, String idSender);

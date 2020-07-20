@@ -1,5 +1,7 @@
-package cl.medicapp.service.document;
+package cl.medicapp.service.dto;
 
+import cl.medicapp.service.document.UserDocument;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,36 +15,30 @@ import javax.persistence.Id;
 import java.io.Serializable;
 
 /**
- * Document Message Chat
+ * Dto feedback
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "feedbacks")
-public class FeedbackDocument implements Serializable {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class FeedbackDto implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
      * Identificador
      */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     /**
-     * De
-     * DBRef para referenciar document User
+     * Autor de feedback
      */
-    @DBRef
-    private UserDocument from;
+    private UserDto from;
 
     /**
      * Para
-     * DBRef para referenciar documento User
      */
-    @DBRef
-    private UserDocument to;
+    private UserDto to;
 
     /**
      * Comentario

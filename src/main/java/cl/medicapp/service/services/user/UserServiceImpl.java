@@ -1,19 +1,26 @@
 package cl.medicapp.service.services.user;
 
 import cl.medicapp.service.constants.Constants;
+import cl.medicapp.service.document.FeedbackDocument;
 import cl.medicapp.service.document.UserDocument;
 import cl.medicapp.service.dto.ContentDto;
 import cl.medicapp.service.dto.GenericResponseDto;
+import cl.medicapp.service.dto.StatsDto;
 import cl.medicapp.service.dto.UserDto;
 import cl.medicapp.service.holder.DocumentsHolder;
+import cl.medicapp.service.repository.feedback.FeedbackRepository;
 import cl.medicapp.service.repository.user.UserRepository;
+import cl.medicapp.service.services.chat.ChatService;
+import cl.medicapp.service.util.DocumentsHolderUtil;
+import cl.medicapp.service.util.FeedbackUtil;
 import cl.medicapp.service.util.GenericResponseUtil;
 import cl.medicapp.service.util.UserUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,8 +32,9 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-
-    private final HttpServletResponse httpServletResponse;
+    private final FeedbackRepository feedbackRepository;
+    private final ChatService chatService;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public List<UserDto> getAll() {
@@ -46,52 +54,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getAllByRole(String role) {
-        return userRepository.findAllByRole(
-                DocumentsHolder.getInstance().getRoleDocumentList()
-                        .stream()
-                        .filter(roleDocument -> roleDocument.getName().contains(role))
-                        .findFirst()
-                        .orElseThrow(
-                                () ->
-                                        GenericResponseUtil.buildGenericException(
-                                                HttpStatus.NOT_FOUND,
-                                                "Rol no encontrado",
-                                                String.format("Rol %s no encontrado", role)
-                                        )
-                        )
-        )
+        List<UserDto> userDtos = userRepository.findAllByRole(DocumentsHolderUtil.getRoleDocumentByName(role))
                 .stream()
                 .map(UserUtil::toUserDto)
                 .collect(Collectors.toList());
+
+        userDtos.forEach(user -> user.setStats(getStats(user.getId())));
+
+        return userDtos;
     }
 
     @Override
     public List<UserDto> getAllByRegionId(String role, String regionId) {
         return userRepository.findAllByRoleAndRegion(
-                DocumentsHolder.getInstance().getRoleDocumentList()
-                        .stream()
-                        .filter(roleDocument -> roleDocument.getName().contains(role))
-                        .findFirst()
-                        .orElseThrow(
-                                () ->
-                                        GenericResponseUtil.buildGenericException(
-                                                HttpStatus.NOT_FOUND,
-                                                "Rol no encontrado",
-                                                String.format("Rol %s no encontrado", role)
-                                        )
-                        ),
-                DocumentsHolder.getInstance().getRegionDocumentList()
-                        .stream()
-                        .filter(regionDocument -> regionDocument.getId().contains(regionId))
-                        .findFirst()
-                        .orElseThrow(
-                                () ->
-                                        GenericResponseUtil.buildGenericException(
-                                                HttpStatus.NOT_FOUND,
-                                                "Region no encontrada",
-                                                String.format("Region %s no encontrada", role)
-                                        )
-                        )
+                DocumentsHolderUtil.getRoleDocumentByName(role),
+                DocumentsHolderUtil.getRegionDocumentById(regionId)
         )
                 .stream()
                 .map(UserUtil::toUserDto)
@@ -101,30 +78,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getAllByCommuneId(String role, String communeId) {
         return userRepository.findAllByRoleAndCommune(
-                DocumentsHolder.getInstance().getRoleDocumentList()
-                        .stream()
-                        .filter(roleDocument -> roleDocument.getName().contains(role))
-                        .findFirst()
-                        .orElseThrow(
-                                () ->
-                                        GenericResponseUtil.buildGenericException(
-                                                HttpStatus.NOT_FOUND,
-                                                "Rol no encontrado",
-                                                String.format("Rol %s no encontrado", role)
-                                        )
-                        ),
-                DocumentsHolder.getInstance().getCommuneDocumentList()
-                        .stream()
-                        .filter(communeDocument -> communeDocument.getId().contains(communeId))
-                        .findFirst()
-                        .orElseThrow(
-                                () ->
-                                        GenericResponseUtil.buildGenericException(
-                                                HttpStatus.NOT_FOUND,
-                                                "Communa no encontrada",
-                                                String.format("Communa %s no encontrada", role)
-                                        )
-                        )
+                DocumentsHolderUtil.getRoleDocumentByName(role),
+                DocumentsHolderUtil.getCommuneDocumentById(communeId)
         )
                 .stream()
                 .map(UserUtil::toUserDto)
@@ -174,6 +129,49 @@ public class UserServiceImpl implements UserService {
         }
 
         return ContentDto.builder().contentType("image").content(user.get().getUserDetails().getProfileImageURI()).build();
+    }
+
+    @Override
+    public StatsDto getStats(String userId) {
+        Optional<UserDocument> user = userRepository.findById(userId);
+
+        if (!user.isPresent() || !user.get().getRoleEntities().contains(DocumentsHolderUtil.getRoleDocumentByName(Constants.PARAMEDIC))) {
+            throw GenericResponseUtil.buildGenericException(HttpStatus.INTERNAL_SERVER_ERROR, "");
+        }
+
+        List<FeedbackDocument> feedbackDocuments = feedbackRepository.findAllByTo(user.get());
+
+        int contacts = chatService.getMessagesToUser(userId, false).size();
+        int valuations = feedbackDocuments.size();
+        int rating = FeedbackUtil.calculateRating(feedbackDocuments);
+
+        return StatsDto.builder().contacts(contacts).rating(rating).valuations(valuations).build();
+    }
+
+    @Override
+    public UserDto edit(String userId, UserDto newUser) {
+
+        Optional<UserDocument> actualUser = userRepository.findById(userId);
+
+        if (!actualUser.isPresent()) {
+            throw GenericResponseUtil.buildGenericException(HttpStatus.INTERNAL_SERVER_ERROR, "");
+        }
+
+        UserDocument userMerged = UserUtil.merge(newUser, actualUser.get());
+        userMerged.getUserDetails().setId(actualUser.get().getUserDetails().getId());
+        userMerged.getUserDetails().getCommune().setId(actualUser.get().getUserDetails().getCommune().getId());
+
+        if (newUser.isParamedic()) {
+            userMerged.getParamedicDetails().setId(actualUser.get().getParamedicDetails().getId());
+        }
+
+        if (newUser.getPassword() != null) {
+            userMerged.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        }else {
+            userMerged.setPassword(actualUser.get().getPassword());
+        }
+
+        return UserUtil.toUserDto(userRepository.save(userMerged));
     }
 
     @Override

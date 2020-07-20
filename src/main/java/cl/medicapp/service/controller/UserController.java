@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -108,6 +110,11 @@ public class UserController {
     @GetMapping("/disabled")
     public List<UserDto> getAllDisabled() {
         return userService.getAllDisabled();
+    }
+
+    @PutMapping("/{id}")
+    public UserDto editUser(@PathVariable String id, @RequestBody @Valid UserDto userDto) {
+        return userService.edit(id, userDto);
     }
 
     @PutMapping("/{id}/enable")

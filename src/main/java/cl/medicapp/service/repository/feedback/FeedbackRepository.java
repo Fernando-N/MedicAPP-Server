@@ -14,9 +14,9 @@ import java.util.Optional;
 @Repository
 public interface FeedbackRepository extends PagingAndSortingRepository<FeedbackDocument, String> {
 
-    Optional<List<FeedbackDocument>> findByFrom(UserDocument user);
+    List<FeedbackDocument> findAllByFrom(UserDocument user);
 
-    Optional<List<FeedbackDocument>> findByTo(UserDocument userTo);
+    List<FeedbackDocument> findAllByTo(UserDocument userTo);
 
     Optional<FeedbackDocument> findByFromAndTo(UserDocument from, UserDocument to);
 

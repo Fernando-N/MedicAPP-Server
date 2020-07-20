@@ -47,10 +47,22 @@ public class ChatServiceImpl implements ChatService {
     public List<MessageOutboundDto> getMessagesToUserLoggedIn() {
         String emailSender = UserUtil.getEmailUserLogged();
         log.info("User: [{}], esta obteniendo su lista de mensajes ", emailSender);
-        Optional<UserDocument> user = userDocumentRepository.findByEmailIgnoreCase(emailSender);
+        return getMessagesToUser(emailSender, true);
+    }
+
+    @Override
+    public List<MessageOutboundDto> getMessagesToUser(String userTarget, boolean findByEmail) {
+
+        Optional<UserDocument> user;
+
+        if (findByEmail) {
+            user = userDocumentRepository.findByEmailIgnoreCase(userTarget);
+        }else {
+            user = userDocumentRepository.findById(userTarget);
+        }
 
         if (!user.isPresent()) {
-            throw GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, String.format(Constants.USER_X_NOT_FOUND, emailSender));
+            throw GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, String.format(Constants.USER_X_NOT_FOUND, userTarget));
         }
 
         List<MessageDocument> messages = Stream.concat(

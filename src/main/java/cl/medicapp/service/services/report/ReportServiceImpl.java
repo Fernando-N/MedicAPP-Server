@@ -44,7 +44,6 @@ public class ReportServiceImpl implements ReportService {
             throw GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.getReasonPhrase(), String.format(Constants.ROLE_X_NOT_FOUND, id));
         }
 
-
         return reportRepository.findByFrom(userDocumentOptional.get()).stream().map(ReportUtil::toReporDto).collect(Collectors.toList());
     }
 
@@ -55,7 +54,6 @@ public class ReportServiceImpl implements ReportService {
         if (!userDocumentOptional.isPresent()) {
             throw GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.getReasonPhrase(), String.format(Constants.ROLE_X_NOT_FOUND, id));
         }
-
 
         return reportRepository.findByTo(userDocumentOptional.get()).stream().map(ReportUtil::toReporDto).collect(Collectors.toList());
     }

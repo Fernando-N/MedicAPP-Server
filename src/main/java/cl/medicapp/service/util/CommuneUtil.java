@@ -20,7 +20,7 @@ public class CommuneUtil {
         return CommuneDocument.builder()
                 .id(communeDto.getValue())
                 .name(communeDto.getLabel())
-                .region(RegionUtil.toRegionDocument(communeDto.getRegion()))
+                .region(communeDto.getRegion() != null ? RegionUtil.toRegionDocument(communeDto.getRegion()) : null)
                 .build();
     }
 
