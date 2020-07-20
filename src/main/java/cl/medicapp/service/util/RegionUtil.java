@@ -4,7 +4,7 @@ import cl.medicapp.service.document.RegionDocument;
 import cl.medicapp.service.dto.RegionDto;
 
 /**
- * Clase util para RegionDto y RegionDocument
+ * Clase util para regiones
  */
 public class RegionUtil {
 

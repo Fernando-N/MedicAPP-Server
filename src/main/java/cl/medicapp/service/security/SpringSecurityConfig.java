@@ -24,13 +24,23 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
 
+    /**
+     * Bean servicio de detalles de usuario (spring security)
+     */
     private final UserDetailsService userDetailsService;
+
+    /**
+     * Bean publicador de evento de autenticacion
+     */
     private final AuthenticationEventPublisher authenticationEventPublisher;
+
+    /**
+     * Bean logger Interceptor para loggear Request y Response
+     */
     private final LoggingInterceptor loggingInterceptor;
 
     /**
      * Codificador de contraseñas
-     *
      * @return codificador
      */
     @Bean
@@ -40,7 +50,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter implement
 
     /**
      * Configura el userDetailsServide, codificador de contraseñas y clase controladora de eventos de autenticación
-     *
      * @param auth AuthenticationManagerBuilder
      * @throws Exception exception
      */
@@ -54,7 +63,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter implement
 
     /**
      * Retorna el manejador de autenticación
-     *
      * @return AuthenticationManager
      * @throws Exception exception
      */
@@ -66,13 +74,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter implement
 
     /**
      * Agrega interceptores al contexto de spring
-     *
      * @param registry InterceptorRegistry
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loggingInterceptor);
     }
-
-
+    
 }

@@ -3,6 +3,9 @@ package cl.medicapp.service.util;
 import cl.medicapp.service.dto.LocationDto;
 import cl.medicapp.service.dto.LocationResponseDto;
 
+/**
+ * Clase utilitaria para locations
+ */
 public class LocationUtil {
 
     public static LocationDto toLocationDto(LocationResponseDto.Location locationResponseDto) {
@@ -12,6 +15,9 @@ public class LocationUtil {
                 .build();
     }
 
+    /**
+     * Constructor privado para no permitir crear instancias de la clase
+     */
     private LocationUtil() {
 
     }

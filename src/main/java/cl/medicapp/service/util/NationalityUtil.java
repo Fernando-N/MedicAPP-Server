@@ -4,7 +4,7 @@ import cl.medicapp.service.document.NationalityDocument;
 import cl.medicapp.service.dto.NationalityDto;
 
 /**
- * Clase util para NationalityDto y NationalityDocument
+ * Clase util para nacionalidades
  */
 public class NationalityUtil {
 

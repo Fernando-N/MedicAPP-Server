@@ -3,7 +3,7 @@ package cl.medicapp.service.util;
 import org.springframework.mail.SimpleMailMessage;
 
 /**
- * Clase util de SimpleMailMessageMapper
+ * Clase util de emails
  */
 public class SimpleMailMessageUtil {
 

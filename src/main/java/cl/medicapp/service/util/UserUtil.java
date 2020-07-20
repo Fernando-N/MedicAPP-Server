@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Clase util para UserDto, UserDocument
+ * Clase util para usuarios
  */
 public class UserUtil {
 

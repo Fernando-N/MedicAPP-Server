@@ -20,11 +20,13 @@ import java.util.Date;
 @Component
 public class AuthenticationSuccessErrorHandler implements AuthenticationEventPublisher {
 
+    /**
+     * Bean repositorio de usuarios
+     */
     private final UserDocumentRepository userDocumentRepository;
 
     /**
      * Evento de autenticación correcta
-     *
      * @param authentication Objeto de usuario autenticado
      */
     @Override
@@ -41,7 +43,6 @@ public class AuthenticationSuccessErrorHandler implements AuthenticationEventPub
 
     /**
      * Evento de autenticación fallida
-     *
      * @param exception      Excepcion ocurrida
      * @param authentication Usuario intento autenticación
      */

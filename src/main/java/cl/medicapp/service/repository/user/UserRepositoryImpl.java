@@ -18,35 +18,77 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Implementacion de repositorio de usuario
+ */
 @AllArgsConstructor
 @Repository
 public class UserRepositoryImpl implements UserRepository {
 
+    /**
+     * Bean repositorio de detalles de usuario
+     */
     private final UserDocumentRepository userRepository;
+
+    /**
+     * Bean repositorio de usuarios
+     */
     private final UserDetailsDocumentRepository userDetailsRepository;
+
+    /**
+     * Bean repositorio de detalles de paramedicos
+     */
     private final ParamedicDetailsDocumentRepository paramedicDetailsDocumentRepository;
+
+    /**
+     * Bean repositorio de comunas
+     */
     private final CommuneRepository communeRepository;
 
+    /**
+     * Buscar usuario por id
+     * @param id Id a buscar
+     * @return Usuario encontrado
+     */
     @Override
     public Optional<UserDocument> findById(String id) {
         return userRepository.findById(id);
     }
 
+    /**
+     * Buscar todos los usuarios
+     * @return Lista de usuarios
+     */
     @Override
     public List<UserDocument> findAll() {
         return userRepository.findAll();
     }
 
+    /**
+     * Buscar todos los usuarios que esten deshabilitados
+     * @return Lista de usuarios
+     */
     @Override
     public List<UserDocument> findAllByEnabledFalse() {
         return userRepository.findAllByEnabledFalse();
     }
 
+    /**
+     * Buscar todos los usuarios por rol
+     * @param roleDocument Rol a buscar
+     * @return Lista de usuarios
+     */
     @Override
     public List<UserDocument> findAllByRole(RoleDocument roleDocument) {
         return userRepository.findAllByRoleEntities(roleDocument);
     }
 
+    /**
+     * Busca todos los usuarios de un rol y region
+     * @param roleDocument Rol a buscar
+     * @param regionDocument Region a buscar
+     * @return Lista de usuarios
+     */
     @Override
     public List<UserDocument> findAllByRoleAndRegion(RoleDocument roleDocument, RegionDocument regionDocument) {
         List<CommuneDocument> communeDocumentList = DocumentsHolder.getInstance()
@@ -60,12 +102,23 @@ public class UserRepositoryImpl implements UserRepository {
         return userRepository.findAllByRoleEntitiesAndUserDetailsIn(roleDocument, userDetailsDocumentList);
     }
 
+    /**
+     * Buscar usuarios por rol y comuna
+     * @param roleDocument Rol a buscar
+     * @param communeDocument Comuna a buscar
+     * @return Lista de usuarios
+     */
     @Override
     public List<UserDocument> findAllByRoleAndCommune(RoleDocument roleDocument, CommuneDocument communeDocument) {
         List<UserDetailsDocument> userDetailsDocumentList = userDetailsRepository.findAllByCommuneIn(Collections.singletonList(communeDocument));
         return userRepository.findAllByRoleEntitiesAndUserDetailsIn(roleDocument, userDetailsDocumentList);
     }
 
+    /**
+     * Guardar un usuario
+     * @param userDocument Usuario a guardar
+     * @return Usuario guardado
+     */
     @Override
     public UserDocument save(UserDocument userDocument) {
         UserDetailsDocument userDetailsDocumentSaved = userDetailsRepository.save(userDocument.getUserDetails());
@@ -75,11 +128,22 @@ public class UserRepositoryImpl implements UserRepository {
         return userRepository.save(userDocument);
     }
 
+    /**
+     * Buscar usuario por email
+     * @param email Email a buscar
+     * @return Usuario encontrado
+     */
     @Override
     public Optional<UserDocument> findByEmailIgnoreCase(String email) {
         return userRepository.findByEmailIgnoreCase(email);
     }
 
+    /**
+     * Buscar usuarios por su nombre y apellido
+     * @param firstName Nombre
+     * @param lastName Apellido
+     * @return Lista de usuarios encontrados
+     */
     @Override
     public Optional<List<UserDocument>> findByFirstNameAndLastName(String firstName, String lastName) {
         List<UserDetailsDocument> usersDetailsDocuments = userDetailsRepository.findByFirstNameAndLastName(firstName, lastName);
@@ -88,16 +152,31 @@ public class UserRepositoryImpl implements UserRepository {
                 .collect(Collectors.toList()));
     }
 
+    /**
+     * Buscar usuario por email y que este habilitado
+     * @param email Email
+     * @return Usuario encontrado
+     */
     @Override
-    public Optional<UserDocument> findByEmailIgnoreCaseAndEnabledTrue(String username) {
-        return userRepository.findByEmailIgnoreCaseAndEnabledTrue(username);
+    public Optional<UserDocument> findByEmailIgnoreCaseAndEnabledTrue(String email) {
+        return userRepository.findByEmailIgnoreCaseAndEnabledTrue(email);
     }
 
+    /**
+     * Buscar usuario por token de restablecimiento
+     * @param resetToken token de restablecimiento
+     * @return Usuario encontrado
+     */
     @Override
     public Optional<UserDocument> findByResetToken(String resetToken) {
         return userRepository.findByResetToken(resetToken);
     }
 
+    /**
+     * Eliminar un usuario por su id
+     * @param id Id usuario a eliminar
+     * @return Resultado
+     */
     @Override
     public boolean deleteById(String id) {
 

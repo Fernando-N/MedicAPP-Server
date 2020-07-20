@@ -4,7 +4,7 @@ import cl.medicapp.service.document.RoleDocument;
 import cl.medicapp.service.dto.RoleDto;
 
 /**
- * Clase util para RoleDto y RoleDocument
+ * Clase util para roles
  */
 public class RoleUtil {
 

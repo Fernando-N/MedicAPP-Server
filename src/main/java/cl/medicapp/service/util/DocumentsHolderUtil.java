@@ -6,6 +6,9 @@ import cl.medicapp.service.document.RoleDocument;
 import cl.medicapp.service.holder.DocumentsHolder;
 import org.springframework.http.HttpStatus;
 
+/**
+ * Clase utilitaria para DocumentsHolder
+ */
 public class DocumentsHolderUtil {
 
     public static RoleDocument getRoleDocumentByName(String name) {
@@ -52,6 +55,9 @@ public class DocumentsHolderUtil {
                 );
     }
 
+    /**
+     * Constructor privado para no permitir crear instancias de la clase
+     */
     private DocumentsHolderUtil () {
 
     }

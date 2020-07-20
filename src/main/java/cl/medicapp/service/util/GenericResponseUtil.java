@@ -6,11 +6,10 @@ import org.springframework.http.HttpStatus;
 
 import java.util.Arrays;
 
+/**
+ * Clase utilitaria para respuestas genericas
+ */
 public class GenericResponseUtil {
-
-    private GenericResponseUtil() {
-
-    }
 
     public static GenericResponseDto buildGenericResponse(String message, String... details) {
         return GenericResponseDto.builder()
@@ -25,6 +24,13 @@ public class GenericResponseUtil {
 
     public static GenericException getGenericException() {
         return new GenericException(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), null);
+    }
+
+    /**
+     * Constructor privado para no permitir crear instancias de la clase
+     */
+    private GenericResponseUtil() {
+
     }
 
 }

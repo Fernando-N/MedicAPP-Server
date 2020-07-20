@@ -22,11 +22,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TokenAdditionalInformation implements TokenEnhancer {
 
+    /**
+     * Bean repositorio de usuarios
+     */
     private final UserDocumentRepository userDocumentRepository;
 
     /**
      * Agrega datos extra al token
-     *
      * @param accessToken    token de acceso
      * @param authentication objeto de autenticación
      * @return OAuth2AccessToken

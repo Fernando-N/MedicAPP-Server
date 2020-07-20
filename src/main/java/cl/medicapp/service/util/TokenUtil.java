@@ -12,11 +12,10 @@ import org.springframework.security.oauth2.common.util.JsonParserFactory;
 
 import java.util.Map;
 
+/**
+ * Clase utilitaria de tokens
+ */
 public class TokenUtil {
-
-    private TokenUtil() {
-
-    }
 
     private static final JWTVerifier verifier;
     private static final JsonParser parser;
@@ -45,6 +44,13 @@ public class TokenUtil {
         }
 
         return claims.get(key).toString();
+    }
+
+    /**
+     * Constructor privado para no permitir crear instancias de la clase
+     */
+    private TokenUtil() {
+
     }
 
 }

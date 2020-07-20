@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Clase util para MessageDocument y MessageDto
+ * Clase util para mensajes
  */
 @Slf4j
 public class MessageUtil {

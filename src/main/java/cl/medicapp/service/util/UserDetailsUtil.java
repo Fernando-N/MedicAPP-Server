@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Clase util para UserDetails
+ * Clase utilitaria para detalles de usuario
  */
 public class UserDetailsUtil {
 

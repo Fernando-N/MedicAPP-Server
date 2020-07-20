@@ -7,7 +7,7 @@ import cl.medicapp.service.dto.ReportDto;
 import java.util.Date;
 
 /**
- * Clase util para RoleDto y RoleDocument
+ * Clase util para reportes
  */
 public class ReportUtil {
 

@@ -4,10 +4,15 @@ import cl.medicapp.service.document.CommuneDocument;
 import cl.medicapp.service.dto.CommuneDto;
 
 /**
- * Clase util para CommuneDto y CommuneDocument
+ * Clase utilitaria para comunas
  */
 public class CommuneUtil {
 
+    /**
+     * Transforma a CommuneDto
+     * @param communeDocument target
+     * @return target convertido a CommuneDto
+     */
     public static CommuneDto toCommuneDto(CommuneDocument communeDocument) {
         return CommuneDto.builder()
                 .id(communeDocument.getId())
@@ -16,6 +21,11 @@ public class CommuneUtil {
                 .build();
     }
 
+    /**
+     * Transforma a CommuneDocument
+     * @param communeDto target
+     * @return target convertido a CommuneDocument
+     */
     public static CommuneDocument toCommuneDocument(CommuneDto communeDto) {
         return CommuneDocument.builder()
                 .id(communeDto.getId())

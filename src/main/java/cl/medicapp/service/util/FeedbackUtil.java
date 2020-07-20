@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Clase util para Feedbacks
+ * Clase util para feedbacks
  */
 public class FeedbackUtil {
 
