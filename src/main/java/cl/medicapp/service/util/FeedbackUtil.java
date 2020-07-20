@@ -8,10 +8,15 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Clase util para Feedbacks
+ * Clase utilitarias para feedbacks
  */
 public class FeedbackUtil {
 
+    /**
+     * Convierte a FeedbackDto
+     * @param feedbackDocument target
+     * @return target convertido a FeedbackDto
+     */
     public static FeedbackDto toFeedbackDto(FeedbackDocument feedbackDocument) {
         return FeedbackDto.builder()
                 .id(feedbackDocument.getId())
@@ -24,7 +29,14 @@ public class FeedbackUtil {
                 .build();
     }
 
-    public static FeedbackDocument toReportDocument(FeedbackDto feedbackDto, UserDocument from, UserDocument to) {
+    /**
+     * Convierte a FeedbackDocument
+     * @param feedbackDto target
+     * @param from Autor
+     * @param to Destinatario
+     * @return target convertido a FeedbackDocument
+     */
+    public static FeedbackDocument toFeedbackDocument(FeedbackDto feedbackDto, UserDocument from, UserDocument to) {
         return FeedbackDocument.builder()
                 .date(DateUtil.from(new Date()))
                 .from(from)
@@ -35,6 +47,11 @@ public class FeedbackUtil {
                 .build();
     }
 
+    /**
+     * Calcula la puntuación de un usuario
+     * @param feedbackDocumentList Lista de feedbacks
+     * @return puntuación de usuario
+     */
     public static int calculateRating(List<FeedbackDocument> feedbackDocumentList) {
         if (feedbackDocumentList.isEmpty()) {
             return 0;

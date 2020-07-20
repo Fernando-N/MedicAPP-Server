@@ -82,6 +82,8 @@ public class Constants {
 
     public static final String PARAMEDIC = "PARAMEDIC";
 
+    public static final String USER = "USER";
+
 
     /**
      * Constructor privado para no permitir crear instancias de la clase

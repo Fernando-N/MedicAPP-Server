@@ -12,7 +12,7 @@ import javax.persistence.Id;
 import java.io.Serializable;
 
 /**
- * Document Regions
+ * Documento de region
  */
 @Data
 @Builder

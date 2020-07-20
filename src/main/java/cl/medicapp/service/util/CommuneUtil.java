@@ -1,26 +1,37 @@
 package cl.medicapp.service.util;
 
 import cl.medicapp.service.document.CommuneDocument;
+import cl.medicapp.service.document.RegionDocument;
 import cl.medicapp.service.dto.CommuneDto;
 
 /**
- * Clase util para CommuneDto y CommuneDocument
+ * Clase utilitaria para comunas
  */
 public class CommuneUtil {
 
+    /**
+     * Transforma a CommuneDto
+     * @param communeDocument target
+     * @return target convertido a CommuneDto
+     */
     public static CommuneDto toCommuneDto(CommuneDocument communeDocument) {
         return CommuneDto.builder()
-                .value(communeDocument.getId())
-                .label(communeDocument.getName())
+                .id(communeDocument.getId())
+                .name(communeDocument.getName())
                 .region(RegionUtil.toRegionDto(communeDocument.getRegion()))
                 .build();
     }
 
-    public static CommuneDocument toCommuneDocument(CommuneDto communeDto) {
+    /**
+     * Transforma a CommuneDocument
+     * @param communeDto target
+     * @return target convertido a CommuneDocument
+     */
+    public static CommuneDocument toCommuneDocument(CommuneDto communeDto, RegionDocument regionDocument) {
         return CommuneDocument.builder()
-                .id(communeDto.getValue())
-                .name(communeDto.getLabel())
-                .region(communeDto.getRegion() != null ? RegionUtil.toRegionDocument(communeDto.getRegion()) : null)
+                .id(communeDto.getId())
+                .name(communeDto.getName())
+                .region(regionDocument)
                 .build();
     }
 

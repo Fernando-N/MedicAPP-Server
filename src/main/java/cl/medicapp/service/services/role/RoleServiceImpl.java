@@ -6,6 +6,7 @@ import cl.medicapp.service.constants.Constants;
 import cl.medicapp.service.document.RoleDocument;
 import cl.medicapp.service.dto.GenericResponseDto;
 import cl.medicapp.service.dto.RoleDto;
+import cl.medicapp.service.holder.DocumentsHolder;
 import cl.medicapp.service.repository.role.RoleRepository;
 import cl.medicapp.service.util.GenericResponseUtil;
 import cl.medicapp.service.util.RoleUtil;
@@ -16,27 +17,52 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+/**
+ * Implementacion servicio de roles
+ */
 @Service
 @RequiredArgsConstructor
-//TODO aplicar logica utilizando la clase DocumentsHolder para evitar carga a la bd
 public class RoleServiceImpl implements RoleService {
 
+    /**
+     * Bean de repositorio de roles
+     */
     private final RoleRepository roleRepository;
 
+    /**
+     * Obtener todos los roles
+     * @return Lista de roles
+     */
     @Override
     public List<RoleDto> getAll() {
-        List<RoleDto> roleDtoList = new ArrayList<>();
-        roleRepository.findAll().forEach(roleDocument -> roleDtoList.add(RoleUtil.toRoleDto(roleDocument)));
-        return roleDtoList;
+        return DocumentsHolder.getInstance().getRoleDocumentList()
+                .stream()
+                .map(RoleUtil::toRoleDto)
+                .collect(Collectors.toList());
     }
 
+    /**
+     * Obtener rol por su nombre
+     * @param name
+     * @return
+     */
     @Override
     public RoleDto getByName(String name) {
-        return roleRepository.findByNameIgnoreCaseEndsWith(name).map(RoleUtil::toRoleDto)
+        return DocumentsHolder.getInstance().getRoleDocumentList()
+                .stream()
+                .filter(role -> role.getName().equalsIgnoreCase(name))
+                .findFirst()
+                .map(RoleUtil::toRoleDto)
                 .orElseThrow(() -> GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.getReasonPhrase(), String.format(Constants.ROLE_X_NOT_FOUND, name)));
     }
 
+    /**
+     * Guardar un rol
+     * @param request Objeto con datos del rol
+     * @return Rol guardado
+     */
     @Override
     @FormatArgs
     public RoleDto save(RoleDto request) {
@@ -55,6 +81,12 @@ public class RoleServiceImpl implements RoleService {
         return request;
     }
 
+    /**
+     * Actualizar un rol
+     * @param roleName Nombre rol a actualizar
+     * @param newRoleName Rol con cambios
+     * @return Rol guardado
+     */
     @Override
     @FormatArgs
     public RoleDto update(@UpperCase String roleName, RoleDto newRoleName) {
@@ -79,6 +111,11 @@ public class RoleServiceImpl implements RoleService {
         return newRoleName;
     }
 
+    /**
+     * Elimina un rol por su nombre
+     * @param name Nombre de rol
+     * @return Resultado
+     */
     @Override
     @FormatArgs
     public GenericResponseDto deleteByName(@UpperCase String name) {

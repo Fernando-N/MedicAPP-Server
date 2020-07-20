@@ -4,17 +4,27 @@ import cl.medicapp.service.document.RegionDocument;
 import cl.medicapp.service.dto.RegionDto;
 
 /**
- * Clase util para RegionDto y RegionDocument
+ * Clase util para regiones
  */
 public class RegionUtil {
 
+    /**
+     * Convierte RegionDocument a RegionDto
+     * @param regionDocument target
+     * @return target convertido a RegionDto
+     */
     public static RegionDto toRegionDto(RegionDocument regionDocument) {
         return RegionDto.builder()
-                .value(regionDocument.getId())
+                .id(regionDocument.getId())
                 .label(regionDocument.getOrdinal() + " " + regionDocument.getName())
                 .build();
     }
 
+    /**
+     * Convierte RegionDto a RegionDocument
+     * @param regionDto target
+     * @return target como RegionDocument
+     */
     public static RegionDocument toRegionDocument(RegionDto regionDto) {
         return RegionDocument.builder()
                 .name(regionDto.getLabel())

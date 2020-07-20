@@ -13,10 +13,24 @@ import java.util.Optional;
 @Repository
 public interface NationalityRepository extends PagingAndSortingRepository<NationalityDocument, String> {
 
+    /**
+     * Buscar todas las nacionalidades
+     * @return Lista de nacionalidades
+     */
     List<NationalityDocument> findAll();
 
+    /**
+     * Buscar una nacionalidad por su nombre
+     * @param name Nombre a buscar
+     * @return Lista de nacionalidades
+     */
     Optional<NationalityDocument> findByNameIgnoreCase(String name);
 
+    /**
+     * Elimina una nacionalidad por su nombre
+     * @param name Nombre a eliminar
+     * @return Resultado
+     */
     int deleteByNameIgnoreCase(String name);
 
 }

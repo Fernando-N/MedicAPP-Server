@@ -13,7 +13,7 @@ import javax.persistence.Id;
 import java.io.Serializable;
 
 /**
- * Document Message Chat
+ * Documento feedback
  */
 @Data
 @Builder

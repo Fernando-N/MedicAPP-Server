@@ -2,9 +2,9 @@ package cl.medicapp.service.util;
 
 import cl.medicapp.service.document.MessageDocument;
 import cl.medicapp.service.document.UserDocument;
-import cl.medicapp.service.dto.MessageDto;
 import cl.medicapp.service.dto.MessageInboundDto;
 import cl.medicapp.service.dto.MessageOutboundDto;
+import cl.medicapp.service.dto.UserChatDto;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -14,11 +14,18 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Clase util para MessageDocument y MessageDto
+ * Clase util para mensajes
  */
 @Slf4j
 public class MessageUtil {
 
+    /**
+     * Genera MessageDocument
+     * @param messageInboundDto Mensaje
+     * @param from Remitente
+     * @param to Destinatario
+     * @return MessageDocument
+     */
     public static MessageDocument buildDocument(MessageInboundDto messageInboundDto, UserDocument from, UserDocument to) {
         return MessageDocument.builder()
                 .date(DateUtil.from(new Date()))
@@ -29,26 +36,17 @@ public class MessageUtil {
                 .build();
     }
 
-    public static MessageDto toMessageDto(MessageDocument messageDocument) {
-        return MessageDto.builder()
-                .id(messageDocument.getId())
-                .date(DateUtil.from(messageDocument.getDate()))
-                .message(messageDocument.getMessage())
-                .from(MessageDto.UserChat.builder()
-                        .id(messageDocument.getFrom().getId())
-                        .name(messageDocument.getFrom().getUserDetails().getFirstName() + " " + messageDocument.getFrom().getUserDetails().getLastName())
-                        .avatar(messageDocument.getFrom().getUserDetails().getProfileImageURI())
-                        .build())
-                .to(messageDocument.getTo().getUserDetails().getFirstName() + " " + messageDocument.getTo().getUserDetails().getLastName())
-                .build();
-    }
-
+    /**
+     * Convierte un messageDocument en MessageOutboundDto
+     * @param messageDocument target
+     * @return target como MessageOutboundDto
+     */
     public static MessageOutboundDto toMessageOutboundDto(MessageDocument messageDocument) {
         return MessageOutboundDto.builder()
                 .id(messageDocument.getId())
                 .date(messageDocument.getDate())
                 .text(messageDocument.getMessage())
-                .user(MessageOutboundDto.UserChat.builder()
+                .user(UserChatDto.builder()
                         .id(messageDocument.getFrom().getId())
                         .avatarURI(messageDocument.getFrom().getUserDetails().getProfileImageURI())
                         .name(messageDocument.getFrom().getUserDetails().getFirstName() + " " + messageDocument.getFrom().getUserDetails().getLastName())
@@ -56,6 +54,11 @@ public class MessageUtil {
                 .build();
     }
 
+    /**
+     * Convierte los mensajes mios agregandole un prefijo "Yo: " a cada uno
+     * @param messages Lista de mensajes
+     * @return Lista de mensajes con prefijo
+     */
     public static List<MessageDocument> convertMessagesFromMe(List<MessageDocument> messages) {
         messages.forEach(message -> {
             UserDocument tmp = message.getFrom();
@@ -66,11 +69,20 @@ public class MessageUtil {
         return messages;
     }
 
+    /**
+     * Ordenar mensajes por fecha descendente (esto lo hace con referencia)
+     * @param messages Lista de mensajes
+     */
     public static void orderMessagesByDateDesc(List<MessageDocument> messages) {
         messages.sort(Comparator.comparing(MessageDocument::getDate));
         Collections.reverse(messages);
     }
 
+    /**
+     * Filtra el primer mensaje de cada usuario
+     * @param messages Lista de mensajes
+     * @return Lista de mensajes filtrados
+     */
     public static List<MessageDocument> filterMessagesFromOneUser(List<MessageDocument> messages) {
         List<String> userFrom = new ArrayList<>();
         List<MessageDocument> listFiltered = new ArrayList<>();

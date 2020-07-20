@@ -4,10 +4,15 @@ import cl.medicapp.service.document.RoleDocument;
 import cl.medicapp.service.dto.RoleDto;
 
 /**
- * Clase util para RoleDto y RoleDocument
+ * Clase util para roles
  */
 public class RoleUtil {
 
+    /**
+     * Convierte RoleDocument a RoleDto
+     * @param roleDocument target
+     * @return target convertido a RoleDto
+     */
     public static RoleDto toRoleDto(RoleDocument roleDocument) {
         return RoleDto.builder()
                 .id(roleDocument.getId())
@@ -15,6 +20,11 @@ public class RoleUtil {
                 .build();
     }
 
+    /**
+     * Convierte RoleDto a RoleDocument
+     * @param roleDto target
+     * @return target convertido a RoleDocument
+     */
     public static RoleDocument toRoleDocument(RoleDto roleDto) {
         return RoleDocument.builder()
                 .name(roleDto.getName())

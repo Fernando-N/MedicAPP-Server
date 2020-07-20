@@ -3,9 +3,9 @@ package cl.medicapp.service.services.chat;
 import cl.medicapp.service.constants.Constants;
 import cl.medicapp.service.document.MessageDocument;
 import cl.medicapp.service.document.UserDocument;
-import cl.medicapp.service.dto.MessageDto;
 import cl.medicapp.service.dto.MessageInboundDto;
 import cl.medicapp.service.dto.MessageOutboundDto;
+import cl.medicapp.service.dto.UserChatDto;
 import cl.medicapp.service.repository.chat.ChatRepository;
 import cl.medicapp.service.repository.user.UserDocumentRepository;
 import cl.medicapp.service.util.GenericResponseUtil;
@@ -32,7 +32,7 @@ public class ChatServiceImpl implements ChatService {
 
     //TODO Implementar esto
     @Override
-    public List<MessageDto> getMessagesNotRead() {
+    public List<MessageOutboundDto> getMessagesNotRead() {
         return new ArrayList<>();
 //        return chatRepository.findAllByAlreadyReadFalse().toStream()
 //                .map(messageDocument -> {
@@ -43,6 +43,10 @@ public class ChatServiceImpl implements ChatService {
 //                .collect(Collectors.toList());
     }
 
+    /**
+     * Obtiene los mensajes del usuario en sesión
+     * @return Lista de mensajes
+     */
     @Override
     public List<MessageOutboundDto> getMessagesToUserLoggedIn() {
         String emailSender = UserUtil.getEmailUserLogged();
@@ -50,6 +54,12 @@ public class ChatServiceImpl implements ChatService {
         return getMessagesToUser(emailSender, true);
     }
 
+    /**
+     * Obtienes los mensajes de un usuario
+     * @param userTarget target
+     * @param findByEmail Flag si el target es un correo o id
+     * @return Lista de mensajes
+     */
     @Override
     public List<MessageOutboundDto> getMessagesToUser(String userTarget, boolean findByEmail) {
 
@@ -77,6 +87,11 @@ public class ChatServiceImpl implements ChatService {
         return filtered.stream().map(MessageUtil::toMessageOutboundDto).collect(Collectors.toList());
     }
 
+    /**
+     * Obtiene el historial de mensajes de un usuario con el usuario en sesion
+     * @param userId Id de usuario
+     * @return Lista de mensajes
+     */
     @Override
     public List<MessageOutboundDto> getMessagesFromUserId(String userId) {
         String emailSender = UserUtil.getEmailUserLogged();
@@ -102,6 +117,12 @@ public class ChatServiceImpl implements ChatService {
         return messages.stream().map(MessageUtil::toMessageOutboundDto).collect(Collectors.toList());
     }
 
+    /**
+     * Guarda y retorna un mensaje entrante
+     * @param messageInboundDto Mensaje entrante
+     * @param idSender Id remitente
+     * @return Mensaje entrante convertido a MessageOutboundDto
+     */
     @Override
     public MessageOutboundDto saveAndSendMessage(MessageInboundDto messageInboundDto, String idSender) {
 
@@ -116,7 +137,7 @@ public class ChatServiceImpl implements ChatService {
             throw GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, String.format(Constants.USER_X_NOT_FOUND, messageInboundDto.getTo()));
         }
 
-        messageInboundDto.setFrom(MessageInboundDto.UserChat.builder()
+        messageInboundDto.setFrom(UserChatDto.builder()
                 .id(userFrom.get().getId())
                 .name(userFrom.get().getUserDetails().getFirstName() + " " + userFrom.get().getUserDetails().getLastName())
                 .avatarURI(userFrom.get().getUserDetails().getProfileImageURI())

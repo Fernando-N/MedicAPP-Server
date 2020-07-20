@@ -5,6 +5,7 @@ import cl.medicapp.service.dto.GenericResponseDto;
 import cl.medicapp.service.services.feedback.FeedbackService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,27 +24,29 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/feedback")
-//@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasRole('ADMIN')")
 public class FeedbackController {
 
+    /**
+     * Bean de servicio de feedbacks
+     */
     private final FeedbackService feedbackService;
 
     /**
-     * Endpoint que crea un usuario
-     *
-     * @param userDto Usuario a crear
-     * @return Usuario creado
+     * Endpoint que crea un feedback
+     * @param feedback Objeto con feedback a crear
+     * @return Objeto con feedback creado
      */
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public FeedbackDto create(@Valid @RequestBody FeedbackDto reportDto) {
-        return feedbackService.save(reportDto);
+    @PreAuthorize("isAuthenticated()")
+    public FeedbackDto create(@Valid @RequestBody FeedbackDto feedback) {
+        return feedbackService.save(feedback);
     }
 
     /**
-     * Endpoint que obtiene todos los usuarios
-     *
-     * @return Lista de usuarios
+     * Endpoint que obtiene todos los feedbacks
+     * @return Lista de feedbacks
      */
     @GetMapping("")
     public List<FeedbackDto> getAll() {
@@ -51,26 +54,29 @@ public class FeedbackController {
     }
 
     /**
-     * Endpoint que obtiene un usuario por su correo
-     *
-     * @param email Email
-     * @return Usuario encontrado
+     * Endpoint que obtiene feedbacks creados por un usuario
+     * @param idFrom Id de usuario a buscar
+     * @return Lista de feedbacks creados por usuario
      */
     @GetMapping("/from/{idFrom}")
     public List<FeedbackDto> getByFrom(@PathVariable String idFrom) {
         return feedbackService.getAllByFromUserId(idFrom);
     }
 
+    /**
+     * Endpoint que obtiene feedbacks dirigidos a un usuario
+     * @param idTo Id usuario a buscar
+     * @return Lista de feedbacks
+     */
     @GetMapping("/to/{idTo}")
     public List<FeedbackDto> getByTo(@PathVariable String idTo) {
         return feedbackService.getAllByToUserId(idTo);
     }
 
     /**
-     * Endpoint que elimina un usuario por su correo
-     *
-     * @param email Email
-     * @return GenericResponse con detalles
+     * Endpoint que elimina un feedback
+     * @param id Id de feedback a eliminar
+     * @return Resultado de eliminación
      */
     @DeleteMapping("/{id}")
     public GenericResponseDto deleteById(@PathVariable String id) {

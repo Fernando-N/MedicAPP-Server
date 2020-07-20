@@ -28,11 +28,13 @@ import java.util.List;
 @PreAuthorize("hasRole('ADMIN')")
 public class RoleController {
 
+    /**
+     * Bean de servicio de roles
+     */
     private final RoleService roleService;
 
     /**
-     * Endpoint que crea un rol
-     *
+     * Endpoint para crear un rol
      * @param request Request con nombre del rol
      * @return Rol creado
      */
@@ -43,9 +45,8 @@ public class RoleController {
     }
 
     /**
-     * Endpoint que obtiene todos los roles
-     *
-     * @return Listado de roles
+     * Endpoint que obtiene lista de roles
+     * @return Lista de roles
      */
     @GetMapping("")
     public List<RoleDto> getAll() {
@@ -53,9 +54,8 @@ public class RoleController {
     }
 
     /**
-     * Endpoint que trae un rol
-     *
-     * @param name Rol
+     * Endpoint que obtiene un rol por su nombre
+     * @param name Nombre a buscar
      * @return Rol encontrado
      */
     @GetMapping("/{name}")
@@ -63,16 +63,21 @@ public class RoleController {
         return roleService.getByName(name);
     }
 
+    /**
+     * Endpoint para actualizar un rol
+     * @param name Nombre de rol a actualizar
+     * @param newRole Objeto de rol con cambios
+     * @return Objeto de rol con cambios
+     */
     @PutMapping("/{name}")
-    public RoleDto update(@PathVariable String name, @Valid @RequestBody RoleDto newRoleName) {
-        return roleService.update(name, newRoleName);
+    public RoleDto update(@PathVariable String name, @Valid @RequestBody RoleDto newRole) {
+        return roleService.update(name, newRole);
     }
 
     /**
      * Endpoint que elimina un rol por su nombre
-     *
      * @param name Nombre del rol
-     * @return GenericResponse con detalles
+     * @return Objeto con resultado de eliminación
      */
     @DeleteMapping("/{name}")
     public GenericResponseDto deleteByName(@PathVariable String name) {

@@ -21,11 +21,13 @@ import java.util.Optional;
 @Slf4j
 public class UserDetailsServiceImpl implements UserDetailsService {
 
+    /**
+     * Bean repositorio de usuarios
+     */
     private final UserDocumentRepository userDocumentRepository;
 
     /**
      * Carga el usuario a logearse
-     *
      * @param username Nombre de usuario
      * @return UserDetails
      */

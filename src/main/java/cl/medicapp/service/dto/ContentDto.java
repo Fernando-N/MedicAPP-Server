@@ -14,8 +14,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ContentDto {
 
+    /**
+     * Tipo de contenido
+     */
     private String contentType;
 
+    /**
+     * Contenido
+     */
     private String content;
 
 }

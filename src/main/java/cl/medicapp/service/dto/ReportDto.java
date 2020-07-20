@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * Dto para mensajes de chat
+ * Objeto de transferencia para reporte
  */
 @Data
 @Builder

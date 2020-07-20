@@ -20,14 +20,22 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-//TODO aplicar logica utilizando la clase DocumentsHolder para evitar carga a la bd
+/**
+ * Implementacion de servicio de comunas
+ */
 @Service
 @RequiredArgsConstructor
 public class CommuneServiceImpl implements CommuneService {
 
+    /**
+     * Bean de repositorio de comunas
+     */
     private final CommuneRepository communeRepository;
-    private final RegionRepository regionRepository;
 
+    /**
+     * Obtiene todas las comunas
+     * @return Lista de comunas
+     */
     @Override
     public List<CommuneDto> getAll() {
         return DocumentsHolder.getInstance().getCommuneDocumentList()
@@ -36,47 +44,98 @@ public class CommuneServiceImpl implements CommuneService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Obtiene una comuna por nombre
+     * @param name Nombre de comuna a buscar
+     * @return Comuna encontrada
+     */
     @Override
     public CommuneDto getByName(String name) {
-        return communeRepository.findByNameIgnoreCase(name).map(CommuneUtil::toCommuneDto)
+        return DocumentsHolder.getInstance().getCommuneDocumentList()
+                .stream()
+                .filter(commune -> commune.getName().equalsIgnoreCase(name))
+                .findFirst()
+                .map(CommuneUtil::toCommuneDto)
                 .orElseThrow(() -> GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.getReasonPhrase(), String.format("Commune %s NOT FOUND!", name)));
     }
 
+    /**
+     * Obtiene comunas de una region
+     * @param regionId id de region
+     * @return Lista de comunas encontradas
+     */
     @Override
-    public List<CommuneDto> getCommunesByRegionId(String id) {
-        RegionDocument regionFind = regionRepository.findById(id).orElseThrow(GenericResponseUtil::getGenericException);
-        return communeRepository.findAllByRegion(regionFind).stream().map(CommuneUtil::toCommuneDto).collect(Collectors.toList());
+    public List<CommuneDto> getCommunesByRegionId(String regionId) {
+        RegionDocument regionFind = DocumentsHolder.getInstance().getRegionDocumentList()
+                .stream()
+                .filter(region -> region.getId().equalsIgnoreCase(regionId))
+                .findFirst()
+                .orElseThrow(GenericResponseUtil::getGenericException);
+
+        return DocumentsHolder.getInstance().getCommuneDocumentList()
+                .stream()
+                .filter(commune -> commune.getRegion().equals(regionFind))
+                .map(CommuneUtil::toCommuneDto)
+                .collect(Collectors.toList());
     }
 
+    /**
+     * Guardar nueva comuna
+     * @param request Objeto de comuna a guardar
+     * @return Comuna guardada
+     */
     @Override
     @FormatArgs
     public CommuneDto save(CommuneDto request) {
-        Optional<CommuneDocument> commune = communeRepository.findByNameIgnoreCase(request.getLabel());
+        Optional<CommuneDocument> communeOp = DocumentsHolder.getInstance().getCommuneDocumentList()
+                .stream()
+                .filter(commune -> commune.getName().equalsIgnoreCase(request.getName()))
+                .findAny();
 
-        if (commune.isPresent()) {
-            throw GenericResponseUtil.buildGenericException(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.getReasonPhrase(), String.format("Commune %s already exist!", request.getLabel()));
+        Optional<RegionDocument> regionOp = DocumentsHolder.getInstance().getRegionDocumentList()
+                .stream()
+                .filter(region -> region.getId().equalsIgnoreCase(request.getRegion().getId()))
+                .findAny();
+
+        if (communeOp.isPresent() || !regionOp.isPresent()) {
+            throw GenericResponseUtil.buildGenericException(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.getReasonPhrase(), String.format("Commune %s already exist!", request.getName()));
         }
 
-        communeRepository.save(CommuneUtil.toCommuneDocument(request));
+        CommuneDocument save = communeRepository.save(CommuneUtil.toCommuneDocument(request, regionOp.get()));
+        DocumentsHolder.getInstance().getCommuneDocumentList().add(save);
 
         return request;
     }
 
+    /**
+     * Modifica el nombre de una comuna
+     * @param communeName Target
+     * @param newCommune Nuevo nombre
+     * @return Comuna modificada
+     */
     @Override
     @FormatArgs
     public CommuneDto update(@Capitalize String communeName, CommuneDto newCommune) {
-        Optional<CommuneDocument> commune = communeRepository.findByNameIgnoreCase(communeName);
+        Optional<CommuneDocument> communeOp = DocumentsHolder.getInstance().getCommuneDocumentList()
+                .stream()
+                .filter(commune -> commune.getName().equalsIgnoreCase(communeName))
+                .findAny();
 
-        if (!commune.isPresent()) {
-            throw GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.getReasonPhrase(), String.format(Constants.ROLE_X_NOT_FOUND, communeName));
+        if (!communeOp.isPresent()) {
+            throw GenericResponseUtil.buildGenericException(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.getReasonPhrase(), String.format("Commune %s already exist!", newCommune.getName()));
         }
 
-        commune.get().setName(newCommune.getLabel());
-        communeRepository.save(commune.get());
+        communeOp.get().setName(newCommune.getName());
+        communeRepository.save(communeOp.get());
 
         return newCommune;
     }
 
+    /**
+     * Eliminar comuna por su nombre
+     * @param name Nombre de comuna
+     * @return Resultado
+     */
     @Override
     @FormatArgs
     public GenericResponseDto deleteByName(@Capitalize String name) {

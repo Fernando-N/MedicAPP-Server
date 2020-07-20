@@ -28,32 +28,64 @@ import java.util.Arrays;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
+    /**
+     * Bean de BCryptPasswordEncoder para codificar contraseñas
+     */
     private final BCryptPasswordEncoder passwordEncoder;
+
+    /**
+     * Bean de AuthenticationManager
+     */
     private final AuthenticationManager authenticationManager;
+
+    /**
+     * Bean de TokenAdditionalInformation para agregar información adicional al token
+     */
     private final TokenAdditionalInformation tokenAdditionalInformation;
+
+    /**
+     * Bean servicio de detalles de usuario (spring security)
+     */
     private final UserDetailsService userDetailsService;
 
+    /**
+     * Id cliente autenticacion
+     */
     @Value("${security.auth.client.id}")
     private String clientId;
 
+    /**
+     * Clave cliente autenticacion
+     */
     @Value("${security.auth.client.secret}")
     private String clientSecret;
 
+    /**
+     * Secreto codificacion jwt
+     */
     @Value("${security.auth.jwt.secretKey}")
     private String secret;
 
+    /**
+     * Scopes de seguridad
+     */
     @Value("${security.config.scopes}")
     private String[] securityScopes;
 
+    /**
+     * Tipos de autorizacion
+     */
     @Value("${security.config.authorizedGrantTypes}")
     private String[] authorizedGrantTypes;
 
+    /**
+     * Tiempo validez token
+     */
     @Value("${security.config.accessTokenValiditySeconds}")
     private int accessTokenValiditySeconds;
 
     /**
      * Configuración para definir donde guardar los tokens generados
-     *
      * @param clients obj spring security config clients
      * @throws Exception exception
      */
@@ -70,7 +102,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     /**
      * Configuración de endpoints de autorización
-     *
      * @param endpoints obj spring security endpoints
      */
     @Override
@@ -89,7 +120,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     /**
      * Almacen de tokens
-     *
      * @return obj almacen tokens
      */
     @Bean
@@ -99,7 +129,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     /**
      * Definir UserDetailsService personalizado
-     *
      * @return Convertidor de usuarios
      */
     @Bean
@@ -111,7 +140,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     /**
      * Convertidor de token
-     *
      * @return convertidor de token
      */
     @Bean

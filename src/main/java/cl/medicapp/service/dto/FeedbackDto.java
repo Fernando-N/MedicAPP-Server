@@ -15,7 +15,7 @@ import javax.persistence.Id;
 import java.io.Serializable;
 
 /**
- * Dto feedback
+ * Objeto de transferencia para feedback
  */
 @Data
 @Builder

@@ -11,6 +11,9 @@ import lombok.ToString;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Objeto para recibir respuesta de API
+ */
 @Builder
 @Getter
 @ToString
@@ -19,8 +22,14 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class LocationResponseDto implements Serializable {
 
+    /**
+     * Lista obtenida de API
+     */
     private List<Location> data;
 
+    /**
+     * Formato de respueta API
+     */
     @Builder
     @Getter
     @ToString

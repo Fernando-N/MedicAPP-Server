@@ -22,12 +22,13 @@ public class RegionDto implements Serializable {
     /**
      * Identificado
      */
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private String value;
+    @JsonProperty(value = "value")
+    private String id;
 
     /**
      * Nombre
      */
+    @JsonProperty(value = "label")
     @NotBlank(message = Constants.ROLE_NAME_CANT_BE_EMPTY)
     private String label;
 

@@ -7,8 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
+/**
+ * Objeto de transferencia para mensaje entrante
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -16,37 +17,22 @@ import java.util.Date;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MessageInboundDto {
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY, value = "_id")
-    private String id;
-
+    /**
+     * Mensaje
+     */
     @JsonProperty(value = "text")
     private String text;
 
-    @JsonProperty(value = "createdAt")
-    private Date date;
-
+    /**
+     * Remitente
+     */
     @JsonProperty(value = "user")
-    private UserChat from;
+    private UserChatDto from;
 
+    /**
+     * Id destinatario
+     */
     @JsonProperty(value = "to")
     private String to;
-
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class UserChat {
-
-        @JsonProperty(value = "_id")
-        private String id;
-
-        @JsonProperty(value = "name")
-        private String name;
-
-        @JsonProperty(value = "avatar")
-        private String avatarURI;
-
-    }
 
 }

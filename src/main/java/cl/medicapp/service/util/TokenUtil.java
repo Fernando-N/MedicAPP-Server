@@ -12,13 +12,19 @@ import org.springframework.security.oauth2.common.util.JsonParserFactory;
 
 import java.util.Map;
 
+/**
+ * Clase utilitaria de tokens
+ */
 public class TokenUtil {
 
-    private TokenUtil() {
-
-    }
-
+    /**
+     * Verificador
+     */
     private static final JWTVerifier verifier;
+
+    /**
+     * Parseador
+     */
     private static final JsonParser parser;
 
     static {
@@ -27,6 +33,10 @@ public class TokenUtil {
         parser = JsonParserFactory.create();
     }
 
+    /**
+     * Valida un token, en caso de no estar validado lanza una excepcion
+     * @param authToken token
+     */
     public static void validateJwtToken(String authToken) {
         try {
             verifier.verify(authToken);
@@ -35,6 +45,12 @@ public class TokenUtil {
         }
     }
 
+    /**
+     * Obtiene un claim del token
+     * @param authToken Token
+     * @param key Llave de claim
+     * @return Claim obtenido
+     */
     public static String getClaim(String authToken, String key){
         String token = authToken.replace("Bearer ", "");
         Jwt decode = JwtHelper.decode(token);
@@ -45,6 +61,13 @@ public class TokenUtil {
         }
 
         return claims.get(key).toString();
+    }
+
+    /**
+     * Constructor privado para no permitir crear instancias de la clase
+     */
+    private TokenUtil() {
+
     }
 
 }

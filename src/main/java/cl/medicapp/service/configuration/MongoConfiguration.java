@@ -15,13 +15,23 @@ import org.springframework.data.mongodb.core.mapping.BasicMongoPersistentEntity;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 
+/**
+ * Clase de configuración de MongoDb
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Configuration
 @EnableMongoAuditing
 public class MongoConfiguration {
 
+    /**
+     * Bean MongoTemplate
+     */
     private final MongoTemplate mongoTemplate;
+
+    /**
+     * Bean MongoConverter
+     */
     private final MongoConverter mongoConverter;
 
     /**

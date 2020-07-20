@@ -14,7 +14,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Document User Details
+ * Documento detalles de usuario
  */
 @Data
 @Builder

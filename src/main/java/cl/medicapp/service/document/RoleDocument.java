@@ -13,7 +13,7 @@ import javax.persistence.Id;
 import java.io.Serializable;
 
 /**
- * Document Role
+ * Documento rol
  */
 @Data
 @Builder

@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
- * Objeto transferencia para role
+ * Objeto transferencia para rol
  */
 @Data
 @Builder

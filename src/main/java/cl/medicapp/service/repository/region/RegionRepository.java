@@ -8,15 +8,29 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Repositorio de Usuarios
+ * Repositorio de regiones
  */
 @Repository
 public interface RegionRepository extends PagingAndSortingRepository<RegionDocument, String> {
 
+    /**
+     * Buscar todas las regiones
+     * @return Lista de regiones
+     */
     List<RegionDocument> findAll();
 
+    /**
+     * Buscar region por nombre
+     * @param name Nombre a buscar
+     * @return Region encontrada
+     */
     Optional<RegionDocument> findByNameIgnoreCase(String name);
 
+    /**
+     * Eliminar una region por su nombre
+     * @param name Nombre de region a eliminar
+     * @return Resultado
+     */
     int deleteByNameIgnoreCase(String name);
 
 }

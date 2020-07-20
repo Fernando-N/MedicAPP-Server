@@ -10,4 +10,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ParamedicDetailsDocumentRepository extends PagingAndSortingRepository<ParamedicDetailsDocument, String> {
 
+    /*
+        Sin nada porque se utilizan metodos de PagingAndSortingRepository
+     */
+
 }
