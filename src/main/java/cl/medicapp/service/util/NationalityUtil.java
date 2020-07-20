@@ -10,14 +10,14 @@ public class NationalityUtil {
 
     public static NationalityDto toNationalityDto(NationalityDocument nationalityDocument) {
         return NationalityDto.builder()
-                .value(nationalityDocument.getId())
-                .label(nationalityDocument.getName())
+                .id(nationalityDocument.getId())
+                .name(nationalityDocument.getName())
                 .build();
     }
 
     public static NationalityDocument toNationalityDocument(NationalityDto nationalityDto) {
         return NationalityDocument.builder()
-                .name(nationalityDto.getLabel())
+                .name(nationalityDto.getName())
                 .build();
     }
 

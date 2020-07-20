@@ -18,18 +18,20 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 /**
- * Controlador de autenticación
+ * Controlador de endpoints de autenticación
  */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthController {
 
+    /**
+     * Bean Servicio AuthService
+     */
     private final AuthService authService;
 
     /**
-     * Endpoint de registro
-     *
+     * Endpoint que realiza el registro de un usuario
      * @param user Objeto request con datos de usuario a registrar
      * @return user recibido sin contraseña
      */
@@ -40,8 +42,7 @@ public class AuthController {
     }
 
     /**
-     * Endpoint de perdida de contraseña
-     *
+     * Endpoint de recuperar contraseña
      * @param email Email a enviar token de recuperación
      * @return Respuesta ok siempre, independiente de si no existe la cuenta
      */
@@ -51,10 +52,9 @@ public class AuthController {
     }
 
     /**
-     * Endpoint para resetear la contraseña
-     *
+     * Endpoint para restablecer la contraseña
      * @param request Request con token y contraseña nueva
-     * @return Usuario reseteado sin contraseña
+     * @return Usuario restablecido
      */
     @PostMapping("/reset")
     public UserDto resetPassword(@Valid @RequestBody ResetPasswordRequestDto request) {

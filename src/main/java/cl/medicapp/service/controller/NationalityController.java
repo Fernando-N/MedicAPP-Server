@@ -20,41 +20,67 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * Controlador de roles
+ * Controlador de nacionalidades
  */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/nationality")
+@PreAuthorize("hasRole('ADMIN')")
 public class NationalityController {
 
+    /**
+     * Bean de servicio de nacionalidades
+     */
     private final NationalityService nationalityService;
 
+    /**
+     * Endpoint para crear nacionalidades
+     * @param request Objeto con datos de nacionalidad
+     * @return Objeto de nacionalidad creado
+     */
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasRole('ADMIN')")
     public NationalityDto create(@Valid @RequestBody NationalityDto request) {
         return nationalityService.save(request);
     }
 
+    /**
+     * Endpoint que retorna lista de nacionalidades
+     * @return Lista de nacionalidades
+     */
     @GetMapping("")
+    @PreAuthorize("permitAll()")
     public List<NationalityDto> getAll() {
         return nationalityService.getAll();
     }
 
+    /**
+     * Endpoint que obtiene una nacionalidad por su nombre
+     * @param name Nombre a buscar
+     * @return Nacionalidad
+     */
     @GetMapping("/{name}")
-    @PreAuthorize("hasRole('ADMIN')")
     public NationalityDto getByName(@PathVariable String name) {
         return nationalityService.getByName(name);
     }
 
+    /**
+     * Endpoint que modifica una nacionalidad
+     * @param name Nombre de nacionalidad a modificar
+     * @param newRoleName Objeto de nacionalidad con cambios
+     * @return Objeto de nacionalidad con cambios realizados
+     */
     @PutMapping("/{name}")
-    @PreAuthorize("hasRole('ADMIN')")
     public NationalityDto update(@PathVariable String name, @Valid @RequestBody NationalityDto newRoleName) {
         return nationalityService.update(name, newRoleName);
     }
 
+    /**
+     * Endpoint que eliminar una nacionalidad por su nombre
+     * @param name Nombre nacionalidad a eliminar
+     * @return Resultado de eliminación
+     */
     @DeleteMapping("/{name}")
-    @PreAuthorize("hasRole('ADMIN')")
     public GenericResponseDto deleteByName(@PathVariable String name) {
         return nationalityService.deleteByName(name);
     }

@@ -1,6 +1,7 @@
 package cl.medicapp.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * Objeto transferencia para regiones
+ * Objeto transferencia para comuna
  */
 @Data
 @Builder
@@ -21,12 +22,14 @@ public class CommuneDto implements Serializable {
     /**
      * Identificador
      */
-    private String value;
+    @JsonProperty(value = "value")
+    private String id;
 
     /**
      * Nombre
      */
-    private String label;
+    @JsonProperty(value = "label")
+    private String name;
 
     /**
      * Region

@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Document User
+ * Documento usuario
  */
 @Data
 @Builder

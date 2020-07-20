@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -88,6 +89,23 @@ public class ReportServiceImpl implements ReportService {
         //reportRepository.save(role.get());
 
         return newReport;
+    }
+
+    @Override
+    public GenericResponseDto resolveReportId(String idReport) {
+        Optional<ReportDocument> reportDocumentOptional = reportRepository.findById(idReport);
+
+        if (!reportDocumentOptional.isPresent()) {
+            throw GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.getReasonPhrase(), String.format(Constants.ROLE_X_NOT_FOUND, idReport));
+        }
+
+        reportDocumentOptional.get().setAlreadyRead(true);
+        reportRepository.save(reportDocumentOptional.get());
+
+        return GenericResponseDto.builder()
+                .message("Report resolve successfully")
+                .details(Collections.singletonList(String.format("Report ID %s resolve successfully", idReport)))
+                .build();
     }
 
     @Override

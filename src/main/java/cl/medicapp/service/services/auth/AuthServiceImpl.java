@@ -59,7 +59,7 @@ public class AuthServiceImpl implements AuthService {
             throw GenericResponseUtil.buildGenericException(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.getReasonPhrase(), String.format(Constants.EMAIL_X_ALREADY_REGISTER, newUser.getEmail()));
         }
 
-        CommuneDocument commune = communeRepository.findById(newUser.getCommune().getValue()).orElseThrow(GenericResponseUtil::getGenericException);
+        CommuneDocument commune = communeRepository.findById(newUser.getCommune().getId()).orElseThrow(GenericResponseUtil::getGenericException);
         UserDetailsDocument userDetailsDocument = userDetailsDocumentRepository.save(UserUtil.buildUserDetailsDocument(newUser, commune));
         ParamedicDetailsDocument paramedicDetailsDocument = null;
 

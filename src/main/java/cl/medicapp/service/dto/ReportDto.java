@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Dto para mensajes de chat
+ * Objeto de transferencia para reporte
  */
 @Data
 @Builder

@@ -8,31 +8,31 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Objeto de transferencia para mensaje entrante
+ * Objeto de transferencia para usuario de chat
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class MessageInboundDto {
+public class UserChatDto {
 
     /**
-     * Mensaje
+     * Id usuario
      */
-    @JsonProperty(value = "text")
-    private String text;
+    @JsonProperty(value = "_id")
+    private String id;
 
     /**
-     * Remitente
+     * Nombre usuario
      */
-    @JsonProperty(value = "user")
-    private UserChatDto from;
+    @JsonProperty(value = "name")
+    private String name;
 
     /**
-     * Id destinatario
+     * URI Avatar
      */
-    @JsonProperty(value = "to")
-    private String to;
+    @JsonProperty(value = "avatar")
+    private String avatarURI;
 
 }

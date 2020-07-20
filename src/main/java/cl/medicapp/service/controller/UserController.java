@@ -30,8 +30,7 @@ public class UserController {
     private final UserService userService;
 
     /**
-     * Endpoint que obtiene todos los usuarios
-     *
+     * Endpoint que obtiene lista de los usuarios
      * @return Lista de usuarios
      */
     @GetMapping("")
@@ -40,8 +39,7 @@ public class UserController {
     }
 
     /**
-     * Endpoint que obtiene el perfil del usuario logead
-     *
+     * Endpoint que obtiene el perfil del usuario logeado
      * @return Datos de usuario logeado
      */
     @GetMapping("/me")
@@ -51,31 +49,7 @@ public class UserController {
     }
 
     /**
-     * Endpoint que obtiene todos los usuarios
-     *
-     * @return Lista de usuarios
-     */
-    @GetMapping("/paramedic")
-    @PreAuthorize("isAuthenticated()")
-    public List<UserDto> getAllByRole() {
-        return userService.getAllByRole(Constants.PARAMEDIC);
-    }
-
-    @GetMapping("/paramedic/{regionId}")
-    @PreAuthorize("isAuthenticated()")
-    public List<UserDto> getAllByRegionId(@PathVariable String regionId) {
-        return userService.getAllByRegionId(Constants.PARAMEDIC, regionId);
-    }
-
-    @GetMapping("/paramedic/commune-{communeId}")
-    @PreAuthorize("isAuthenticated()")
-    public List<UserDto> getAllByRegionIdAndCommuneId(@PathVariable String communeId) {
-        return userService.getAllByCommuneId(Constants.PARAMEDIC, communeId);
-    }
-
-    /**
-     * Endpoint que obtiene usuarios por su id
-     *
+     * Endpoint que obtiene usuario por su id
      * @param id Id de usuario
      * @return Usuario encontrado
      */
@@ -98,7 +72,6 @@ public class UserController {
 
     /**
      * Endpoint que elimina un usuario por su id
-     *
      * @param id Id de usuario
      * @return GenericResponse con detalles
      */
@@ -107,21 +80,41 @@ public class UserController {
         return userService.deleteById(id);
     }
 
+    /**
+     * Endpoint para obtener lista de usuarios deshabilitados
+     * @return Lista de usuarios deshabilitados
+     */
     @GetMapping("/disabled")
     public List<UserDto> getAllDisabled() {
         return userService.getAllDisabled();
     }
 
+    /**
+     * Endpoint para editar un usuario
+     * @param id id de usuario a editar
+     * @param userDto Objeto de usuario con cambios
+     * @return Objeto de usuario actualizado
+     */
     @PutMapping("/{id}")
     public UserDto editUser(@PathVariable String id, @RequestBody @Valid UserDto userDto) {
         return userService.edit(id, userDto);
     }
 
+    /**
+     * Endpoint que habilita un usuario
+     * @param id Id de usuario a activar
+     * @return Resultado de operación
+     */
     @PutMapping("/{id}/enable")
     public GenericResponseDto enableUser(@PathVariable String id) {
         return userService.enableUser(id, true);
     }
 
+    /**
+     * Endpoint que deshabilita un usuario
+     * @param id Id de usuario a desactivar
+     * @return Resultado de operación
+     */
     @PutMapping("/{id}/disable")
     public GenericResponseDto disableUser(@PathVariable String id) {
         return userService.enableUser(id, false);

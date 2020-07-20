@@ -1,14 +1,17 @@
 package cl.medicapp.service.services.user;
 
 import cl.medicapp.service.constants.Constants;
+import cl.medicapp.service.document.CommuneDocument;
 import cl.medicapp.service.document.FeedbackDocument;
+import cl.medicapp.service.document.RegionDocument;
 import cl.medicapp.service.document.UserDocument;
 import cl.medicapp.service.dto.ContentDto;
 import cl.medicapp.service.dto.GenericResponseDto;
 import cl.medicapp.service.dto.StatsDto;
 import cl.medicapp.service.dto.UserDto;
-import cl.medicapp.service.holder.DocumentsHolder;
+import cl.medicapp.service.repository.commune.CommuneRepository;
 import cl.medicapp.service.repository.feedback.FeedbackRepository;
+import cl.medicapp.service.repository.region.RegionRepository;
 import cl.medicapp.service.repository.user.UserRepository;
 import cl.medicapp.service.services.chat.ChatService;
 import cl.medicapp.service.util.DocumentsHolderUtil;
@@ -18,7 +21,6 @@ import cl.medicapp.service.util.UserUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,6 +34,8 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final CommuneRepository communeRepository;
+    private final RegionRepository regionRepository;
     private final FeedbackRepository feedbackRepository;
     private final ChatService chatService;
     private final BCryptPasswordEncoder passwordEncoder;
@@ -152,14 +156,24 @@ public class UserServiceImpl implements UserService {
     public UserDto edit(String userId, UserDto newUser) {
 
         Optional<UserDocument> actualUser = userRepository.findById(userId);
+        Optional<CommuneDocument> communeDocument = communeRepository.findById(newUser.getCommune().getId());
+        Optional<RegionDocument> regionDocument = regionRepository.findById(newUser.getRegion().getId());
 
         if (!actualUser.isPresent()) {
-            throw GenericResponseUtil.buildGenericException(HttpStatus.INTERNAL_SERVER_ERROR, "");
+            throw GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, "User not found", String.format("User id %s not found", userId));
+        }
+
+        if (!communeDocument.isPresent()) {
+            throw GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, "Commune not found", String.format("Commune id %s not found", userId));
+        }
+
+        if (!regionDocument.isPresent()) {
+            throw GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, "Region not found", String.format("Region id %s not found", userId));
         }
 
         UserDocument userMerged = UserUtil.merge(newUser, actualUser.get());
         userMerged.getUserDetails().setId(actualUser.get().getUserDetails().getId());
-        userMerged.getUserDetails().getCommune().setId(actualUser.get().getUserDetails().getCommune().getId());
+        userMerged.getUserDetails().setCommune(communeDocument.get());
 
         if (newUser.isParamedic()) {
             userMerged.getParamedicDetails().setId(actualUser.get().getParamedicDetails().getId());

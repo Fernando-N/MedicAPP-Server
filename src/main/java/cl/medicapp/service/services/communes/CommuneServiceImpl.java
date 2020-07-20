@@ -51,10 +51,10 @@ public class CommuneServiceImpl implements CommuneService {
     @Override
     @FormatArgs
     public CommuneDto save(CommuneDto request) {
-        Optional<CommuneDocument> commune = communeRepository.findByNameIgnoreCase(request.getLabel());
+        Optional<CommuneDocument> commune = communeRepository.findByNameIgnoreCase(request.getName());
 
         if (commune.isPresent()) {
-            throw GenericResponseUtil.buildGenericException(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.getReasonPhrase(), String.format("Commune %s already exist!", request.getLabel()));
+            throw GenericResponseUtil.buildGenericException(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.getReasonPhrase(), String.format("Commune %s already exist!", request.getName()));
         }
 
         communeRepository.save(CommuneUtil.toCommuneDocument(request));
@@ -71,7 +71,7 @@ public class CommuneServiceImpl implements CommuneService {
             throw GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.getReasonPhrase(), String.format(Constants.ROLE_X_NOT_FOUND, communeName));
         }
 
-        commune.get().setName(newCommune.getLabel());
+        commune.get().setName(newCommune.getName());
         communeRepository.save(commune.get());
 
         return newCommune;

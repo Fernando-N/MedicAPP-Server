@@ -22,13 +22,14 @@ public class NationalityDto implements Serializable {
     /**
      * Identificado
      */
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private String value;
+    @JsonProperty(value = "value", access = JsonProperty.Access.READ_ONLY)
+    private String id;
 
     /**
      * Nombre
      */
+    @JsonProperty(value = "label")
     @NotBlank(message = Constants.ROLE_NAME_CANT_BE_EMPTY)
-    private String label;
+    private String name;
 
 }

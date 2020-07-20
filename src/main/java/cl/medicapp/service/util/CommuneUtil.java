@@ -10,16 +10,16 @@ public class CommuneUtil {
 
     public static CommuneDto toCommuneDto(CommuneDocument communeDocument) {
         return CommuneDto.builder()
-                .value(communeDocument.getId())
-                .label(communeDocument.getName())
+                .id(communeDocument.getId())
+                .name(communeDocument.getName())
                 .region(RegionUtil.toRegionDto(communeDocument.getRegion()))
                 .build();
     }
 
     public static CommuneDocument toCommuneDocument(CommuneDto communeDto) {
         return CommuneDocument.builder()
-                .id(communeDto.getValue())
-                .name(communeDto.getLabel())
+                .id(communeDto.getId())
+                .name(communeDto.getName())
                 .region(communeDto.getRegion() != null ? RegionUtil.toRegionDocument(communeDto.getRegion()) : null)
                 .build();
     }

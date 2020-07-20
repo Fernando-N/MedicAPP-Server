@@ -10,7 +10,7 @@ public class RegionUtil {
 
     public static RegionDto toRegionDto(RegionDocument regionDocument) {
         return RegionDto.builder()
-                .value(regionDocument.getId())
+                .id(regionDocument.getId())
                 .label(regionDocument.getOrdinal() + " " + regionDocument.getName())
                 .build();
     }

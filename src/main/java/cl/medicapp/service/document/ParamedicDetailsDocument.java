@@ -12,7 +12,7 @@ import javax.persistence.Id;
 import java.io.Serializable;
 
 /**
- * Document User Details
+ * Documento de detalles de paramedico
  */
 @Data
 @Builder

@@ -40,10 +40,10 @@ public class NationalityServiceImpl implements NationalityService {
     @Override
     @FormatArgs
     public NationalityDto save(NationalityDto request) {
-        Optional<NationalityDocument> nationality = nationalityRepository.findByNameIgnoreCase(request.getLabel());
+        Optional<NationalityDocument> nationality = nationalityRepository.findByNameIgnoreCase(request.getName());
 
         if (nationality.isPresent()) {
-            throw GenericResponseUtil.buildGenericException(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.getReasonPhrase(), String.format("Nationality %s already exist!", request.getLabel()));
+            throw GenericResponseUtil.buildGenericException(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.getReasonPhrase(), String.format("Nationality %s already exist!", request.getName()));
         }
 
         nationalityRepository.save(NationalityUtil.toNationalityDocument(request));
@@ -59,7 +59,7 @@ public class NationalityServiceImpl implements NationalityService {
             throw GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.getReasonPhrase(), String.format(Constants.ROLE_X_NOT_FOUND, regionName));
         }
 
-        nationality.get().setName(newRegion.getLabel());
+        nationality.get().setName(newRegion.getName());
         nationalityRepository.save(nationality.get());
 
         return newRegion;

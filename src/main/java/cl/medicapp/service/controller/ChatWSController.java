@@ -13,17 +13,28 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 /**
- * Controlador de roles
+ * Controlador de chat websockets
  */
 @RequiredArgsConstructor
 @Controller
 @Slf4j
 public class ChatWSController {
 
+    /**
+     * Bean Servicio de chat
+     */
     private final ChatService chatService;
-    private final UserRepository userRepository;
+
+    /**
+     * Bean SimpMessaginTemplate para reenviar mensajes a channels
+     */
     private final SimpMessagingTemplate simpMessagingTemplate;
 
+    /**
+     * Channel encargado de recibir mensajes, guardarlos en bd y enviarlos a destino correspondiente
+     * @param message Mensaje entrante
+     * @param simpMessageHeaderAccessor Headers mensaje entrante
+     */
     @MessageMapping("/message")
     public void sendMessage(MessageInboundDto message, SimpMessageHeaderAccessor simpMessageHeaderAccessor) {
 

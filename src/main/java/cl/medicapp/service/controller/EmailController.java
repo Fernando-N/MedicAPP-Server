@@ -13,18 +13,28 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+/**
+ * Controlador de envio de correos
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/email")
 @PreAuthorize("hasRole('ADMIN')")
 public class EmailController {
 
+    /**
+     * Bean de servicio de envio de emails
+     */
     private final EmailService emailService;
 
+    /**
+     * Endpoint que envia correo de notificacion a usuarios
+     * @param email Objeto con datos de envio de email
+     */
     @PostMapping("/send")
     @ResponseStatus(HttpStatus.CREATED)
-    public void sendEmail(@Valid @RequestBody EmailDto user) {
-        emailService.sendEmail(user);
+    public void sendEmail(@Valid @RequestBody EmailDto email) {
+        emailService.sendEmail(email);
     }
 
 }

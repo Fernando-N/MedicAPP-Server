@@ -17,6 +17,8 @@ public interface ReportService {
 
     ReportDto update(String id, ReportDto newReportDto);
 
+    GenericResponseDto resolveReportId(String id);
+
     GenericResponseDto deleteById(String id);
 
 }

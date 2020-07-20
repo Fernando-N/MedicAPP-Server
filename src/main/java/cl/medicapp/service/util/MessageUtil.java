@@ -2,9 +2,9 @@ package cl.medicapp.service.util;
 
 import cl.medicapp.service.document.MessageDocument;
 import cl.medicapp.service.document.UserDocument;
-import cl.medicapp.service.dto.MessageDto;
 import cl.medicapp.service.dto.MessageInboundDto;
 import cl.medicapp.service.dto.MessageOutboundDto;
+import cl.medicapp.service.dto.UserChatDto;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -29,26 +29,12 @@ public class MessageUtil {
                 .build();
     }
 
-    public static MessageDto toMessageDto(MessageDocument messageDocument) {
-        return MessageDto.builder()
-                .id(messageDocument.getId())
-                .date(DateUtil.from(messageDocument.getDate()))
-                .message(messageDocument.getMessage())
-                .from(MessageDto.UserChat.builder()
-                        .id(messageDocument.getFrom().getId())
-                        .name(messageDocument.getFrom().getUserDetails().getFirstName() + " " + messageDocument.getFrom().getUserDetails().getLastName())
-                        .avatar(messageDocument.getFrom().getUserDetails().getProfileImageURI())
-                        .build())
-                .to(messageDocument.getTo().getUserDetails().getFirstName() + " " + messageDocument.getTo().getUserDetails().getLastName())
-                .build();
-    }
-
     public static MessageOutboundDto toMessageOutboundDto(MessageDocument messageDocument) {
         return MessageOutboundDto.builder()
                 .id(messageDocument.getId())
                 .date(messageDocument.getDate())
                 .text(messageDocument.getMessage())
-                .user(MessageOutboundDto.UserChat.builder()
+                .user(UserChatDto.builder()
                         .id(messageDocument.getFrom().getId())
                         .avatarURI(messageDocument.getFrom().getUserDetails().getProfileImageURI())
                         .name(messageDocument.getFrom().getUserDetails().getFirstName() + " " + messageDocument.getFrom().getUserDetails().getLastName())
