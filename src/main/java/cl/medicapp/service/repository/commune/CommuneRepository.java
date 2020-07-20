@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Repositorio de Usuarios
+ * Repositorio de comunas
  */
 @Repository
 public interface CommuneRepository extends PagingAndSortingRepository<CommuneDocument, String> {

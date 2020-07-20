@@ -19,7 +19,7 @@ public class ChatSchedule {
     public void sendPushNotificationMessageNotRead() {
         chatService.getMessagesNotRead().forEach(
                 message -> {
-                    log.info("Sending push notification to: " + message.getTo());
+                    log.info("Sending push notification to: " + message.getUser().getId());
                     log.info(message.toString());
                 });
     }
