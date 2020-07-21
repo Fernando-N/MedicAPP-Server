@@ -89,7 +89,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     @FormatArgs
     public FeedbackDto save(FeedbackDto request) {
         Optional<UserDocument> fromUserOptional = userRepository.findByEmailIgnoreCase(UserUtil.getEmailUserLogged());
-        Optional<UserDocument> toUserOptional = userRepository.findById(request.getTo().getId());
+        Optional<UserDocument> toUserOptional = userRepository.findById(request.getToUserId());
 
         if (!fromUserOptional.isPresent() || !toUserOptional.isPresent()) {
             throw GenericResponseUtil.buildGenericException(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.getReasonPhrase(), String.format(Constants.USER_X_NOT_FOUND, request.getTo().getId()));
