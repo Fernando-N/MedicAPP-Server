@@ -4,6 +4,7 @@ import cl.medicapp.service.dto.LocationDto;
 import cl.medicapp.service.dto.LocationResponseDto;
 import cl.medicapp.service.util.GenericResponseUtil;
 import cl.medicapp.service.util.LocationUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
  * Implementacion de servicio de localizacion
  */
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class LocationServiceImpl implements LocationService {
 
@@ -28,6 +30,11 @@ public class LocationServiceImpl implements LocationService {
      */
     @Value("${api.positionStack.uri}")
     private String apiUri;
+
+    /**
+     * Rest template para peticiones a API
+     */
+    private final RestTemplate restTemplate;
 
     /**
      * Obtener longitud y latitud de una direccion
@@ -45,7 +52,6 @@ public class LocationServiceImpl implements LocationService {
      * @return Respuesta de API
      */
     private LocationResponseDto.Location consumeAPI(String address) {
-        RestTemplate restTemplate = new RestTemplate();
         String endpoint = String.format("%s/forward?access_key=%s&query=%s", apiUri, apiKey, address);
 
         LocationResponseDto response;

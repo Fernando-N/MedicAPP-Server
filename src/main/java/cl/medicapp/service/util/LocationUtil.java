@@ -17,6 +17,7 @@ public class LocationUtil {
         return LocationDto.builder()
                 .latitude(locationResponseDto.getLatitude())
                 .longitude(locationResponseDto.getLongitude())
+                .address(locationResponseDto.getLabel())
                 .build();
     }
 

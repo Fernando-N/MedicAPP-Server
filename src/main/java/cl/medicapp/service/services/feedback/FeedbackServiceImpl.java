@@ -1,7 +1,6 @@
 package cl.medicapp.service.services.feedback;
 
 import cl.medicapp.service.annotation.FormatArgs;
-import cl.medicapp.service.annotation.UpperCase;
 import cl.medicapp.service.constants.Constants;
 import cl.medicapp.service.document.UserDocument;
 import cl.medicapp.service.dto.FeedbackDto;

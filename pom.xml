@@ -143,6 +143,45 @@
                     <target>8</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.5</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*cl/medicapp/service/MedicAppApplication.class</exclude>
+                        <exclude>**/*cl/medicapp/service/annotation/**</exclude>
+                        <exclude>**/*cl/medicapp/service/aspect/**</exclude>
+                        <exclude>**/*cl/medicapp/service/configuration/**</exclude>
+                        <exclude>**/*cl/medicapp/service/constants/**</exclude>
+                        <exclude>**/*cl/medicapp/service/controller/**</exclude>
+                        <exclude>**/*cl/medicapp/service/document/**</exclude>
+                        <exclude>**/*cl/medicapp/service/dto/**</exclude>
+                        <exclude>**/*cl/medicapp/service/exception/**</exclude>
+                        <exclude>**/*cl/medicapp/service/holder/**</exclude>
+                        <exclude>**/*cl/medicapp/service/logger/**</exclude>
+                        <exclude>**/*cl/medicapp/service/repository/**</exclude>
+                        <exclude>**/*cl/medicapp/service/schedule/**</exclude>
+                        <exclude>**/*cl/medicapp/service/security/**</exclude>
+                        <exclude>**/*cl/medicapp/service/services/firebase/**</exclude>
+                        <exclude>**/*cl/medicapp/service/services/email/**</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 

@@ -2,7 +2,6 @@ package cl.medicapp.service.controller;
 
 import cl.medicapp.service.dto.MessageInboundDto;
 import cl.medicapp.service.dto.MessageOutboundDto;
-import cl.medicapp.service.repository.user.UserRepository;
 import cl.medicapp.service.services.chat.ChatService;
 import cl.medicapp.service.util.ChatUtil;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +44,8 @@ public class ChatWSController {
         log.info("EmailSender: " + emailSender);
 
         MessageOutboundDto messageOutboundDto = chatService.saveAndSendMessage(message, idSender);
+
+        log.info("MessageOut: " + messageOutboundDto );
 
         simpMessagingTemplate.convertAndSend("/chat/messages/" + message.getTo() + "/" + idSender, messageOutboundDto);
         simpMessagingTemplate.convertAndSend("/chat/messages/" + message.getTo(), messageOutboundDto);
