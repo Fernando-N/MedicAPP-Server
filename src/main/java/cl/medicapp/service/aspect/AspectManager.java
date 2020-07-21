@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 public class AspectManager {
 
     /**
-     * Controlador de lujo del método capturado con @FormatArgs
+     * Controlador de flujo del método capturado con @FormatArgs
      * @param proceedingJoinPoint ProceedingJoinPoint obtenido del flujo ejecutado
      * @return ejecución del flujo
      * @throws Throwable excepción ocurrida

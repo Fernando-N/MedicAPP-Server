@@ -19,9 +19,9 @@ import java.util.stream.Collectors;
 public class UserUtil {
 
     /**
-     * Transforma UserDocument -> UserDto
+     * Convierte UserDocument a UserDto
      * @param userDocument target
-     * @return UserDto
+     * @return target convertido a UserDto
      */
     public static UserDto toUserDto(UserDocument userDocument) {
         UserDto user = UserDto.builder()
@@ -75,10 +75,9 @@ public class UserUtil {
     }
 
     /**
-     * Transforma UserDto -> UserDocument
-     *
+     * Convierte UserDto a UserDocument
      * @param userDto target
-     * @return UserDocument
+     * @return UserDto convetido a UserDocument
      */
     public static UserDocument toUserDocument(UserDto userDto) {
         return UserDocument.builder()

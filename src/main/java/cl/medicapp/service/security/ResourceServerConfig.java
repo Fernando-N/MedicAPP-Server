@@ -81,7 +81,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     /**
      * Asigna el filtro de cors
-     * @return FilterRegistrationBean<CorsFilter>
+     * @return FilterRegistrationBean
      */
     @Bean
     public FilterRegistrationBean<CorsFilter> corsFilter() {
