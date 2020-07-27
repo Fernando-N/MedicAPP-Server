@@ -11,6 +11,7 @@ import cl.medicapp.service.util.FeedbackUtil;
 import cl.medicapp.service.util.GenericResponseUtil;
 import cl.medicapp.service.util.UserUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -49,18 +50,21 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     /**
      * Obtener todos los feedbacks dirigidos a un usuario
-     * @param idUsuario idUsuario
+     * @param idUser idUsuario
      * @return Lista de feedbacks
      */
     @Override
-    public List<FeedbackDto> getAllByToUserId(String idUsuario) {
-        Optional<UserDocument> userDocumentOptional = userRepository.findById(idUsuario);
+    public List<FeedbackDto> getAllByToUserId(String idUser, int page) {
+        Optional<UserDocument> userDocumentOptional = userRepository.findById(idUser);
 
         if (!userDocumentOptional.isPresent()) {
-            throw GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.getReasonPhrase(), String.format(Constants.ROLE_X_NOT_FOUND, idUsuario));
+            throw GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.getReasonPhrase(), String.format(Constants.ROLE_X_NOT_FOUND, idUser));
         }
 
-        return feedbackRepository.findAllByTo(userDocumentOptional.get()).stream().map(FeedbackUtil::toFeedbackDto).collect(Collectors.toList());
+        return feedbackRepository.findAllByToOrderByDateDesc(userDocumentOptional.get(), PageRequest.of(page, 15))
+                .stream()
+                .map(FeedbackUtil::toFeedbackDto)
+                .collect(Collectors.toList());
     }
 
     /**

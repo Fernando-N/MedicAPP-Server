@@ -16,9 +16,9 @@ public interface FeedbackService {
     List<FeedbackDto> getAll();
 
     /**
-     * @see FeedbackServiceImpl#getAllByToUserId(String)
+     * @see FeedbackServiceImpl#getAllByToUserId(String, int)
      */
-    List<FeedbackDto> getAllByToUserId(String id);
+    List<FeedbackDto> getAllByToUserId(String id, int page);
 
     /**
      * @see FeedbackServiceImpl#getAllByFromUserId(String)

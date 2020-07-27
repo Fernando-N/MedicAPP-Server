@@ -52,10 +52,10 @@ class FeedbackServiceImplTest {
         CommuneDocument communeDocument = CommuneDocument.builder().region(RegionDocument.builder().build()).build();
         UserDetailsDocument userDetailsDocument = UserDetailsDocument.builder().commune(communeDocument).build();
         FeedbackDocument feedbackDocument = FeedbackDocument.builder().anon(true).to(UserDocument.builder().roleEntities(Collections.singletonList(RoleDocument.builder().name("ADMIN").build())).userDetails(userDetailsDocument).build()).build();
-        when(feedbackRepository.findAllByTo(any())).thenReturn(Collections.singletonList(feedbackDocument));
+        when(feedbackRepository.findAllByToOrderByDateDesc(any())).thenReturn(Collections.singletonList(feedbackDocument));
         when(userRepository.findById(anyString())).thenReturn(Optional.of(UserDocument.builder().roleEntities(Collections.singletonList(RoleDocument.builder().name("ROLE_PARAMEDIC").build())).build()));
 
-        List<FeedbackDto> result = feedbackServiceImpl.getAllByToUserId("idUsuario");
+        List<FeedbackDto> result = feedbackServiceImpl.getAllByToUserId("idUsuario", 1);
         assertNotNull(result);
     }
 
@@ -64,7 +64,7 @@ class FeedbackServiceImplTest {
         CommuneDocument communeDocument = CommuneDocument.builder().region(RegionDocument.builder().build()).build();
         UserDetailsDocument userDetailsDocument = UserDetailsDocument.builder().commune(communeDocument).build();
         FeedbackDocument feedbackDocument = FeedbackDocument.builder().anon(true).to(UserDocument.builder().roleEntities(Collections.singletonList(RoleDocument.builder().name("ADMIN").build())).userDetails(userDetailsDocument).build()).build();
-        when(feedbackRepository.findAllByTo(any())).thenReturn(Collections.singletonList(feedbackDocument));
+        when(feedbackRepository.findAllByToOrderByDateDesc(any())).thenReturn(Collections.singletonList(feedbackDocument));
         when(userRepository.findById(anyString())).thenReturn(Optional.of(UserDocument.builder().build()));
 
         List<FeedbackDto> result = feedbackServiceImpl.getAllByFromUserId("idUsuario");

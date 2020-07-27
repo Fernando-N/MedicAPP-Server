@@ -52,7 +52,7 @@ public class RoleServiceImpl implements RoleService {
     public RoleDto getByName(String name) {
         return DocumentsHolder.getInstance().getRoleDocumentList()
                 .stream()
-                .filter(role -> role.getName().equalsIgnoreCase(name))
+                .filter(role -> role.getName().toUpperCase().contains(name.toUpperCase()))
                 .findFirst()
                 .map(RoleUtil::toRoleDto)
                 .orElseThrow(() -> GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.getReasonPhrase(), String.format(Constants.ROLE_X_NOT_FOUND, name)));

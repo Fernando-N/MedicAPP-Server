@@ -19,8 +19,16 @@ spring:
         starttls.enable: true
 api:
   positionStack:
-    uri: ${POSITIONSTACK_API_URI:}
+    uri: ${POSITIONSTACK_API_URI:http://api.positionstack.com/v1}
     key: ${POSITIONSTACK_API_KEY:}
+  googlemaps:
+    key: ${GMAPS_API_KEY:}
+    places:
+      radio: ${GMAPSPLACES_RADIO:10000}
+      uri: ${GMAPSPLACES_API_URI:https://maps.googleapis.com/maps/api/place/nearbysearch/json}
+  farmanet:
+    uri: ${FARMANET_API_URI:https://farmanet.minsal.cl/maps/index.php/ws/getLocalesTurnos}
+
 #Server configuration
 #server:
 #  port: 443

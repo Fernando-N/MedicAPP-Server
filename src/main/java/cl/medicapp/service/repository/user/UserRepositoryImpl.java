@@ -11,6 +11,7 @@ import cl.medicapp.service.repository.paramedicdetails.ParamedicDetailsDocumentR
 import cl.medicapp.service.repository.userdetails.UserDetailsDocumentRepository;
 import cl.medicapp.service.util.GenericResponseUtil;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
@@ -77,11 +78,12 @@ public class UserRepositoryImpl implements UserRepository {
     /**
      * Buscar todos los usuarios por rol
      * @param roleDocument Rol a buscar
+     * @param pageable Objeto de paginación
      * @return Lista de usuarios
      */
     @Override
-    public List<UserDocument> findAllByRole(RoleDocument roleDocument) {
-        return userRepository.findAllByRoleEntities(roleDocument);
+    public List<UserDocument> findAllByRole(RoleDocument roleDocument, Pageable pageable) {
+        return userRepository.findAllByRoleEntities(roleDocument, pageable);
     }
 
     /**

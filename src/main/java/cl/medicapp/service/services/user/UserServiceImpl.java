@@ -4,6 +4,7 @@ import cl.medicapp.service.constants.Constants;
 import cl.medicapp.service.document.CommuneDocument;
 import cl.medicapp.service.document.FeedbackDocument;
 import cl.medicapp.service.document.RegionDocument;
+import cl.medicapp.service.document.StatsDocument;
 import cl.medicapp.service.document.UserDocument;
 import cl.medicapp.service.dto.ContentDto;
 import cl.medicapp.service.dto.GenericResponseDto;
@@ -12,13 +13,16 @@ import cl.medicapp.service.dto.UserDto;
 import cl.medicapp.service.repository.commune.CommuneRepository;
 import cl.medicapp.service.repository.feedback.FeedbackRepository;
 import cl.medicapp.service.repository.region.RegionRepository;
+import cl.medicapp.service.repository.stats.StatsRepository;
 import cl.medicapp.service.repository.user.UserRepository;
 import cl.medicapp.service.services.chat.ChatService;
 import cl.medicapp.service.util.DocumentsHolderUtil;
 import cl.medicapp.service.util.FeedbackUtil;
 import cl.medicapp.service.util.GenericResponseUtil;
+import cl.medicapp.service.util.StatsUtil;
 import cl.medicapp.service.util.UserUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -62,6 +66,11 @@ public class UserServiceImpl implements UserService {
     private final ChatService chatService;
 
     /**
+     * Bean de repositorio de estadisticas
+     */
+    private final StatsRepository statsRepository;
+
+    /**
      * Bean de BCryptPasswordEncoder
      */
     private final BCryptPasswordEncoder passwordEncoder;
@@ -97,18 +106,19 @@ public class UserServiceImpl implements UserService {
     /**
      * Obtener todos los usuarios de un rol
      * @param role Rol a buscar
+     * @param page Pagina a buscar
      * @return Lista de usuarios
      */
     @Override
-    public List<UserDto> getAllByRole(String role) {
-        List<UserDto> userDtos = userRepository.findAllByRole(DocumentsHolderUtil.getRoleDocumentByName(role))
+    public List<UserDto> getAllByRole(String role, int page) {
+        return userRepository.findAllByRole(DocumentsHolderUtil.getRoleDocumentByName(role), PageRequest.of(page, 15))
                 .stream()
-                .map(UserUtil::toUserDto)
+                .map(userDocument -> {
+                    UserDto userDto = UserUtil.toUserDto(userDocument);
+                    userDto.setStats(getStats(userDocument));
+                    return userDto;
+                })
                 .collect(Collectors.toList());
-
-        userDtos.forEach(user -> user.setStats(getStats(user.getId())));
-
-        return userDtos;
     }
 
     /**
@@ -124,7 +134,11 @@ public class UserServiceImpl implements UserService {
                 DocumentsHolderUtil.getRegionDocumentById(regionId)
         )
                 .stream()
-                .map(UserUtil::toUserDto)
+                .map(userDocument -> {
+                    UserDto userDto = UserUtil.toUserDto(userDocument);
+                    userDto.setStats(getStats(userDocument));
+                    return userDto;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -141,7 +155,11 @@ public class UserServiceImpl implements UserService {
                 DocumentsHolderUtil.getCommuneDocumentById(communeId)
         )
                 .stream()
-                .map(UserUtil::toUserDto)
+                .map(userDocument -> {
+                    UserDto userDto = UserUtil.toUserDto(userDocument);
+                    userDto.setStats(getStats(userDocument));
+                    return userDto;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -231,13 +249,28 @@ public class UserServiceImpl implements UserService {
             throw GenericResponseUtil.buildGenericException(HttpStatus.INTERNAL_SERVER_ERROR, "");
         }
 
-        List<FeedbackDocument> feedbackDocuments = feedbackRepository.findAllByTo(user.get());
+        Optional<StatsDocument> statsDocument = statsRepository.findByUser(user.get());
 
-        int contacts = chatService.getMessagesToUser(userId, false).size();
-        int valuations = feedbackDocuments.size();
-        int rating = FeedbackUtil.calculateRating(feedbackDocuments);
+        if (!statsDocument.isPresent()) {
+            return StatsDto.builder().build();
+        }
 
-        return StatsDto.builder().contacts(contacts).rating(rating).valuations(valuations).build();
+        return StatsDto.builder()
+                .contacts(statsDocument.get().getContacts())
+                .rating(statsDocument.get().getRating())
+                .valuations(statsDocument.get().getValuations())
+                .build();
+    }
+
+    @Override
+    public StatsDto getStats(UserDocument user) {
+        Optional<StatsDocument> statsDocument = statsRepository.findByUser(user);
+
+        if (!statsDocument.isPresent()) {
+            return StatsDto.builder().contacts(0).rating(0).valuations(0).build();
+        }
+
+        return StatsUtil.toStatsDto(statsDocument.get());
     }
 
     /**

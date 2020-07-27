@@ -3,6 +3,7 @@ package cl.medicapp.service.repository.user;
 import cl.medicapp.service.document.RoleDocument;
 import cl.medicapp.service.document.UserDetailsDocument;
 import cl.medicapp.service.document.UserDocument;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
@@ -26,9 +27,9 @@ public interface UserDocumentRepository extends PagingAndSortingRepository<UserD
     List<UserDocument> findAllByEnabledFalse();
 
     /**
-     * @see UserRepositoryImpl#findAllByRole(RoleDocument)
+     * @see UserRepositoryImpl#findAllByRole(RoleDocument, Pageable)
      */
-    List<UserDocument> findAllByRoleEntities(RoleDocument role);
+    List<UserDocument> findAllByRoleEntities(RoleDocument role, Pageable pageable);
 
     /**
      * Buscar usuarios por rol y lista de UserDetailsDocuments

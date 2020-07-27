@@ -92,7 +92,7 @@ public class ReportServiceImpl implements ReportService {
     public ReportDto save(ReportDto request) {
 
         Optional<UserDocument> fromUserOptional = userRepository.findByEmailIgnoreCase(UserUtil.getEmailUserLogged());
-        Optional<UserDocument> toUserOptional = userRepository.findById(request.getToUser().getId());
+        Optional<UserDocument> toUserOptional = userRepository.findById(request.getToUserId());
 
         if (!fromUserOptional.isPresent() || !toUserOptional.isPresent()) {
             throw GenericResponseUtil.buildGenericException(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.getReasonPhrase(), String.format(Constants.ROLE_X_ALREADY_EXIST, request.getMessage()));

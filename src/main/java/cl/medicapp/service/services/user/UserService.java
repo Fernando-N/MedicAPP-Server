@@ -1,5 +1,6 @@
 package cl.medicapp.service.services.user;
 
+import cl.medicapp.service.document.UserDocument;
 import cl.medicapp.service.dto.ContentDto;
 import cl.medicapp.service.dto.GenericResponseDto;
 import cl.medicapp.service.dto.StatsDto;
@@ -28,9 +29,9 @@ public interface UserService {
     UserDto getOwnProfile();
 
     /**
-     * @see UserServiceImpl#getAllByRole(String)
+     * @see UserServiceImpl#getAllByRole(String, int)
      */
-    List<UserDto> getAllByRole(String role);
+    List<UserDto> getAllByRole(String role, int page);
 
     /**
      * @see UserServiceImpl#getAllByRoleAndRegionId(String, String)
@@ -71,6 +72,11 @@ public interface UserService {
      * @see UserServiceImpl#getStats(String)
      */
     StatsDto getStats(String userId);
+
+    /**
+     * @see UserServiceImpl#getStats(UserDocument)
+     */
+    StatsDto getStats(UserDocument userDocument);
 
     /**
      * @see UserServiceImpl#edit(String, UserDto)

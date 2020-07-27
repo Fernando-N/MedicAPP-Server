@@ -51,6 +51,19 @@ public class DocumentsHolderUtil {
     }
 
     /**
+     * Busca una comuna por su nombre
+     * @param communeName nombre de la comuna
+     * @return Comuna encontrada
+     */
+    public static CommuneDocument getCommuneDocumentByName(String communeName) {
+        return DocumentsHolder.getInstance().getCommuneDocumentList()
+                .stream()
+                .filter(communeDocument -> communeDocument.getName().toUpperCase().contains(communeName.toUpperCase()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    /**
      * Busca region por su id
      * @param regionId Id de region a buscar
      * @return Region encontrada

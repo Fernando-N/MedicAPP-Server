@@ -13,14 +13,14 @@ import javax.persistence.Id;
 import java.io.Serializable;
 
 /**
- * Documento feedback
+ * Documento Stats usuarios
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "feedbacks")
-public class FeedbackDocument implements Serializable {
+@Document(collection = "stats")
+public class StatsDocument implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -31,42 +31,24 @@ public class FeedbackDocument implements Serializable {
     private String id;
 
     /**
-     * De
      * DBRef para referenciar document User
      */
     @DBRef
-    private UserDocument from;
+    private UserDocument user;
 
     /**
-     * Para
-     * DBRef para referenciar documento User
+     * Cantidad de valoreaciones/feedbacks
      */
-    @DBRef
-    private UserDocument to;
+    private int valuations;
 
     /**
-     * Comentario
+     * Cantidad de Contactos
      */
-    private String comment;
+    private int contacts;
 
     /**
-     * Flag si es anonimo
+     * Rating
      */
-    private boolean anon;
-
-    /**
-     * Fecha
-     */
-    private String date;
-
-    /**
-     * Calificación
-     */
-    private int rate;
-
-    /**
-     * Already read by Schedule
-     */
-    private boolean alreadyRead;
+    private int rating;
 
 }

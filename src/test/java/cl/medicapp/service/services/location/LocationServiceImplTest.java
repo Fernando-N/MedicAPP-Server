@@ -42,7 +42,7 @@ class LocationServiceImplTest {
 
         when(restTemplate.getForObject(anyString(), any())).thenReturn(locationResponseDto);
         LocationDto result = locationServiceImpl.getLongitudeAndLatitude("address");
-        assertEquals(new LocationDto(0d, 0d, "address").toString(), result.toString());
+        assertEquals(LocationDto.builder().address("address").latitude(0d).longitude(0d).toString(), result.toString());
     }
 
     @Test

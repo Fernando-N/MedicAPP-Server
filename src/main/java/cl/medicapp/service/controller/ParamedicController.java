@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -35,8 +36,8 @@ public class ParamedicController {
      */
     @GetMapping("")
     @PreAuthorize("isAuthenticated()")
-    public List<UserDto> getAll() {
-        return userService.getAllByRole("PARAMEDIC");
+    public List<UserDto> getAll(@RequestParam int page) {
+        return userService.getAllByRole("PARAMEDIC", page-1);
     }
 
     /**
@@ -55,7 +56,7 @@ public class ParamedicController {
      * @param communeId Id de comuna a buscar
      * @return Lista de paramedicos encontrados
      */
-    @GetMapping("/paramedic/commune-{communeId}")
+    @GetMapping("/commune/{communeId}")
     @PreAuthorize("isAuthenticated()")
     public List<UserDto> getAllByRegionIdAndCommuneId(@PathVariable String communeId) {
         return userService.getAllByRoleAndCommuneId(Constants.PARAMEDIC, communeId);

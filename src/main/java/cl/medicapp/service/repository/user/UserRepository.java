@@ -4,6 +4,7 @@ import cl.medicapp.service.document.CommuneDocument;
 import cl.medicapp.service.document.RegionDocument;
 import cl.medicapp.service.document.RoleDocument;
 import cl.medicapp.service.document.UserDocument;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,9 +30,9 @@ public interface UserRepository {
     List<UserDocument> findAllByEnabledFalse();
 
     /**
-     * @see UserRepositoryImpl#findAllByRole(RoleDocument)
+     * @see UserRepositoryImpl#findAllByRole(RoleDocument, Pageable)
      */
-    List<UserDocument> findAllByRole(RoleDocument roleDocument);
+    List<UserDocument> findAllByRole(RoleDocument roleDocument, Pageable pageable);
 
     /**
      * @see UserRepositoryImpl#findAllByRoleAndRegion(RoleDocument, RegionDocument)

@@ -102,7 +102,7 @@ class UserServiceImplTest {
         when(userRepository.findById(anyString())).thenReturn(Optional.of(userDocument));
         when(chatService.getMessagesToUser(anyString(), anyBoolean())).thenReturn(Collections.singletonList(new MessageOutboundDto("id", "text", "date", null)));
 
-        List<UserDto> result = userServiceImpl.getAllByRole("PARAMEDIC");
+        List<UserDto> result = userServiceImpl.getAllByRole("PARAMEDIC", 1);
         assertNotNull(result);
     }
 

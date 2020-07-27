@@ -33,5 +33,18 @@ public class LocationDto {
      */
     private String address;
 
+    /**
+     * Comuna
+     */
+    private String communeId;
+
+    private String communeName;
+
+    /**
+     * Region
+     */
+    private String regionId;
+
+    private String regionName;
 
 }

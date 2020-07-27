@@ -2,6 +2,7 @@ package cl.medicapp.service.dto;
 
 import cl.medicapp.service.document.UserDocument;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.opencensus.stats.Stats;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -39,6 +40,9 @@ public class FeedbackDto {
      */
     private UserDto to;
 
+    /**
+     * Para user id
+     */
     private String toUserId;
 
     /**

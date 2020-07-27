@@ -51,7 +51,7 @@ public class RegionServiceImpl implements RegionService {
     public RegionDto getByName(String name) {
         return DocumentsHolder.getInstance().getRegionDocumentList()
                 .stream()
-                .filter(region -> region.getName().equalsIgnoreCase(name))
+                .filter(region -> region.getName().toUpperCase().contains(name.toUpperCase()))
                 .findFirst()
                 .map(RegionUtil::toRegionDto)
                 .orElseThrow(() -> GenericResponseUtil.buildGenericException(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.getReasonPhrase(), String.format("Region %s NOT FOUND!", name)));

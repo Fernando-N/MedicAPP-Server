@@ -4,6 +4,7 @@ import cl.medicapp.service.document.FeedbackDocument;
 import cl.medicapp.service.document.UserDocument;
 import cl.medicapp.service.dto.FeedbackDto;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -44,6 +45,7 @@ public class FeedbackUtil {
                 .comment(feedbackDto.getComment())
                 .rate(feedbackDto.getRate())
                 .anon(feedbackDto.isAnon())
+                .alreadyRead(false)
                 .build();
     }
 
@@ -70,6 +72,19 @@ public class FeedbackUtil {
 
         return Integer.parseInt(div);
     }
+
+    public static List<FeedbackDocument> filterFeedbackByUserId(String userId, List<FeedbackDocument> feedbackDocuments) {
+        List<FeedbackDocument> listFiltered = new ArrayList<>();
+
+        feedbackDocuments.forEach(feedback -> {
+            if (feedback.getTo().getId().equalsIgnoreCase(userId)) {
+                listFiltered.add(feedback);
+            }
+        });
+
+        return listFiltered;
+    }
+
 
     /**
      * Constructor privado para no permitir crear instancias de la clase
