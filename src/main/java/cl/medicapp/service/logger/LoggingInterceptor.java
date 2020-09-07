@@ -35,6 +35,9 @@ import java.util.Map;
 @Slf4j
 public class LoggingInterceptor extends RequestBodyAdviceAdapter implements ResponseBodyAdvice<Object>, HandlerInterceptor {
 
+    /**
+     * Bean de HttpServletRequest
+     */
     private final HttpServletRequest httpServletRequest;
 
     @Override

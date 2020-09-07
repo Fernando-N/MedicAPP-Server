@@ -1,40 +1,47 @@
 package cl.medicapp.service.controller;
 
-import cl.medicapp.service.dto.MessageDto;
+import cl.medicapp.service.dto.MessageOutboundDto;
 import cl.medicapp.service.services.chat.ChatService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Flux;
 
-import javax.validation.Valid;
+import java.util.List;
 
 /**
- * Controlador de roles
+ * Controlador de servicios de chat
  */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/chat")
+@PreAuthorize("isAuthenticated()")
 public class ChatController {
 
+    /**
+     * Bean Servicio de chat
+     */
     private final ChatService chatService;
 
-    @PostMapping("")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void postChat(@Valid @RequestBody MessageDto messageDto) {
-        chatService.insertAndSubscribe(messageDto);
+    /**
+     * Endpoint para obtener lista de chats iniciados
+     * @return Lista de mensajes
+     */
+    @GetMapping("/messages/get")
+    public List<MessageOutboundDto> getMessages() {
+        return chatService.getMessagesToUserLoggedIn();
     }
 
-    @GetMapping(value = "/{to}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<MessageDto> streamMessages(@PathVariable String to) {
-        return chatService.openStreamToUser(to);
+    /**
+     * Endpoint para obtener historial de chat con un usuario
+     * @param userId Id de usuario con quien buscar historial
+     * @return Lista de mensajes encontrados con UserId
+     */
+    @GetMapping("/messages/get/{userId}")
+    public List<MessageOutboundDto> getMessagesFromUserId(@PathVariable String userId) {
+        return chatService.getMessagesFromUserId(userId);
     }
 
 }

@@ -2,21 +2,33 @@ package cl.medicapp.service.util;
 
 import cl.medicapp.service.document.RoleDocument;
 import cl.medicapp.service.dto.RoleDto;
-import org.dozer.DozerBeanMapper;
 
 /**
- * Clase util para RoleDto y RoleDocument
+ * Clase util para roles
  */
 public class RoleUtil {
 
-    private static final DozerBeanMapper mapper = new DozerBeanMapper();
-
+    /**
+     * Convierte RoleDocument a RoleDto
+     * @param roleDocument target
+     * @return target convertido a RoleDto
+     */
     public static RoleDto toRoleDto(RoleDocument roleDocument) {
-        return mapper.map(roleDocument, RoleDto.class);
+        return RoleDto.builder()
+                .id(roleDocument.getId())
+                .name(roleDocument.getName())
+                .build();
     }
 
+    /**
+     * Convierte RoleDto a RoleDocument
+     * @param roleDto target
+     * @return target convertido a RoleDocument
+     */
     public static RoleDocument toRoleDocument(RoleDto roleDto) {
-        return mapper.map(roleDto, RoleDocument.class);
+        return RoleDocument.builder()
+                .name(roleDto.getName())
+                .build();
     }
 
     /**

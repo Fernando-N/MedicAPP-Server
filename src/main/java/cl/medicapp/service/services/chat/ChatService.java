@@ -1,16 +1,38 @@
 package cl.medicapp.service.services.chat;
 
-import cl.medicapp.service.dto.MessageDto;
-import reactor.core.publisher.Flux;
+import cl.medicapp.service.dto.MessageInboundDto;
+import cl.medicapp.service.dto.MessageOutboundDto;
 
 import java.util.List;
 
+/**
+ * Interfaz de servicio de chat
+ */
 public interface ChatService {
 
-    void insertAndSubscribe(MessageDto messageDto);
+    /**
+     * @see ChatServiceImpl#getMessagesNotRead()
+     */
+    List<MessageOutboundDto> getMessagesNotRead();
 
-    Flux<MessageDto> openStreamToUser(String to);
+    /**
+     * @see ChatServiceImpl#getMessagesToUserLoggedIn()
+     */
+    List<MessageOutboundDto> getMessagesToUserLoggedIn();
 
-    List<MessageDto> getMessagesNotRead();
+    /**
+     * @see ChatServiceImpl#getMessagesToUser(String, boolean)
+     */
+    List<MessageOutboundDto> getMessagesToUser(String userId, boolean findByEmail);
+
+    /**
+     * @see ChatServiceImpl#getMessagesFromUserId(String)
+     */
+    List<MessageOutboundDto> getMessagesFromUserId(String userId);
+
+    /**
+     * @see ChatServiceImpl#saveAndSendMessage(MessageInboundDto, String)
+     */
+    MessageOutboundDto saveAndSendMessage(MessageInboundDto messageInboundDto, String idSender);
 
 }

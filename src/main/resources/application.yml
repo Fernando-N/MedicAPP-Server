@@ -2,33 +2,48 @@
 spring:
   data:
     mongodb:
-      host: localhost
-      authentication-database: admin
-      database: test
-      username: medicapp
-      password: medicapp1
-      auto-index-creation: false
+      host: ${MONGO_HOST:}
+      database: ${MONGO_DB:medicapp}
+      username: ${MONGO_USER:}
+      password: ${MONGO_PASS:}
+      authentication-database: ${MONGO_AUTH_DB:admin}
+      auto-index-creation: ${MONGO_AUTO_INDEX:false}
   mail:
-    host: smtp.gmail.com
-    port: 587
-    username: fe.neiraj@gmail.com
-    password: lbijxnkpoddlyoji
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USER:}
+    password: ${MAIL_PASS:}
     properties:
       mail.smtp:
         auth: true
         starttls.enable: true
-#  redis:
-#    host: localhost
-#    port: 6379
-#    ssl: true
-#    password: 57686f6120447564652c2049495320526f636b73
+api:
+  positionStack:
+    uri: ${POSITIONSTACK_API_URI:http://api.positionstack.com/v1}
+    key: ${POSITIONSTACK_API_KEY:}
+  googlemaps:
+    key: ${GMAPS_API_KEY:}
+    places:
+      radio: ${GMAPSPLACES_RADIO:10000}
+      uri: ${GMAPSPLACES_API_URI:https://maps.googleapis.com/maps/api/place/nearbysearch/json}
+  farmanet:
+    uri: ${FARMANET_API_URI:https://farmanet.minsal.cl/maps/index.php/ws/getLocalesTurnos}
 
+#Server configuration
+#server:
+#  port: 443
+#  ssl:
+#    key-store: classpath:medicapp.p12
+#    key-store-password: medicapp
+#    key-store-type: PKCS12
+#  error:
+#    whitelabel:
+#      enabled: false
 
 #Log configuration
 logging:
   level:
-    root: info
-    org.hibernate.SQL: info
-    org.springframework.data.mongodb.core.MongoTemplate: info
+    root: ${LOG_LEVEL_ROOT:info}
+    org.springframework.data.mongodb.core.MongoTemplate: ${LOG_LEVEL_MONGO:info}
 #  pattern:
 #    console: '${CONSOLE_LOG_PATTERN:-%clr(%d{dd-MM-yyyy HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}'

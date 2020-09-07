@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -30,6 +29,12 @@ import java.util.List;
 public class UserDto implements Serializable {
 
     /**
+     * Id de usuario
+     */
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY, value = "key")
+    private String id;
+
+    /**
      * Email
      */
     @NotBlank(message = Constants.EMAIL_CANT_BE_EMPTY)
@@ -40,10 +45,15 @@ public class UserDto implements Serializable {
     /**
      * Contraseña
      */
-    @NotBlank(message = Constants.PASSWORD_CANT_BE_EMPTY)
     @Size(min = 6, max = 16, message = Constants.PASSWORD_MUST_BE_BETWEEN)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+
+    /**
+     * Rut
+     */
+    @NotBlank(message = "RUT can't be empty!")
+    private String rut;
 
     /**
      * Primer nombre
@@ -60,10 +70,71 @@ public class UserDto implements Serializable {
     private String lastName;
 
     /**
+     * Fecha de nacimiento
+     */
+    private Date birthDay;
+
+    /**
+     * Comuna
+     */
+    private CommuneDto commune;
+
+    /**
+     * Region
+     */
+    private RegionDto region;
+
+    /**
+     * Flag para mostrar dirección en perfil
+     */
+    private boolean showAddress;
+
+    /**
+     * Direccion
+     */
+    @NotBlank(message = "Address can't be empty!")
+    private String address;
+
+    /**
+     * Sobre mi
+     */
+    private String aboutMe;
+
+    /**
+     * Flag es paramedico
+     */
+    private boolean isParamedic;
+
+    /**
+     * B64 de Imagen de perfil
+     */
+    private String profileImage;
+
+    /**
+     * B64 de Imagen de titulo técnico/universitario
+     */
+    private String titleImage;
+
+    /**
+     * Año de graduación
+     */
+    private int graduationYear;
+
+    /**
+     * B64 de Imagen de certificado de inscripción en registro de prestadores individuales
+     */
+    private String certificateNationalHealth;
+
+    /**
+     * B64 de Imagen de carnet
+     */
+    private String carnetImage;
+
+    /**
      * Fecha de creación
      * JsonIgnore para ocultar en respuestas
      */
-    @CreatedDate
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Date createdOn;
 
     /**
@@ -71,7 +142,7 @@ public class UserDto implements Serializable {
      * JsonIgnore para ocultar en respuestas
      */
     @JsonIgnore
-    private Integer attemps = 0;
+    private Integer attempts = 0;
 
     /**
      * Habilitado
@@ -79,9 +150,16 @@ public class UserDto implements Serializable {
     private Boolean enabled = true;
 
     /**
+     * Stats de paramedico
+     * puede ser null si no es paramedico
+     */
+    private StatsDto stats;
+
+    /**
      * Roles
      * JsonIgnore para ocultar en respuestas
      */
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<RoleDto> roleEntities;
 
 }

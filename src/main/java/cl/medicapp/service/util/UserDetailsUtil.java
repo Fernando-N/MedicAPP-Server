@@ -11,13 +11,12 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Clase util para UserDetails
+ * Clase utilitaria para detalles de usuario
  */
 public class UserDetailsUtil {
 
     /**
      * Builder de objeto User a UserDetails
-     *
      * @param user Usuario a mapear
      * @return UserDetails
      */
@@ -27,7 +26,6 @@ public class UserDetailsUtil {
 
     /**
      * Obtiene los authorities del usuario
-     *
      * @param retrievedUserDocument usuario
      * @return Set con roles/autorizaciones del usuario
      */

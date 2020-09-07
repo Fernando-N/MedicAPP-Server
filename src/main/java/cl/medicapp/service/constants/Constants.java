@@ -3,6 +3,7 @@ package cl.medicapp.service.constants;
 /**
  * Clase de constantes
  */
+//TODO Mover Mensajes a yml externo
 public class Constants {
 
     public static final String FIRST_NAME = "FIRST_NAME";
@@ -76,6 +77,12 @@ public class Constants {
     public static final String LOWERCASE = "LowerCase";
 
     public static final String PACKAGE_BASE = "cl.medicapp";
+
+    public static final String ERROR_DATE_PARSE = "Error al parsear fecha";
+
+    public static final String PARAMEDIC = "PARAMEDIC";
+
+    public static final String USER = "USER";
 
 
     /**

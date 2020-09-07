@@ -6,41 +6,49 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.io.Serializable;
 
 /**
- * Dto para mensajes de chat
+ * Objeto de transferencia para reporte
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class MessageDto {
+public class ReportDto {
 
     /**
-     * Fecha
+     * Identificador
      */
-    private Date date;
+    private String id;
+
+    private String toUserId;
 
     /**
      * De
+     * DBRef para referenciar document User
      */
-    private String from;
+    private UserDto fromUser;
 
     /**
      * Para
      */
-    private String to;
+    private UserDto toUser;
 
     /**
-     * Mensaje
+     * Mensajes
      */
     private String message;
 
     /**
+     * Fecha
+     */
+    private String date;
+
+    /**
      * Fue leido
      */
-    private boolean alreadyRead = false;
+    private boolean alreadyRead;
 
 }

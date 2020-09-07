@@ -27,11 +27,20 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+/**
+ * Aspecto encargado de capturar metodos que tengan la anotación @FormatArgs para aplicar formateo de parametros
+ */
 @Slf4j
 @Aspect
 @Component
 public class AspectManager {
 
+    /**
+     * Controlador de flujo del método capturado con @FormatArgs
+     * @param proceedingJoinPoint ProceedingJoinPoint obtenido del flujo ejecutado
+     * @return ejecución del flujo
+     * @throws Throwable excepción ocurrida
+     */
     @Around("@within(cl.medicapp.service.annotation.FormatArgs) || @annotation(cl.medicapp.service.annotation.FormatArgs)")
     public Object formatArgs(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 
@@ -88,6 +97,12 @@ public class AspectManager {
         return proceedingJoinPoint.proceed(args);
     }
 
+    /**
+     * Aplicar formateo a argumento String según corresponda
+     * @param annotations Array de anotaciones que contiene el argumento enviado
+     * @param arg Argumento a formatear
+     * @return Argumento formateado
+     */
     private String formatString(Annotation[] annotations, String arg) {
         if (containsAnnotation(annotations, Capitalize.class)) {
             return StringUtil.capitalizeAllWords(arg);
@@ -100,6 +115,11 @@ public class AspectManager {
         }
     }
 
+    /**
+     * Obtiene los campos que contengan la anotación @Capitalize, @Uppercase o @LowerCase
+     * @param arg Objeto que se esta formateando para obtener fields
+     * @return Lista con campos con la anotación permitida
+     */
     private List<FieldWithAnnotation> getFieldsWithAnnotation(Object arg) {
         return Arrays.stream(arg.getClass().getDeclaredFields())
                 .filter(field -> field.isAnnotationPresent(Capitalize.class) || field.isAnnotationPresent(UpperCase.class) || field.isAnnotationPresent(LowerCase.class))
@@ -111,7 +131,11 @@ public class AspectManager {
         return Arrays.stream(annotationsCheck).anyMatch(annotation -> annotationToValidate.isAssignableFrom(annotation.getClass().getInterfaces()[0]));
     }
 
-
+    /**
+     * Convierte un Field en FieldWithAnnotation (objeto de dominio) para luego utilizarlo en el aspecto
+     * @param field Target a convertir
+     * @return FieldWithAnnotation
+     */
     private FieldWithAnnotation convert(Field field) {
         return FieldWithAnnotation.builder()
                 .fieldName(field.getName())
@@ -120,10 +144,13 @@ public class AspectManager {
                                 .filter(annotation -> annotation.getClass().getInterfaces()[0].getName().startsWith(Constants.PACKAGE_BASE))
                                 .findFirst()
                                 .map(annotation -> annotation.getClass().getInterfaces()[0].getSimpleName())
-                                .orElseThrow())
+                                .orElseThrow(GenericResponseUtil::getGenericException))
                 .build();
     }
 
+    /**
+     * Objeto de dominio FieldWithAnnotation para manejar de manera mas optima en aspecto
+     */
     @AllArgsConstructor
     @Getter
     @Builder

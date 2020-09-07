@@ -1,9 +1,15 @@
 package cl.medicapp.service.services.email;
 
-import org.springframework.mail.SimpleMailMessage;
+import cl.medicapp.service.dto.EmailDto;
 
+/**
+ * Interfaz de servicio de email
+ */
 public interface EmailService {
 
-    void sendEmail(SimpleMailMessage email);
+    /**
+     * @see EmailServiceImpl#sendEmail(EmailDto)
+     */
+    void sendEmail(EmailDto email);
 
 }

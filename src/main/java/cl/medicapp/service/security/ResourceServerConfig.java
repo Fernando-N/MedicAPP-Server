@@ -27,14 +27,20 @@ import java.util.Collections;
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
+    /**
+     * Metodos HTTP permitidos
+     */
     protected static final String[] SECURITY_ALLOWED_METHODS = {"POST", "GET", "PUT", "DELETE", "OPTIONS"};
+
+    /**
+     * Headers HTTP permitidos
+     */
     protected static final String[] SECURITY_ALLOWED_HEADERS = {"Authorization", "Content-Type"};
 
     private final TokenStore tokenStore;
 
     /**
      * Configura el almacen de tokens
-     *
      * @param resources ResourceServerSecurityConfigurer
      */
     @Override
@@ -44,7 +50,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     /**
      * Configura el objeto HttpSecurity asignando los parametros de seguridad para los endpoints
-     *
      * @param http HttpSecurity
      * @throws Exception exception
      */
@@ -58,7 +63,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     /**
      * Configura los cors permitiendo origenes, metodos y headers personalizados.
-     *
      * @return CorsConfigurationSource
      */
     @Bean
@@ -77,8 +81,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     /**
      * Asigna el filtro de cors
-     *
-     * @return FilterRegistrationBean<CorsFilter>
+     * @return FilterRegistrationBean
      */
     @Bean
     public FilterRegistrationBean<CorsFilter> corsFilter() {
